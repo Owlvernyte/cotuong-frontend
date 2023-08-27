@@ -3,9 +3,13 @@ import React from 'react'
 
 function BasicLayout({ children }: React.PropsWithChildren) {
     return (
-        <div className='screen'>
-            <Header/>
-            <main className="container h-full">{children}</main>
+        <div className="app">
+            <div className="app-page">
+                <Header />
+                <main className="h-full w-full overflow-y-auto">
+                    {children}
+                </main>
+            </div>
         </div>
     )
 }
