@@ -9,8 +9,10 @@ const paytone = Paytone_One({
 })
 
 export const metadata: Metadata = {
-    title: 'Co tuong an thit nuong',
-    description: 'Play Vietnamese Chess!',
+    title: 'Cờ tướng Thịt nướng',
+    description: 'Play Vietnamese Chess while BBQing!',
+
+    icons: ['/thitnuong.svg']
 }
 
 export default function RootLayout({
