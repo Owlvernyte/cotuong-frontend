@@ -5,9 +5,9 @@ import Image from 'next/image'
 
 export default function Home() {
     return (
-        <div className="flex justify-center h-full">
-            <div className="container flex flex-col">
-                <div className="screen flex flex-col space-y-4 justify-center items-center pb-40">
+        <div className="flex justify-center h-full bg-red-500">
+            <div className="container flex flex-col h-full">
+                <div className="screen flex flex-col space-y-4 justify-center items-center pb-40 h-full">
                     <div className="flex flex-row justify-center items-center p-2 text-center space-x-2">
                         <img
                             className="w-[96px] md:w-[128px] drop-shadow-lg"

@@ -5,10 +5,10 @@ function BasicLayout({ children }: React.PropsWithChildren) {
     return (
         <div className="app">
             <div className="app-page">
-                <Header />
-                <main className="h-full w-full overflow-y-auto">
-                    {children}
-                </main>
+                <div className='flex flex-col h-full'>
+                    <Header />
+                    <main className='p-2 flex-1'>{children}</main>
+                </div>
             </div>
         </div>
     )

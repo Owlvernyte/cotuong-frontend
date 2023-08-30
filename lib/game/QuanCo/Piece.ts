@@ -4,12 +4,14 @@ export interface IPiece {
     pieceType?: PieceType
     coord?: CoordinationType
     isRed: boolean
+    signature: string
 }
 
 abstract class Piece implements IPiece {
     pieceType?: PieceType
     coord?: CoordinationType
     isRed: boolean = true
+    signature: string = ''
 
     constructor(options?: Partial<IPiece>) {
         if (!options) {
@@ -19,6 +21,7 @@ abstract class Piece implements IPiece {
         this.coord = options.coord ?? this.coord
         this.isRed = options.isRed ?? this.isRed
         this.pieceType = options.pieceType ?? this.pieceType
+        this.signature = options.signature ?? this.signature
     }
 
     setCoord(coord?: CoordinationType) {

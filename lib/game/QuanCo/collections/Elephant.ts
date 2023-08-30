@@ -4,6 +4,7 @@ class Elephant extends Piece {
     constructor(options?: IPiece) {
         super(options)
         this.pieceType = PieceType.Elephant
+        this.signature = 'B'
     }
 }
 

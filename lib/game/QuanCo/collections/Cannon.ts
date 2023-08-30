@@ -4,6 +4,7 @@ class Cannon extends Piece {
     constructor(options?: Partial<IPiece>) {
         super(options)
         this.pieceType = PieceType.Cannon
+        this.signature = 'C'
     }
 }
 

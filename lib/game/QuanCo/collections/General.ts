@@ -4,6 +4,7 @@ class General extends Piece {
     constructor(options?: Partial<IPiece>) {
         super(options)
         this.pieceType = PieceType.General
+        this.signature = 'K'
     }
 }
 
