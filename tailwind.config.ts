@@ -18,9 +18,6 @@ const config: Config = {
       fontFamily: {
         paytone: ["var(--font-paytone)"],
       },
-      flexGrow: {
-        2: "2",
-      },
     },
     colors: {
       dirt: {
