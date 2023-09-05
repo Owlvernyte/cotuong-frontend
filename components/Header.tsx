@@ -3,7 +3,7 @@ import React from 'react'
 
 function Header() {
     return (
-        <div className="bg-primary min-h-[50px] h-fit p-2 flex justify-between items-center w-full">
+        <div className="bg-primary min-h-[50px] h-fit p-2 flex justify-between items-center w-full sticky top-0">
             <div className="px-2 inline-flex items-center space-x-6">
                 <div>
                     <img src="/thitnuong.svg" alt="thitnuong"></img>

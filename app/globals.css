@@ -4,7 +4,7 @@
 
 html,
 body {
-    @apply h-full w-full overflow-hidden;
+    @apply h-screen w-full;
 }
 
 body {
@@ -31,12 +31,12 @@ body {
     }
 
     .app, .app-page {
-        @apply h-full overflow-hidden;
+        @apply h-screen overflow-hidden;
     }
 }
 
 @layer utilities {
-    .screen {
+    .h-screen {
         height: 100dvh;
         max-height: 100vh;
         min-height: 100svh;
