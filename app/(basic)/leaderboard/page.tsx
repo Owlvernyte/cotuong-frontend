@@ -47,7 +47,7 @@ export default function LeaderBoard() {
                   />
                 </div>
               </div>
-              <div className="text-bamboo-100 text-2xl">Username</div>
+              <div className="text-bamboo-100 text-2xl py-2">Username</div>
               <Image src="/flags/VN.svg" alt="Flag" width={40} height={40} />
             </div>
 
@@ -110,39 +110,67 @@ export default function LeaderBoard() {
         </div>
 
         {/* PHẦN 3: BẢNG XẾP HẠNG CHUNG */}
-        <div>
-          {/* Bảng xếp hạng gồm các cột:
+        {/* Bảng xếp hạng gồm các cột:
         1/ Số thứ tự (Số)
         2/ Thông tin người chơi (gồm ảnh đại diện + tên người chơi)
         3/ Quốc gia (Ảnh hoặc Icon)
         4/ Thắng/Thua/Hoà (Số trận Thắng - Thua - Hoà của người chơi)
         5/ Điểm thịt nướng (Số điểm của ngưởi chơi) */}
-          <table>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th>Thắng/Thua/Hoà</th>
-              <th>Thịt Nướng</th>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>(Ava) Username</td>
-              <td>(Cờ Nước)</td>
-              <td>120/42/2</td>
-              <td>71171</td>
-            </tr>
-
-            <tr>
-              <td>2</td>
-              <td>(Ava) Username</td>
-              <td>(Cờ Nước)</td>
-              <td>120/42/2</td>
-              <td>71171</td>
-            </tr>
+        <div className="overflow-x-auto">
+          <table className="table bg-bamboo-300 text-bamboo-100 text-lg rounded-md">
+            <thead className="text-bamboo-100 text-lg">
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Thắng / Thua / Hoà</th>
+                <th>
+                  <div className="w-12">
+                    <Image
+                      src="/diemthitnuong.svg"
+                      alt="Score"
+                      width={120}
+                      height={120}
+                    />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>1</th>
+                <td>
+                  <div className="flex space-x-3 items-center">
+                    <div className="avatar">
+                      <div className="w-12 rounded-full">
+                        <Image
+                          src="/avatars/avatar1.png"
+                          alt="Avatar"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    </div>
+                    <div className="text-bamboo-100 text-2xl">Username</div>
+                  </div>
+                </td>
+                <td>
+                  <Image
+                    src="/flags/VN.svg"
+                    alt="Flag"
+                    width={40}
+                    height={40}
+                  />
+                </td>
+                <td>120 / 42 / 2</td>
+                <td>71171</td>
+              </tr>
+            </tbody>
           </table>
         </div>
+
+        {/* Fix (tạm thời): Phần chân content để không bị cắt bảng khi scroll */}
+        <div className="p-20" />
       </div>
     </div>
   );
