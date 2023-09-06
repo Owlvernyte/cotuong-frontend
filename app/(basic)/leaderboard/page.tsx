@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LeaderBoard() {
   return (
@@ -7,7 +8,7 @@ export default function LeaderBoard() {
         {/* PHẦN 1: TIÊU ĐỀ */}
         <div>
           {/* Tiêu đề */}
-          <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl py-2">
+          <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
             BẢNG XẾP HẠNG
           </div>
 
@@ -31,49 +32,79 @@ export default function LeaderBoard() {
         </div>
 
         {/* PHẦN 2: THÀNH TÍCH CÁ NHÂN */}
-        <div>
+        <div className="bg-dirt-300 rounded-md my-4">
           {/* Tiêu đề */}
-          <div>
+          <div className="flex flex-col justify-between items-center md:flex-row px-6 py-4">
             {/* Thông tin người chơi */}
-            <div>
-              <div>Ảnh đại diện (Ảnh tròn)</div>
-              <div>Tên người chơi (Text)</div>
-              <div>Quốc gia (Ảnh hoặc Icon)</div>
+            <div className="flex flex-col space-x-3 items-center md:flex-row">
+              <div className="avatar">
+                <div className="w-12 rounded-full">
+                  <Image
+                    src="/avatars/avatar1.png"
+                    alt="Avatar"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </div>
+              <div className="text-bamboo-100 text-2xl">Username</div>
+              <Image src="/flags/VN.svg" alt="Flag" width={40} height={40} />
             </div>
 
             {/* Thông tin trang web */}
-            <div>
-              <div>cotuong.nyte.tk (Link)</div>
-              <div>Logo (Ảnh)</div>
+            <div className="flex items-center space-x-1">
+              <Link
+                href={"/cotuong.nyte.tk"}
+                className="text-bamboo-100 opacity-70"
+              >
+                cotuong.nyte.tk
+              </Link>
+              <Image src="/thitnuong.svg" alt="Avatar" width={50} height={50} />
             </div>
           </div>
 
-          {/* Biểu tượng xếp hạng  */}
-          <div>
-            <div>Ảnh xếp hạng (Huy chương vàng - bạc - dồng - ngôi sao)</div>
-            <div>1 (Số thứ tự trên bảng xếp hạng của người chơi)</div>
-          </div>
-
-          {/* Thông số */}
-          <div>
-            <div>
-              <div>Thắng (Tiêu đề tỷ số)</div>
-              <div>120 (Số trận thắng)</div>
+          <div className="flex flex-col md:flex-row">
+            {/* Biểu tượng xếp hạng  */}
+            <div className="bg-bamboo-300 md:rounded-bl-md text-center p-4 md:px-20 md:py-10">
+              <div className="flex flex-col items-center">
+                <Image
+                  src="/medals/top1.svg"
+                  alt="Medal"
+                  width={120}
+                  height={120}
+                />
+                <div className="text-bamboo-100 text-3xl">1</div>
+              </div>
             </div>
 
-            <div>
-              <div>Thua (Tiêu đề tỷ số)</div>
-              <div>42 (Số trận thua)</div>
-            </div>
+            {/* Thông số */}
+            <div className="md:container bg-bamboo-400 rounded-b-md md:rounded-br-md text-bamboo-100 flex flex-col justify-between items-center md:flex-row py-2 px-20">
+              <div className="flex flex-row md:flex-col items-center">
+                <div className="text-xl opacity-70">Thắng</div>
+                <div className="text-3xl px-2 md:text-7xl md:py-4">120</div>
+              </div>
 
-            <div>
-              <div>Hoà (Tiêu đề tỷ số)</div>
-              <div>2 (Số trận hoà)</div>
-            </div>
+              <div className="flex flex-row md:flex-col items-center">
+                <div className="text-xl opacity-70">Thua</div>
+                <div className="text-3xl px-2 md:text-7xl md:py-4">42</div>
+              </div>
 
-            <div>
-              <div>Ảnh điểm thịt nướng (Ảnh hoặc Icon)</div>
-              <div>71171 (Điểm thịt nướng)</div>
+              <div className="flex flex-row md:flex-col items-center">
+                <div className="text-xl opacity-70">Hoà</div>
+                <div className="text-3xl px-2 md:text-7xl md:py-4">2</div>
+              </div>
+
+              <div className="flex flex-row md:flex-col items-center">
+                <div className="w-14 md:w-auto">
+                  <Image
+                    src="/diemthitnuong.svg"
+                    alt="Score"
+                    width={120}
+                    height={120}
+                  />
+                </div>
+                <div className="text-3xl px-2 md:text-2xl md:py-4">71171</div>
+              </div>
             </div>
           </div>
         </div>
