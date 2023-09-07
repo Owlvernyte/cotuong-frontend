@@ -1,35 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import ExtraInformation from "@/components/leaderboard/extra-information/ExtraInformation";
+
+import Title from "@/components/ui/Title";
+
 export default function LeaderBoard() {
   return (
     <div className="flex justify-center h-screen">
       <div className="container max-w-screen-2xl p-10">
         {/* PHẦN 1: TIÊU ĐỀ */}
-        <div>
-          {/* Tiêu đề */}
-          <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
-            BẢNG XẾP HẠNG
-          </div>
 
-          {/* Thông tin bảng xếp hạng*/}
-          <div className="flex flex-col justify-between items-start md:flex-row">
-            <div className="text-dirt-200 text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl py-2">
-              Còn lại: 2 ngày 08 giờ 04 phút 17 giây
-            </div>
-            <button className="btn btn-primary btn-md">
-              <span className="mr-2">
-                <Image
-                  src="/icons/Share_fill.svg"
-                  alt="Share Icon"
-                  width={20}
-                  height={20}
-                />
-              </span>
-              CHIA SẺ THÀNH TÍCH
-            </button>
-          </div>
-        </div>
+        {/* Tiêu đề */}
+        <Title text="BẢNG XẾP HẠNG" textAlign="text-left" />
+
+        {/* Thông tin bảng xếp hạng*/}
+        <ExtraInformation />
 
         {/* PHẦN 2: THÀNH TÍCH CÁ NHÂN */}
         <div className="bg-dirt-300 rounded-md my-4">
