@@ -3,15 +3,28 @@ import Image from "next/image";
 import Link from "next/link";
 import PlayerInformation from "../../player/PlayerInformation";
 
+interface PlayerData {
+  username: string;
+  avatarSrc: string;
+  flagSrc: string;
+}
+
+// Note: Sử dụng data mẫu tạm thời
+const sampleData: PlayerData = {
+  username: "User1",
+  avatarSrc: "/avatars/avatar1.png",
+  flagSrc: "/flags/VN.svg",
+};
+
 const CardTitle: React.FC = () => {
   return (
     <div className="flex flex-col justify-between items-center md:flex-row px-6 py-4">
       {/* Note: Còn hard code phần avatar & flag */}
       <PlayerInformation
-        username="Username"
-        avatarSrc="/avatars/avatar1.png"
+        username={sampleData.username}
+        avatarSrc={sampleData.avatarSrc}
         hasFlag
-        flagSrc="/flags/VN.svg"
+        flagSrc={sampleData.flagSrc}
       />
 
       {/* Note: Link cotuong.nyte.tk chưa có */}

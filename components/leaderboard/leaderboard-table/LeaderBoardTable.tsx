@@ -2,8 +2,18 @@ import React from "react";
 import Image from "next/image";
 import PlayerInformation from "@/components/player/PlayerInformation";
 
+interface PlayerData {
+  username: string;
+  avatarSrc: string;
+  flagSrc: string;
+  win: number;
+  loss: number;
+  draw: number;
+  score: number;
+}
+
 // Note: Sử dụng data mẫu tạm thời
-const sampleData = [
+const sampleData: PlayerData[] = [
   {
     username: "User1",
     avatarSrc: "/avatars/avatar1.png",
@@ -67,18 +77,12 @@ const LeaderBoardTable: React.FC = () => {
   );
 };
 
-const LeaderBoardRow: React.FC<{
-  data: {
-    username: string;
-    avatarSrc: string;
-    flagSrc: string;
-    win: number;
-    loss: number;
-    draw: number;
-    score: number;
-  };
+interface LeaderBoardRowProps {
+  data: PlayerData;
   rank: number;
-}> = ({ data, rank }) => {
+}
+
+const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
   return (
     <tr>
       <th>{rank}</th>

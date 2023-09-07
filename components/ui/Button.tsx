@@ -30,32 +30,41 @@ const Button: React.FC<ButtonProps> = ({
   endIconWidth = 20,
   endIconHeight = 20,
 }) => {
+  const renderStartIcon = () => {
+    if (startIcon) {
+      return (
+        <Image
+          src={startIconSrc}
+          alt={startIconAlt}
+          width={startIconWidth}
+          height={startIconHeight}
+          className="mr-2"
+        />
+      );
+    }
+    return null;
+  };
+
+  const renderEndIcon = () => {
+    if (endIcon) {
+      return (
+        <Image
+          src={endIconSrc}
+          alt={endIconAlt}
+          width={endIconWidth}
+          height={endIconHeight}
+          className="ml-2"
+        />
+      );
+    }
+    return null;
+  };
+
   return (
-    <button className={`btn ${buttonVariants} btn-md`}>
-      {startIcon && (
-        <>
-          <Image
-            src={startIconSrc}
-            alt={startIconAlt}
-            width={startIconWidth}
-            height={startIconHeight}
-          />
-          {text}
-        </>
-      )}
-      {!startIcon && !endIcon && <span>{text}</span>}
-      {endIcon && (
-        <>
-          {startIcon && !text && <span>&nbsp;</span>}
-          {text && !startIcon && <span>{text}</span>}
-          <Image
-            src={endIconSrc}
-            alt={endIconAlt}
-            width={endIconWidth}
-            height={endIconHeight}
-          />
-        </>
-      )}
+    <button className={`btn ${buttonVariants} btn-md flex items-center`}>
+      {renderStartIcon()}
+      <span>{text}</span>
+      {renderEndIcon()}
     </button>
   );
 };
