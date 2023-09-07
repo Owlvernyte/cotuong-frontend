@@ -62,6 +62,7 @@ const LeaderBoardTable: React.FC = () => {
                   alt="Score"
                   width={120}
                   height={120}
+                  style={{ width: "auto", height: "auto" }}
                 />
               </div>
             </th>
@@ -93,7 +94,15 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
         />
       </td>
       <td>
-        <Image src={data.flagSrc} alt="Flag" width={40} height={40} />
+        <div className="w-12">
+          <Image
+            src={data.flagSrc}
+            alt="Flag"
+            width={40}
+            height={40}
+            style={{ width: "auto", height: "auto" }}
+          />
+        </div>
       </td>
       <td>
         {data.win} / {data.loss} / {data.draw}

@@ -25,6 +25,7 @@ const ScoreBoard: React.FC = () => {
             alt="Score"
             width={120}
             height={120}
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
         <div className="text-3xl px-2 md:text-2xl md:py-4">{score}</div>

@@ -37,12 +37,21 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
             alt="Avatar"
             width={imageWidth}
             height={imageHeight}
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
       </div>
       <div className={`${textColor} ${textSize} py-2`}>{username}</div>
       {hasFlag && (
-        <Image src={flagSrc} alt="Flag" width={flagWidth} height={flagHeight} />
+        <div className="w-8">
+          <Image
+            src={flagSrc}
+            alt="Flag"
+            width={flagWidth}
+            height={flagHeight}
+            style={{ width: "auto", height: "auto" }}
+          />
+        </div>
       )}
       {/* Dự kiến: Thêm phần điểm + trạng thái hoạt động */}
     </div>

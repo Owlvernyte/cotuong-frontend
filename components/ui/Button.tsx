@@ -39,6 +39,7 @@ const Button: React.FC<ButtonProps> = ({
           width={startIconWidth}
           height={startIconHeight}
           className="mr-2"
+          style={{ width: "auto", height: "auto" }}
         />
       );
     }
@@ -54,6 +55,7 @@ const Button: React.FC<ButtonProps> = ({
           width={endIconWidth}
           height={endIconHeight}
           className="ml-2"
+          style={{ width: "auto", height: "auto" }}
         />
       );
     }

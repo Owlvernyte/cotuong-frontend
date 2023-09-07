@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ExtraInformation from "@/components/leaderboard/extra-information/ExtraInformation";
 import Title from "@/components/ui/Title";
 import PersonalAchievement from "@/components/leaderboard/personal-achievements/PersonalAchievements";

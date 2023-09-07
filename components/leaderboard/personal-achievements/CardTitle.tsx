@@ -32,7 +32,13 @@ const CardTitle: React.FC = () => {
         <Link href={"/cotuong.nyte.tk"} className="text-bamboo-100 opacity-70">
           cotuong.nyte.tk
         </Link>
-        <Image src="/thitnuong.svg" alt="Logo" width={50} height={50} />
+        <Image
+          src="/thitnuong.svg"
+          alt="Logo"
+          width={50}
+          height={50}
+          style={{ width: "auto", height: "auto" }}
+        />
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const Ranking: React.FC<RankingProps> = ({
   return (
     <div className="bg-bamboo-300 md:rounded-bl-md text-center p-4 md:px-20 md:py-10">
       <div className="flex flex-col items-center">
-        <Image src={medalSrc} alt="Medal" width={120} height={120} />
+        <Image src={medalSrc} alt="Medal" width={120} height={120} style={{ width: "auto", height: "auto" }} />
         <div className="text-bamboo-100 text-3xl">{top}</div>
       </div>
     </div>
