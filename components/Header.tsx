@@ -22,22 +22,22 @@ function Header() {
                 <button className="btn btn-secondary px-12">
                     {'Đăng nhập'}
                 </button>
-                <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-ghost rounded-btn">
-                    <img src="/icons/Setting_fill.svg"></img>
-                    </label>
-                    <ul
-                        tabIndex={0}
-                        className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md w-52 mt-4"
-                    >
-                        <li>
-                            <a>Item 1</a>
-                        </li>
-                        <li>
-                            <a>Item 2</a>
-                        </li>
-                    </ul>
-                </div>
+                    <div className="dropdown dropdown-end">
+                        <label tabIndex={0} className="btn btn-ghost rounded-btn">
+                        <img src="/icons/Setting_fill.svg"></img>
+                        </label>
+                        <ul
+                            tabIndex={0}
+                            className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md w-52 mt-4"
+                        >
+                            <li>
+                                <a>Item 1</a>
+                            </li>
+                            <li>
+                                <a>Item 2</a>
+                            </li>
+                        </ul>
+                    </div>
             </div>
         </div>
     )
