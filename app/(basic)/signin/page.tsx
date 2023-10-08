@@ -37,7 +37,7 @@ export default function SignIn() {
                         <div className="pb-6 flex justify-start w-full ">
                             <img
                                 className="w-[51px] h-[51px]"
-                                src="/icons/User_cicrle_duotone.svg"
+                                src="/icons/primary/User_cicrle_duotone.svg"
                                 alt="nyte"
                             />
                             <input

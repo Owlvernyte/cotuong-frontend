@@ -11,9 +11,6 @@ export default function LeaderBoard() {
         <ExtraInformation />
         <PersonalAchievement />
         <LeaderBoardTable />
-
-        {/* Temporary spacer to prevent the table from being cut off when scrolling */}
-        <div className="h-20" />
       </div>
     </div>
   );
