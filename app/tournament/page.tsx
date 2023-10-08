@@ -7,40 +7,58 @@ export default function Home() {
     <>
       <Header />
       <div className="w-full h-[900px] justify-center items-center flex flex-col">
-        <div className="w-[1400px] h-[300px] bg-bamboo-400 rounded shadow mb-6">
-          <div className="w-full h-[50px] justify-between items-start inline-flex">
-            <h1 className="text-center text-dirt-100 text-lg font-normal mx-[15px] my-[15px]">
+        <div className="w-10/12 h-80 bg-bamboo-400 rounded shadow mb-6">
+          <div className="w-full h-1/5 justify-between items-center flex">
+            <h1 className=" text-dirt-100 text-lg font-normal ">
               GIẢI ĐẤU ĐANG DIỄN RA
             </h1>
-            <p className="text-center text-dirt-100 text-xs font-normal mx-[15px] my-[15px]">
+            <p className=" text-dirt-100 text-xs font-normal">
               Còn lại: 3 giờ 2 phút 5 giây
             </p>
           </div>
-          <div className="w-full h-[250px] flex justify-between items-center">
-            <div className="flex items-center justify-center w-[200px]  h-[220px] bg-dirt-300 rounded shadow mx-[15px] my-[15px]">
+          <div className="w-full h-4/5 flex justify-between items-center">
+            <div className="flex items-center justify-center w-[200px] h-[220px] bg-dirt-300 rounded shadow mx-[15px] ">
               <img
-                className="w-[150px] h-[150px]"
+                className="w-40 h-40"
                 src="/icons/Cup.svg"
                 alt="nyte"
               />
             </div>
 
-            <div className="grid grid-cols-3 grid-rows-3 justify-items-center w-96 h-[220px] bg-bamboo-300 text-dirt-100 rounded shadow basis-3/5">
-              <h3>Top</h3>
-              <h3>UserName</h3>
-              <h3>Win</h3>
-              <h3>1</h3>
-              <h3>Player 1</h3>
-              <h3>12</h3>
-              <h3>2</h3>
-              <h3>Player 2</h3>
-              <h3>10</h3>
-            </div>
+            <div className="h-[220px] bg-bamboo-300 text-dirt-100 rounded shadow basis-3/5 flex justify-center">
+              <table className="w-full h-full">
+                <thead>
+                  <th>Top</th>
+                  <th>UserName</th>
+                  <th>Win</th>
+                </thead>
 
-            <div className="w-64 h-[220px] bg-dirt-300 rounded shadow mx-[15px] my-[15px]"></div>
+                <tbody>
+                  <tr className="text-center">
+                    <td>1</td>
+                    <td>Player 1</td>
+                    <td>6</td>
+                  </tr>
+                  <tr className="text-center">
+                    <td>2</td>
+                    <td>Player 2</td>
+                    <td>11</td>
+                  </tr>
+                  <tr className="text-center">
+                    <td>3</td>
+                    <td>Player 3</td>
+                    <td>5</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="flex flex-col h-[220px] justify-between items-center">
+              <div className="w-64 h-40 bg-dirt-300 rounded shadow mx-[15px]"></div>
+              <button className="btn btn-wide">Tham Gia</button>
+            </div>
           </div>
         </div>
-        <div className="w-[1400px] h-[500px] bg-bamboo-400 rounded shadow "></div>
+        <div className="w-10/12 h-[500px] bg-bamboo-400 rounded shadow "></div>
       </div>
     </>
   );
