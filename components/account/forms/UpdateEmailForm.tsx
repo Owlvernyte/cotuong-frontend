@@ -59,12 +59,16 @@ const UpdateEmailForm: React.FC = () => {
                   <input
                     type="submit"
                     value="Cập Nhật"
-                    className="btn btn-md bg-bamboo-100"
+                    className="btn btn-md btn-secondary"
                   />
                 </div>
               </div>
             </form>
           </div>
+          {/* closes when clicked outside */}
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </dialog>
       </div>
     </div>

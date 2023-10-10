@@ -61,7 +61,7 @@ const UpdateUsernameForm: React.FC = () => {
                   <input
                     type="submit"
                     value="Cập Nhật"
-                    className="btn btn-md bg-bamboo-100"
+                    className="btn btn-md btn-secondary"
                   />
                 </div>
               </div>
