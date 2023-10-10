@@ -1,5 +1,6 @@
 "use client"
 
+import IconButton from "@/components/ui/IconButton"
 import React from "react"
 
 const UpdateUsernameForm: React.FC = () => {
@@ -12,16 +13,12 @@ const UpdateUsernameForm: React.FC = () => {
         <div className="input input-bordered input-lg w-full bg-bamboo-100 placeholder-dirt-400 placeholder-opacity-50 text-xl pt-4">
           Owlvernyte
         </div>
-        <button
-          className="btn btn-lg btn-secondary"
+        <IconButton
+          iconSrc="/icons/secondary/Edit.svg"
+          iconAlt="Icon Edit"
           onClick={() => (window as any).my_modal_1.showModal()}
-        >
-          <img
-            className="drop-shadow-lg"
-            src="/thitnuong.svg"
-            alt="icon_quan_co"
-          />
-        </button>
+          buttonVariants="btn-neutral   "
+        />
         <dialog id="my_modal_1" className="modal">
           <form
             method="dialog"
