@@ -7,8 +7,10 @@ interface IconButtonProps {
   iconWidth?: number
   iconHeight?: number
   buttonVariants?: string
+  buttonSize?: string
+  buttonStyle?: string
   onClick?: () => void
-  className?: string 
+  className?: string
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
@@ -16,12 +18,17 @@ const IconButton: React.FC<IconButtonProps> = ({
   iconAlt,
   iconWidth = 20,
   iconHeight = 20,
-  buttonVariants = "btn-secondary",
+  buttonVariants = "",
+  buttonSize = "btn-md",
+  buttonStyle = "btn-square",
   onClick,
-  className = "", 
+  className = "",
 }) => {
   return (
-    <button className={`icon-button btn btn-lg text-xl ${buttonVariants} ${className}`} onClick={onClick}>
+    <button
+      className={`icon-button btn ${buttonStyle} ${buttonSize} ${buttonVariants} ${className}`}
+      onClick={onClick}
+    >
       <Image
         src={iconSrc}
         alt={iconAlt}
