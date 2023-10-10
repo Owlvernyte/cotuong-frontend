@@ -5,7 +5,7 @@ import LeaderBoardTable from "@/components/leaderboard/leaderboard-table/LeaderB
 
 export default function LeaderBoard() {
   return (
-    <div className="flex justify-center min-h-screen">
+    <div className="flex justify-center">
       <div className="container max-w-screen-2xl p-10">
         <div id="leaderBoard">
           <Title text="BẢNG XẾP HẠNG" textAlign="text-left" />
