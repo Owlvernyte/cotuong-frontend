@@ -14,13 +14,16 @@ function Header() {
             height={40}
           />
         </Link>
-        <Link className="text-bamboo-100 hover:underline" href={"/"}>
+        <Link className="text-bamboo-100 hover:underline" href={"/contact"}>
           {"Liên hệ"}
         </Link>
-        <Link className="text-bamboo-100 hover:underline" href={"/"}>
+        <Link className="text-bamboo-100 hover:underline" href={"/rooms"}>
           {"Phòng"}
         </Link>
-        <Link className="text-bamboo-100 hover:underline" href={"/"}>
+        <Link
+          className="text-bamboo-100 hover:underline"
+          href={"/competitions"}
+        >
           {"Giải đấu"}
         </Link>
       </div>
@@ -29,7 +32,10 @@ function Header() {
           {"Đăng nhập"}
         </Link>
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost rounded-btn">
+          <label
+            tabIndex={0}
+            className="btn btn-circle btn-ghost hover:bg-bamboo-300"
+          >
             <Image
               src="/icons/primary/Setting_fill.svg"
               alt="Icon Settings"
@@ -42,10 +48,32 @@ function Header() {
             className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md w-52 mt-4"
           >
             <li>
-              <a>Item 1</a>
+              <Link
+                className="hover:bg-bamboo-300 hover:text-bamboo-100"
+                href={"/"}
+              >
+                <Image
+                  src="/icons/primary/sound_max_fill.svg"
+                  alt="Sound Icon"
+                  width={25}
+                  height={25}
+                />
+                Âm thanh
+              </Link>
             </li>
             <li>
-              <a>Item 2</a>
+              <Link
+                className="hover:bg-bamboo-300 hover:text-bamboo-100"
+                href={"/contact"}
+              >
+                <Image
+                  src="/icons/primary/Question_fill.svg"
+                  alt="Sound Icon"
+                  width={25}
+                  height={25}
+                />
+                Trợ giúp
+              </Link>
             </li>
           </ul>
         </div>
