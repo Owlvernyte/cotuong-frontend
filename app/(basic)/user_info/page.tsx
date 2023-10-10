@@ -9,18 +9,18 @@ export default function UserInfo(){
     return(
     <div className='h-full'>
         <div id="user_info"
-          className=" bg-primary rounded-md shadow-lg w-1/2 h-1/3" style={{marginLeft:'2%' ,float:'left'}}>
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-1/3 float-left" style={{marginLeft:'2%'}}>
             <table className='text-bamboo-100 flex items-center'>
                 <tr>
-                    <td><img src='/avatars/1.png' style={{height:80,borderRadius:'50%'}}></img></td>
+                    <td><img src='/avatars/1.png'className='h-20 rounded-full' ></img></td>
                     <td>
-                        <div style={{display:'inline-block', marginLeft:40}}>
+                        <div className='inline-block float-left ml-10'>
                             Owlvernyte
-                            <img src='/flags/vietnam.png' style={{float:'right',height:30, marginLeft:10}}></img>
+                            <img src='/flags/vietnam.png' className='float-right ml-2 h-8'></img>
                         </div>
                         <div>
                             1234 
-                            <img src='/thitnuong.svg' style={{float:'left'}}></img>
+                            <img src='/thitnuong.svg' className='float-left'></img>
                         </div>
                         <div>
                             10.7
@@ -29,13 +29,13 @@ export default function UserInfo(){
                 </tr>
             </table>
 
-            <table style={{backgroundColor:'aquamarine', width:'85%', justifyContent:'center', margin:'5%'}}>
-                <tr className='text-center' style={{justifyContent:'true'}}>
+            <table className='w-4/5 m-10 ml-16 justify-center bg-bamboo-300'>
+                <tr className='text-center text-bamboo-200'>
                     <th>Thắng</th>
                     <th>Thua</th>
                     <th>Hòa</th>
                 </tr>
-                <tr className='text-center' style={{fontSize:36, justifyContent:'true'}}>
+                <tr className='text-center text-bamboo-100 text-4xl'>
                     <td>120</td>
                     <td>10</td>
                     <td>5</td>
@@ -43,52 +43,55 @@ export default function UserInfo(){
             </table>
 
             <div id="setting"
-          className=" bg-primary rounded-md shadow-lg " style={{width:'100%',float:'left'}}>
+          className=" bg-primary rounded-md shadow-lg w-full float-left">
             <table className='text-bamboo-100 flex items-center'>
                 <tr>
-                <label>Chọn quốc gia: </label> 
-                <div className="dropdown dropdown-end">
-                        <label tabIndex={0} className="btn btn-ghost rounded-btn">
-                        <img src='/flags/vietnam.png' style={{height:30}}></img>
+                <label className='mr-8'>Chọn quốc gia: </label> 
+                <div className="dropdown dropdown-end bg-bamboo-100 mt-2 w-60">
+                        <label tabIndex={0} className="btn btn-ghost rounded-btn text-dirt-200">
+                        <img src='/flags/vietnam.png' className='h-8'></img>
                         Việt Nam
+                        <img src='/icons/dropdown.png' className='float-right inline-block h-8 ml-10'></img>
                         </label>
                         <ul
                             tabIndex={0}
-                            className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md w-52 mt-4"
+                            className="menu dropdown-content z-[1] p-2 shadow bg-primary 
+                            text-primary-content rounded-md w-52 mt-4 bg-bamboo-100 "
                         >
                             <li>
-                                <a><img src='/flags/england.png' style={{height:15}}></img>Anh</a>
+                                <a className='text-dirt-200 h-4'><img src='/flags/england.png'></img>Anh</a>
                             </li>
                             <li>
-                                <a><img src='/flags/usa.png' style={{height:15}}></img>Mỹ</a>
+                                <a className='text-dirt-200 h-4'><img src='/flags/usa.png'></img>Mỹ</a>
                             </li>
                         </ul>
                     </div>
                 </tr>
             </table>
+            <br></br>
 
             <label className='text-bamboo-100 flex items-center'>Chọn ảnh đại diện:</label>
-            <table style={{width:'85%', justifyContent:'center', margin:'5%'}}>
+            <table className='justify-center w-4/5 m-5'>
                 
                 <tr>
                     <td>
-                        <button><img src='/avatars/1.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                        <button><img src='/avatars/1.png' className='h-20 rounded-full'></img></button>
                     </td>
                     <td>
-                        <button><img src='/avatars/2.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                        <button><img src='/avatars/2.png' className='h-20 rounded-full'></img></button>
                     </td>
                     <td>
-                        <button><img src='/avatars/3.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                        <button><img src='/avatars/3.png' className='h-20 rounded-full'></img></button>
                     </td>
                     <td>
-                        <button><img src='/avatars/4.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                        <button><img src='/avatars/4.png' className='h-20 rounded-full'></img></button>
                     </td>
                     <td>
-                        <button><img src='/avatars/5.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                        <button><img src='/avatars/5.png' className='h-20 rounded-full'></img></button>
                     </td>
                     <td>
                         <div className="dropdown dropdown-end">
-                            <label tabIndex={0} className="btn btn-ghost rounded-btn" style={{backgroundColor:'aquamarine'}}>
+                            <label tabIndex={0} className="btn btn-ghost rounded-btn bg-bamboo-100">
                             ...
                             </label>
                             <ul
@@ -97,10 +100,10 @@ export default function UserInfo(){
                             >
                                 <table>
                                     <tr>
-                                        <button><img src='/avatars/6.png' style={{height:80,borderRadius:'50%'}}></img></button>
-                                        <button><img src='/avatars/1.png' style={{height:80,borderRadius:'50%'}}></img></button>
-                                        <button><img src='/avatars/2.png' style={{height:80,borderRadius:'50%'}}></img></button>
-                                        <button><img src='/avatars/3.png' style={{height:80,borderRadius:'50%'}}></img></button>
+                                        <button><img src='/avatars/6.png' className='rounded-full h-20'></img></button>
+                                        <button><img src='/avatars/1.png' className='rounded-full h-20'></img></button>
+                                        <button><img src='/avatars/2.png' className='rounded-full h-20'></img></button>
+                                        <button><img src='/avatars/3.png' className='rounded-full h-20'></img></button>
                                     </tr>
                                 </table>
                             </ul>
@@ -108,20 +111,20 @@ export default function UserInfo(){
                     </td>
                 </tr>
             </table>
-            <button style={{backgroundColor:'#eae7b1', marginLeft:'30em',marginBottom:20, width:'20%'}}>Cập nhật</button>
+            <button className='bg-bamboo-100 mb-5 w-1/5' style={{marginLeft:'30em'}}>Cập nhật</button>
         </div>
 
         </div>
 
 
         <div id="friend_list"
-          className=" bg-primary rounded-md shadow-lg w-1/2" style={{marginTop:'2%',marginLeft:'54%', height:'100%'}}>
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-full" style={{marginTop:'2%',marginLeft:'54%'}}>
             <table className='text-bamboo-100'>
                 <tr>
-                <label style={{fontSize:24, marginRight:'7em', marginLeft:'1em'}}>Bạn Bè</label>
+                <label className='text-2xl' style={{marginRight:'7em', marginLeft:'1em'}}>Bạn Bè</label>
                 <div className="dropdown dropdown-end">
-                        <label tabIndex={0} className="btn btn-ghost rounded-btn" style={{fontSize:24}}>
-                        <img src='/icons/User_fill.svg' style={{height:30}}></img>
+                        <label tabIndex={0} className="btn btn-ghost rounded-btn text-2xl">
+                        <img src='/icons/User_fill.svg' className='h-8'></img>
                         Thêm Bạn Bè
                         </label>
                         <ul
@@ -141,62 +144,64 @@ export default function UserInfo(){
             <table className='text-bamboo-100 flex items-center' style={{marginLeft:'2%'}}>
                 
                 <tr>
-                    <td><img src='/avatars/1.png' style={{height:80,borderRadius:'50%', marginTop:'50%'}}></img></td>
+                    <td><img src='/avatars/1.png' className='h-20 rounded-full' style={{marginTop:'50%'}}></img></td>
                     <td>
-                        <div style={{display:'inline-block', marginTop:'25%', marginLeft:40}}>
+                        <div className='inline-block ml-10' style={{marginTop:'25%'}}>
                             Owlvernyte1
-                            <img src='/flags/vietnam.png' style={{float:'right',height:30, width:50,marginLeft:10}}></img>
+                            <img src='/flags/vietnam.png' className='float-right h-8 w-12 ml-2'></img>
                         </div>
                         <div>
                             Trực Tuyến
-                            <span style={{height:20, width:20, backgroundColor:'lawngreen'
-                            ,borderRadius:'50%', display:'inline-block',float:'left', marginRight:20}}></span>
+                            <span className='rounded-full inline-block float-left h-5 w-5 mr-5'
+                            style={{backgroundColor:'lawngreen'}}></span>
                         </div>
                         <div>
                             1234
-                            <img src='/thitnuong.svg' style={{float:'left'}}></img>
+                            <img src='/thitnuong.svg' className='float-left'></img>
                         </div>
                     </td>
+
                     <tr>
-                    <td><img src='/avatars/1.png' style={{height:80,borderRadius:'50%', marginTop:'50%'}}></img></td>
-                    <td>
-                        <div style={{display:'inline-block', marginTop:'25%', marginLeft:40}}>
-                            Owlvernyte2
-                            <img src='/flags/usa.png' style={{float:'right',height:30, width:50, marginLeft:10}}></img>
-                        </div>
-                        <div>
-                            Đang chơi 
-                            <span style={{height:20, width:20, backgroundColor:'red'
-                            ,borderRadius:'50%', display:'inline-block',float:'left', marginRight:20}}></span>
-                        </div>
-                        <div>
-                            1234
-                            <img src='/thitnuong.svg' style={{float:'left'}}></img>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src='/avatars/1.png' style={{height:80,borderRadius:'50%', marginTop:'50%'}}></img></td>
-                    <td>
-                        <div style={{display:'inline-block', marginTop:'25%', marginLeft:40}}>
-                            Owlvernyte3
-                            <img src='/flags/england.png' style={{float:'right',height:30, width:50,marginLeft:10}}></img>
-                        </div>
-                        <div>
-                            Ngoại tuyến
-                            <span style={{height:20, width:20, backgroundColor:'grey'
-                            ,borderRadius:'50%', display:'inline-block',float:'left', marginRight:20}}></span>
-                        </div>
-                        <div>
-                            1234
-                            <img src='/thitnuong.svg' style={{float:'left'}}></img>
-                        </div>
-                    </td>
-                </tr>
+                        <td><img src='/avatars/1.png' className='h-20 rounded-full' style={{marginTop:'50%'}}></img></td>
+                        <td>
+                            <div className='inline-block ml-10' style={{marginTop:'25%'}}>
+                                Owlvernyte2
+                                <img src='/flags/usa.png' className='float-right h-8 w-12 ml-2'></img>
+                            </div>
+                            <div>
+                                Đang chơi 
+                                <span className='rounded-full inline-block float-left h-5 w-5 mr-5'
+                                style={{backgroundColor:'red'}}></span>
+                            </div>
+                            <div>
+                                1234
+                                <img src='/thitnuong.svg' className='float-left'></img>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><img src='/avatars/1.png' className='h-20 rounded-full' style={{marginTop:'50%'}}></img></td>
+                        <td>
+                            <div className='inline-block ml-10' style={{marginTop:'25%'}}>
+                                Owlvernyte3
+                                <img src='/flags/england.png' className='float-right h-8 w-12 ml-2'></img>
+                            </div>
+                            <div>
+                                Ngoại tuyến
+                                <span className='rounded-full inline-block float-left h-5 w-5 mr-5'
+                                style={{backgroundColor:'grey'}}></span>
+                            </div>
+                            <div>
+                                1234
+                                <img src='/thitnuong.svg' className='float-left'></img>
+                            </div>
+                        </td>
+                    </tr>
                 </tr>
             </table>
 
-        </div>
+    </div>
 
         
     </div>
