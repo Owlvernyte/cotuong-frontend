@@ -1,7 +1,7 @@
 "use client"
 
-import IconButton from "@/components/ui/IconButton"
 import React from "react"
+import IconButton from "@/components/ui/IconButton"
 
 interface PlayerData {
   username: string
