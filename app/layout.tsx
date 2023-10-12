@@ -11,8 +11,8 @@ const paytone = Paytone_One({
 export const metadata: Metadata = {
     title: 'Cờ tướng Thịt nướng',
     description: 'Play Vietnamese Chess while BBQing!',
-
-    icons: ['/thitnuong.svg']
+    viewport: 'user-scalable=no, initial-scale=1.0',
+    icons: ['/thitnuong.svg'],
 }
 
 export default function RootLayout({
@@ -22,9 +22,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={paytone.className}>
-                {children}
-            </body>
+            <body className={paytone.className}>{children}</body>
         </html>
     )
 }
