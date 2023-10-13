@@ -3,7 +3,7 @@ import Link from 'next/link'
 function Lobby() {
     return (
         <div>
-            <Link href={'/room/vip'}>Join</Link>
+            <Link href={'/rooms/vip'}>Join</Link>
         </div>
     )
 }

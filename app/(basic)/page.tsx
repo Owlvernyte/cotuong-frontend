@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+
 export default function Home() {
     return (
         <div className="flex justify-center h-full">
@@ -19,12 +21,18 @@ export default function Home() {
                         </h1>
                     </div>
                     <div className="flex-col space-y-8 justify-center  w-full px-2 md:px-0 md:w-1/2">
-                        <button className="btn btn-primary btn-md md:btn-lg w-full drop-shadow-lg">
+                        <Link
+                            href="/rooms"
+                            className="btn btn-primary btn-md md:btn-lg w-full drop-shadow-lg"
+                        >
                             {'Danh sách phòng'}
-                        </button>
-                        <button className="btn btn-primary btn-md md:btn-lg w-full drop-shadow-lg">
+                        </Link>
+                        <Link
+                            href="/leaderboard"
+                            className="btn btn-primary btn-md md:btn-lg w-full drop-shadow-lg"
+                        >
                             {'Bảng xếp hạng'}
-                        </button>
+                        </Link>
                         <a
                             className="btn btn-primary btn-md md:btn-lg w-full drop-shadow-lg"
                             href="#guide"
@@ -36,7 +44,10 @@ export default function Home() {
                 {/**
                  * MENU - end
                  */}
-                <div id="guide" className="h-screen flex flex-col space-y-2 justify-center items-center pb-40">
+                <div
+                    id="guide"
+                    className="h-screen flex flex-col space-y-2 justify-center items-center pb-40"
+                >
                     <div className="justify-center items-center py-5 text-center space-x-2">
                         <h1 className="text-4xl md:text-8xl drop-shadow-lg">
                             Hướng Dẫn Chơi
