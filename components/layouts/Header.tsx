@@ -12,6 +12,7 @@ function Header() {
             alt="Logo Thit Nuong"
             width={40}
             height={40}
+            style={{ width: "auto", height: "auto" }}
           />
         </Link>
         <Link className="text-bamboo-100 hover:underline" href={"/contact"}>
