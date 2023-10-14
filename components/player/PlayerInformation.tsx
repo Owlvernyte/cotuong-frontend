@@ -31,7 +31,7 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
   return (
     <div className="space-x-3 items-center  ">
       <div className="flex flex-col md:flex-row">
-        <div className="avatar">
+        <div className="avatar mr-2">
           <div className={`w-${avatarSize} rounded-full`}>
             <Image
               src={avatarSrc}
