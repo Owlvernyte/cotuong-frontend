@@ -49,9 +49,9 @@ const AuthCard: React.FC<AuthCardProps> = ({
       <div className="card-body w-full">
         <div className="text-5xl text-center my-6">{formTitle}</div>
 
-        <div className="py-40">{formComponent}</div>
+        <div className="pt-12 pb-4">{formComponent}</div>
 
-        <div className="text-center py-2">
+        <div className="text-center text-lg py-2">
           <Link href={extensionLink} className="link">
             {titleLink}
           </Link>
