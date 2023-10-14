@@ -7,13 +7,11 @@ import React from "react";
 
 export default function Home() {
   return (
-    
     <div className="flex justify-center min-h-screen">
-    <div className="container max-w-screen-2xl p-10">
-    <OnCard />
-    <OffCard />
+      <div className="container max-w-screen-2xl p-10">
+        <OnCard />
+        <OffCard />
       </div>
     </div>
-    
   );
 }

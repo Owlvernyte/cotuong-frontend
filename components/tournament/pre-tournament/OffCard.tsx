@@ -24,14 +24,14 @@ const users: User[] = [
     name: "John Doe",
     avatarSrc: "/avatars/avatar1.png",
     email: "john.doe@example.com",
-    win: 4,
+    win: 5,
   },
   {
     id: 2,
     name: "Jane Doe",
     avatarSrc: "/avatars/avatar1.png",
     email: "jane.doe@example.com",
-    win: 5,
+    win: 6,
   },
   {
     id: 3,
@@ -136,10 +136,7 @@ const UserCard = ({ user, rank }: { user: User; rank: number }) => {
         <div className="text-6xl text-dirt-300">{user.win}</div>
       </div>
       <div className="flex flex-row justify-center items-center bg-bamboo-300 h-1/5 p-6 m-4 ">
-        <img
-          className=" w-14 h-14 rounded-full"
-          src={user.avatarSrc}
-        ></img>
+        <img className=" w-14 h-14 rounded-full" src={user.avatarSrc}></img>
         <div className="px-4">{user.name}</div>
       </div>
     </div>
@@ -164,7 +161,7 @@ const OffCard = () => {
   return (
     <>
       <div className=" bg-bamboo-400 rounded shadow mb-6 pl-4 text-bamboo-100 ">
-        <div className=" text-3xl pb-8 pt-4 pl-4 "> Giai dau dang dien ra</div>
+        <div className=" text-3xl pb-8 pt-4 pl-4 "> Bang Cac Giai Dau</div>
         <TournamentList currentItems={currentItems} />
         <Pagination
           currentPage={currentPage}

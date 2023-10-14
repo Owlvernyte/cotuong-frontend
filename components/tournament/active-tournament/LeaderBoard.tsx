@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import PlayerInformation from "@/components/player/PlayerInformation";
 
-
 interface PlayerData {
   username: string;
   avatarSrc: string;
@@ -49,7 +48,6 @@ sampleData.sort((a, b) => b.score - a.score);
 const LeaderBoard: React.FC = () => {
   return (
     <div className="flex justify-center items-center ">
-        
       <table className="table bg-bamboo-300 text-bamboo-100 rounded-md text-xl w-3/6 ">
         <thead className="text-bamboo-100 text-xl">
           <tr>
@@ -58,7 +56,7 @@ const LeaderBoard: React.FC = () => {
             <th></th>
             <th></th>
             <th></th>
-            <th></th>         
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -82,8 +80,7 @@ const LeaderBoard: React.FC = () => {
           ))}
         </tbody>
       </table>
-      </div>
-  
+    </div>
   );
 };
 
@@ -115,13 +112,11 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
       </td>
       <td></td>
       <td></td>
-      <td></td>     
       <td></td>
-      <td></td> 
-      <td></td> 
-      <td>
-        {data.win} 
-      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{data.win}</td>
       <td>{data.score}</td>
     </tr>
   );

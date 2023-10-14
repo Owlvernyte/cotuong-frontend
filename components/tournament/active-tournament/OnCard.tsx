@@ -10,7 +10,7 @@ export default function OnCard() {
   return (
     <>
       <div className="bg-bamboo-400 rounded shadow mb-6 pl-4 w-full">
-        <div className="flex flex-row justify-between text-3xl pb-8 pt-4 pl-4">
+        <div className="flex flex-row justify-between text-bamboo-100 text-3xl pb-8 pt-4 pl-4">
           <div className="">Giai dau dang dien ra</div>
           <Countdown />
         </div>

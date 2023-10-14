@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -6,7 +6,11 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) => {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
@@ -16,7 +20,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           <li key={number}>
             <button
               className={`mx-1 px-3 py-2 rounded-lg ${
-                currentPage === number ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
+                currentPage === number
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500"
               }`}
               onClick={() => onPageChange(number)}
             >
