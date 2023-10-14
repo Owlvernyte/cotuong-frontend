@@ -1,16 +1,24 @@
 'use client'
 
-import Board from '@/lib/game/Board'
-import Piece, { PieceType } from '@/lib/game/QuanCo/Piece'
+import GameBoard from '@/lib/game/Board'
+import GamePiece, { PieceType } from '@/lib/game/QuanCo/Piece'
 import Link from 'next/link'
-import { useState } from 'react'
-
-const basePiecePath = '/game/pieces1'
+import { useCallback, useState } from 'react'
+import Board from './Board'
+import ChatBox from './LeftArea/ChatBox'
+import Cell from './Cell'
+import Piece, { DraggablePiece, PieceProps } from './Piece'
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+} from '@dnd-kit/core'
 
 function Game() {
-    const [board, setBoard] = useState<Board>(new Board())
-    const [selectedSquare, setSelectedSquare] = useState<{
-        piece: Piece
+    const [board, setBoard] = useState<GameBoard>(new GameBoard())
+    const [movingPiece, setMovingPiece] = useState<{
+        piece: GamePiece
         coord: CoordinationType
     } | null>(null)
 
@@ -29,29 +37,76 @@ function Game() {
     //     return () => {}
     // }, [])
 
+    const handleDragCancel = useCallback(() => {
+        setMovingPiece(null)
+    }, [])
+
     const startBtnHandler = () => {
         setBoard((b) => b.getInitBoard())
     }
 
+    const handleDragEnd = useCallback(
+        function handleDragEnd(event: DragEndEvent) {
+            if (!movingPiece?.coord || !movingPiece?.piece || !event.over?.id) {
+                return
+            }
+
+            const { x: movingPieceX, y: movingPieceY } = movingPiece.coord
+            const [cellX, cellY] = event.over.id
+                .toString()
+                .split('_')
+                .map(Number)
+
+            // const potentialExistingPiece = board.squares[cellY][cellX]
+
+            setMovingPiece(null)
+
+            setBoard((b) =>
+                b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
+            )
+        },
+        [movingPiece]
+    )
+
+    const handleDragStart = useCallback(
+        function handleDragStart({ active }: DragStartEvent) {
+            const piece = board.squares.reduce<GamePiece | null>((acc, row) => {
+                return acc ?? row.find((cell) => cell?.id === active.id) ?? null
+            }, null)
+
+            if (piece) {
+                setMovingPiece({
+                    piece: piece,
+                    coord: piece.coord,
+                })
+            }
+        },
+        [board.squares]
+    )
+
     const movePiece = (destination: CoordinationType) => {
-        if (!selectedSquare?.piece) {
+        if (!movingPiece?.piece) {
             return
         }
         console.log(destination)
-        console.log(selectedSquare.piece.coord)
-        setBoard((b) => b.movePiece(selectedSquare?.piece, destination))
-        setSelectedSquare(null)
+        console.log(movingPiece.piece.coord)
+        setBoard((b) => b.movePiece(movingPiece?.piece, destination))
+        setMovingPiece(null)
     }
 
-    const selectSquareHandler = (cell: Piece | null, x: number, y: number) => {
+    const selectSquareHandler = (
+        cell: GamePiece | null,
+        x: number,
+        y: number
+    ) => {
         if (
             board.squares.every((rows) => rows.every((cell) => cell === null))
         ) {
             return
         }
 
-        if (!selectedSquare && cell) {
-            setSelectedSquare({
+        if (!movingPiece && cell) {
+            setMovingPiece({
                 piece: cell,
                 coord: {
                     x,
@@ -60,155 +115,90 @@ function Game() {
             })
             return
         }
-        if (selectedSquare?.piece) {
+        if (movingPiece?.piece) {
             movePiece({ x, y })
         }
     }
 
     return (
-        <div className="h-full space-y-2 flex flex-col">
-            <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
-                <div
-                    id="left-area"
-                    className="flex flex-col space-y-2 col-span-2"
-                >
+        <DndContext
+            onDragStart={handleDragStart}
+            onDragCancel={handleDragCancel}
+            onDragEnd={handleDragEnd}
+        >
+            <div className="h-full space-y-2 flex flex-col">
+                <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
-                        id="menu"
-                        className="bg-primary h-full rounded-md shadow-lg p-2"
+                        id="left-area"
+                        className="flex flex-col space-y-2 col-span-2"
                     >
-                        <div className="flex space-x-2">
-                            <Link href={'/room'} className="btn btn-secondary">
-                                Back to lobby
-                            </Link>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={startBtnHandler}
-                            >
-                                Start
-                            </button>
-                            <div>
-                                {selectedSquare &&
-                                    PieceType[selectedSquare.piece.pieceType!]}
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        id="chat-box"
-                        className="bg-primary h-full rounded-md shadow-lg flex flex-col p-2 space-y-2 col-span-2"
-                    >
-                        <div className="flex-1 flex flex-col space-y-2">
-                            {messages.map((message, i) => {
-                                return (
-                                    <div key={`m_${i}`}>{message.content}</div>
-                                )
-                            })}
-                        </div>
-                        <div className="join w-full">
-                            <div className="w-full">
-                                <div className="w-full">
-                                    <input
-                                        className="input input-bordered join-item w-full"
-                                        placeholder="Type something..."
-                                    />
+                        <div
+                            id="menu"
+                            className="bg-primary h-full rounded-md shadow-lg p-2"
+                        >
+                            <div className="flex space-x-2">
+                                <Link
+                                    href={'/rooms'}
+                                    className="btn btn-secondary"
+                                >
+                                    Back to lobby
+                                </Link>
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={startBtnHandler}
+                                >
+                                    Start
+                                </button>
+                                <div>
+                                    {movingPiece &&
+                                        PieceType[movingPiece.piece.pieceType!]}
                                 </div>
                             </div>
-                            <button className="btn join-item">
-                                <img
-                                    src="/icons/Send_fill.svg"
-                                    alt="send_button"
-                                ></img>
-                            </button>
                         </div>
+                        <ChatBox messages={messages} />
                     </div>
-                </div>
-                <div
-                    id="game-board"
-                    className="px-8 py-4 bg-dirt-300 rounded-md h-full flex items-center justify-center text-center col-span-4"
-                >
-                    <div className="bg-banco1 bg-center bg-contain bg-no-repeat p-2 grid grid-cols-9 gap-2 w-full max-w-2xl">
-                        {board.squares.map((row, i) => (
-                            <>
-                                {row.map((cell, j) => {
-                                    const isSelected =
-                                        selectedSquare &&
-                                        selectedSquare.coord.x == i &&
-                                        selectedSquare.coord.y == j
+                    <Board>
+                        {board.squares.map((row, i) =>
+                            row.map((cell, j) => {
 
-                                    const selected = isSelected
-                                        ? 'ring-4 ring-black'
-                                        : ''
-
-                                    const baseClassName =
-                                        selected +
-                                        ' ' +
-                                        'flex aspect-square rounded-full justify-center cursor-pointer box-border'
-
-                                    const red =
-                                        baseClassName +
-                                        ' ' +
-                                        'hover:ring-red-500 hover:ring-4'
-
-                                    const blue =
-                                        baseClassName +
-                                        ' ' +
-                                        'hover:ring-blue-500 hover:ring-4'
-
-                                    const emptyCell = baseClassName
-
-                                    const className =
-                                        cell === null
-                                            ? emptyCell
-                                            : cell.isRed
-                                            ? red
-                                            : blue
-
-                                    const pieceChars = cell
-                                        ? `${cell.isRed ? 'r' : 'b'}${
-                                              cell.signature
-                                          }`
-                                        : undefined
-
-                                    const srcPath = !!pieceChars
-                                        ? basePiecePath +
-                                          '/' +
-                                          `${pieceChars}.svg`
-                                        : undefined
-
-                                    const alt = !!pieceChars
-                                        ? `${pieceChars}`
-                                        : undefined
-
-                                    return (
-                                        <div
-                                            key={`cell_${j}`}
-                                            className={className}
-                                            onClick={() =>
-                                                selectSquareHandler(cell, i, j)
-                                            }
-                                        >
-                                            {cell && (
-                                                <img
-                                                    className="box-content shadow-lg rounded-full"
-                                                    src={srcPath}
-                                                    alt={alt}
-                                                ></img>
-                                            )}
-                                        </div>
-                                    )
-                                })}
-                            </>
-                        ))}
+                                return (
+                                    <Cell
+                                        key={`cell_${i}_${j}`}
+                                        id={`${i}_${j}`}
+                                        x={i}
+                                        y={j}
+                                    >
+                                        {cell && (
+                                            <DraggablePiece
+                                                id={cell.id}
+                                                target={cell}
+                                                position={cell.coord}
+                                            />
+                                        )}
+                                    </Cell>
+                                )
+                            })
+                        )}
+                    </Board>
+                    <div
+                        id="right-area"
+                        className="flex flex-col space-y-2 col-span-2"
+                    >
+                        <div className="bg-primary h-full rounded-md shadow-lg"></div>
+                        <div className="bg-primary h-full rounded-md shadow-lg"></div>
                     </div>
-                </div>
-                <div
-                    id="right-area"
-                    className="flex flex-col space-y-2 col-span-2"
-                >
-                    <div className="bg-primary h-full rounded-md shadow-lg"></div>
-                    <div className="bg-primary h-full rounded-md shadow-lg"></div>
                 </div>
             </div>
-        </div>
+            <DragOverlay dropAnimation={null}>
+                {movingPiece == null ? null : (
+                    <Piece
+                        target={movingPiece.piece}
+                        clone
+                        id={movingPiece.piece.id}
+                    />
+                )}
+            </DragOverlay>
+        </DndContext>
     )
 }
 

@@ -42,11 +42,6 @@ class Board implements IBoard {
     movePiece(piece: Piece, destination: CoordinationType): Board {
         if (this.squares[piece.coord!.x][piece.coord!.y] != null) {
             this.squares[piece.coord!.x][piece.coord!.y] = null
-            // this.squares[piece.coord!.y][piece.coord!.x]!.setCoord(undefined)
-        }
-        const desCell = this.squares[destination.x][destination.y]
-        if (desCell !== null) {
-            desCell.setCoord(undefined)
         }
         this.squares[destination.x][destination.y] = piece
         piece.setCoord(destination)
