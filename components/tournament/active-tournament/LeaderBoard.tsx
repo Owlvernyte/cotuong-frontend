@@ -50,14 +50,15 @@ const LeaderBoard: React.FC = () => {
   return (
     <div className="flex justify-center items-center ">
         
-      <table className="table bg-bamboo-300 text-bamboo-100 rounded-md text-sm w-3/6 ">
-        <thead className="text-bamboo-100 text-xs">
+      <table className="table bg-bamboo-300 text-bamboo-100 rounded-md text-xl w-3/6 ">
+        <thead className="text-bamboo-100 text-xl">
           <tr>
             <th>Top</th>
             <th></th>
             <th></th>
             <th></th>
             <th></th>
+            <th></th>         
             <th></th>
             <th></th>
             <th></th>
@@ -114,9 +115,10 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
       </td>
       <td></td>
       <td></td>
+      <td></td>     
       <td></td>
-      <td></td>
-      <td></td>
+      <td></td> 
+      <td></td> 
       <td>
         {data.win} 
       </td>

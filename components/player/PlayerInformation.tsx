@@ -29,30 +29,33 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
   flagHeight = 40,
 }) => {
   return (
-    <div className="flex flex-col space-x-3 items-center md:flex-row">
-      <div className="avatar">
-        <div className={`w-${avatarSize} rounded-full`}>
-          <Image
-            src={avatarSrc}
-            alt="Avatar"
-            width={imageWidth}
-            height={imageHeight}
-            style={{ width: "auto", height: "auto" }}
-          />
+    <div className="space-x-3 items-center  ">
+      <div className="flex flex-col md:flex-row">
+        <div className="avatar">
+          <div className={`w-${avatarSize} rounded-full`}>
+            <Image
+              src={avatarSrc}
+              alt="Avatar"
+              width={imageWidth}
+              height={imageHeight}
+              style={{ width: "auto", height: "auto" }}
+            />
+          </div>
         </div>
+        <div className={`${textColor} ${textSize} py-2`}>{username}</div>
+        {hasFlag && (
+          <div className="w-8">
+            <Image
+              src={flagSrc}
+              alt="Flag"
+              width={flagWidth}
+              height={flagHeight}
+              style={{ width: "auto", height: "auto" }}
+            />
+          </div>
+        )}
       </div>
-      <div className={`${textColor} ${textSize} py-2`}>{username}</div>
-      {hasFlag && (
-        <div className="w-8">
-          <Image
-            src={flagSrc}
-            alt="Flag"
-            width={flagWidth}
-            height={flagHeight}
-            style={{ width: "auto", height: "auto" }}
-          />
-        </div>
-      )}
+
       {/* Dự kiến: Thêm phần điểm + trạng thái hoạt động */}
     </div>
   );
