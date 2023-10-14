@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { enqueueSnackbar } from 'notistack'
 import React from 'react'
 
 export default function SignIn() {
@@ -70,7 +71,9 @@ export default function SignIn() {
                             <p>Quên mật khẩu?</p>
                         </div>
                         <div className="pb-6 mx-auto w-[500px]">
-                            <button className="btn btn-active btn-accent w-full">
+                            <button className="btn btn-active btn-accent w-full" onClick={() => enqueueSnackbar("hi" , {
+                                variant: "success",
+                            })}>
                                 Tiếp Tục
                             </button>
                         </div>

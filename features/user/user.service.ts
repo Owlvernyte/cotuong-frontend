@@ -23,6 +23,10 @@ class UserApiService extends HttpService {
     getUsers() {
         return this.get<User[]>(`/users`)
     }
+
+    checkAuthorization() {
+        return this.get<User>(`/users/check-authorization`)
+    }
 }
 
 const userApi = new UserApiService()

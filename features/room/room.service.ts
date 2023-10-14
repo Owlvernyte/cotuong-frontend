@@ -1,14 +1,10 @@
 'use client'
 import HttpService from '@/lib/services/http.service'
-import { Room } from './room.types'
+import { Room, RoomCreateRequest } from './room.types'
 
 class RoomApiService extends HttpService {
-    createRoom(data: Room) {
+    createRoom(data: RoomCreateRequest) {
         return this.post<Room>('/rooms')
-    }
-
-    deleteRoom(id: string) {
-        return this.delete(`/rooms/${id}`)
     }
 
     getRoomById(id: string) {

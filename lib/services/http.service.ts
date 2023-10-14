@@ -53,9 +53,9 @@ export default class HttpService {
             case HttpStatusCode.UNAUTHORIZED: {
                 if (
                     typeof window !== 'undefined' &&
-                    !window.location.pathname.startsWith('/auth')
+                    !window.location.pathname.startsWith("/sign") // /^\/(sign)(in|up)$/
                 )
-                    window.location.replace('/auth/sign-in')
+                    window.location.replace('/signin')
                 break
             }
         }
