@@ -15,6 +15,7 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core"
 import Image from "next/image"
+import PlayerInformation from "@/components/player/PlayerInformation"
 
 function Game() {
   const [board, setBoard] = useState<GameBoard>(new GameBoard())
@@ -162,7 +163,10 @@ function Game() {
               </div>
 
               <div className="flex flex-col space-y-2 items-center xl:space-y-0 xl:flex-row xl:space-x-2 my-1">
-                <Link href={"/rooms"} className="btn btn-secondary btn-md w-48 text-lg">
+                <Link
+                  href={"/rooms"}
+                  className="btn btn-secondary btn-md w-48 text-lg"
+                >
                   Rời Phòng
                 </Link>
                 <button
@@ -201,8 +205,44 @@ function Game() {
             )}
           </Board>
           <div id="right-area" className="flex flex-col space-y-2 col-span-2">
-            <div className="bg-primary h-full rounded-md shadow-lg"></div>
-            <div className="bg-primary h-full rounded-md shadow-lg"></div>
+            <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
+              <div id="player1" className="self-start pl-4 py-2">
+                <PlayerInformation
+                  username="Player 1"
+                  avatarSrc="/avatars/avatar1.png"
+                  avatarSize={50}
+                  imageWidth={70}
+                  imageHeight={70}
+                  hasFlag
+                  flagSrc="/flags/VN.svg"
+                  hasScore
+                  scoreValue={1234}
+                />
+              </div>
+
+              <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
+
+              <div id="player1-captured-pieces"></div>
+            </div>
+            <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
+              <div id="player2" className="self-start pl-4 py-2">
+                <PlayerInformation
+                  username="Player 2"
+                  avatarSrc="/avatars/avatar2.png"
+                  avatarSize={50}
+                  imageWidth={70}
+                  imageHeight={70}
+                  hasFlag
+                  flagSrc="/flags/VN.svg"
+                  hasScore
+                  scoreValue={3456}
+                />
+              </div>
+
+              <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
+
+              <div id="player2-captured-pieces"></div>
+            </div>
           </div>
         </div>
       </div>
