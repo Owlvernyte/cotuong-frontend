@@ -10,7 +10,7 @@ import UpdateUsernameForm from "@/components/account/forms/UpdateUsernameForm"
 export default function Account() {
   return (
     <div className="flex justify-center">
-      <div className="container max-w-screen-2xl p-10">
+      <div className="container max-w-screen-2xl px-10 py-2">
         <div
           id="profile-card"
           className="bg-primary rounded-md shadow-lg flex-1 px-20 pb-8"
