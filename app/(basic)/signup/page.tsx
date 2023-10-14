@@ -8,7 +8,7 @@ export default function SignUp() {
   return (
     <div className="flex justify-center">
       <div className="container max-w-screen-2xl px-10 py-2">
-        <div id="signin">
+        <div id="signup">
           <AuthCard
             titles={["Cờ Tướng", "ăn thịt nướng"]}
             subtitles={[
