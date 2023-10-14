@@ -69,6 +69,34 @@ const rooms: Room[] = [
     player2: "Username 16",
     linkRoom: "/rooms/vip",
   },
+  {
+    idRoom: "ALO111",
+    numberOfViewers: 7,
+    player1: "Username 17",
+    player2: "Username 18",
+    linkRoom: "/rooms/vip",
+  },
+  {
+    idRoom: "ALO222",
+    numberOfViewers: 7,
+    player1: "Username 19",
+    player2: "Username 20",
+    linkRoom: "/rooms/vip",
+  },
+  {
+    idRoom: "ALO333",
+    numberOfViewers: 7,
+    player1: "Username 17",
+    player2: "Username 18",
+    linkRoom: "/rooms/vip",
+  },
+  {
+    idRoom: "ALO444",
+    numberOfViewers: 7,
+    player1: "Username 17",
+    player2: "Username 18",
+    linkRoom: "/rooms/vip",
+  },
 ]
 
 function RoomList() {
