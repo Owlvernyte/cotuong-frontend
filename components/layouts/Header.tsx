@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
+import AuthHeaderArea from "../auth/AuthHeaderArea"
 
 function Header() {
   return (
@@ -21,14 +22,15 @@ function Header() {
         <Link className="text-bamboo-100 hover:underline" href={"/rooms"}>
           {"Phòng"}
         </Link>
-        <Link className="text-bamboo-100 hover:underline" href={"/tournaments"}>
+        <Link
+          className="text-bamboo-100 hover:underline"
+          href={"/competitions"}
+        >
           {"Giải đấu"}
         </Link>
       </div>
       <div className="flex-none space-x-2">
-        <Link className="btn btn-secondary px-12" href={"/signin"}>
-          {"Đăng nhập"}
-        </Link>
+        <AuthHeaderArea />
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
