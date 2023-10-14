@@ -6,7 +6,7 @@ import Link from "next/link"
 
 interface AuthCardProps {
   titles: string[]
-  subtitle: string
+  subtitles: string[]
   formTitle: string
   formComponent: React.ReactNode
   extensionLink: string
@@ -15,15 +15,15 @@ interface AuthCardProps {
 
 const AuthCard: React.FC<AuthCardProps> = ({
   titles,
-  subtitle,
+  subtitles,
   formTitle,
   formComponent,
   extensionLink,
   titleLink,
 }) => {
   return (
-    <div className="card md:card-side bg-bamboo-200 rounded-md shadow-xl">
-      <div className="card-body w-full md:border-r-bamboo-400 md:border-r-2">
+    <div className="card lg:card-side bg-bamboo-200 rounded-md shadow-xl">
+      <div className="card-body w-full lg:border-r-bamboo-400 lg:border-r-2">
         <div className="card-title">
           <Image src="/nyte2.svg" alt="Nyte Logo" width={50} height={50} />
         </div>
@@ -35,7 +35,13 @@ const AuthCard: React.FC<AuthCardProps> = ({
                 {t}
               </p>
             ))}
-            <p className="text-bamboo-300 text-2xl py-4">{subtitle}</p>
+            <div className="py-4">
+              {subtitles.map((s) => (
+                <p key={s} className="text-bamboo-300 text-2xl py-1">
+                  {s}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -49,7 +55,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
       <div className="card-body w-full">
         <div className="text-5xl text-center my-6">{formTitle}</div>
 
-        <div className="pt-12 pb-4">{formComponent}</div>
+        <div className="my-2">{formComponent}</div>
 
         <div className="text-center text-lg py-2">
           <Link href={extensionLink} className="link">
