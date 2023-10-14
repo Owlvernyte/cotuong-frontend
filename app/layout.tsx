@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Paytone_One } from 'next/font/google'
 import './globals.css'
+import Providers from '@/components/layouts/Providers'
 
 const paytone = Paytone_One({
     subsets: ['latin', 'vietnamese'],
@@ -22,7 +23,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={paytone.className}>{children}</body>
+            <body className={paytone.className}>
+                <Providers>{children}</Providers>
+            </body>
         </html>
     )
 }
