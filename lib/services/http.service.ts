@@ -35,6 +35,13 @@ export default class HttpService {
     }
 
     private onRequest = async (config: AxiosRequestConfig) => {
+        const token = localStorageService.get(StoreKeys.ACCESS_TOKEN, '')
+        if (token) {
+            config.headers = {
+                ...config.headers,
+                Authorization: `Bearer ${token}`,
+            }
+        }
         return config
     }
 
@@ -53,7 +60,7 @@ export default class HttpService {
             case HttpStatusCode.UNAUTHORIZED: {
                 if (
                     typeof window !== 'undefined' &&
-                    !window.location.pathname.startsWith("/sign") // /^\/(sign)(in|up)$/
+                    !window.location.pathname.startsWith('/sign') // /^\/(sign)(in|up)$/
                 )
                     window.location.replace('/signin')
                 break
@@ -80,7 +87,7 @@ export default class HttpService {
     }
 
     public async post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
-        return await this.instance.post<T>(url, data, config)
+        return (await this.instance.post<T>(url, data, config)) as T
     }
 
     public async put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
