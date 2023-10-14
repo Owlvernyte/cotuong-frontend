@@ -9,7 +9,7 @@ export default function UserInfo(){
     return(
     <div className='h-full'>
         <div id="user_info"
-          className=" bg-primary rounded-md shadow-lg w-1/2 h-2/5 float-left" style={{marginLeft:'2%'}}>
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-[40%] float-left ml-[2%]">
             <div className='text-bamboo-100 flex items-center table-auto'>
                 <div>
                     <div className='table-cell'><img src='/avatars/avatar1.png'className='h-20 rounded-full' ></img></div>
@@ -31,22 +31,24 @@ export default function UserInfo(){
                 </div>
             </div>
 
-            <div className='w-4/5 m-10 mt-30 ml-16 justify-center bg-bamboo-300'>
+            <div className='h-[50%] w-[90%] mb-[20%] ml-[5%] mt-[5%] flex bg-bamboo-300 text-bamboo-200'>
                 
-                <div className='text-center text-bamboo-200 row'>
-                    <div className='table-cell'>&ensp;&emsp;&emsp;&emsp;Thắng&emsp;&emsp;&emsp;</div>
-                    <div className='table-cell'>&ensp;&emsp;&emsp;&emsp;Thua&emsp;&emsp;&emsp;</div>
-                    <div className='table-cell'>&ensp;&emsp;&emsp;&emsp;Hòa&emsp;&emsp;&emsp;</div>
+                <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
+                  <div>Thắng</div>
+                  <div className='text-4xl text-bamboo-100'>100</div>
                 </div>
                 
-                
-                <div className='text-center text-bamboo-100 text-4xl row'>
-                    <div className='table-cell'>&ensp;&ensp;&ensp;120&ensp;&ensp;&ensp;</div>
-                    <div className='table-cell'>&ensp;&ensp;&ensp;10&ensp;&ensp;&ensp;</div>
-                    <div className='table-cell'>&ensp;&ensp;&ensp;5&ensp;&ensp;&ensp;</div>
+                <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
+                  <div>Thua</div>
+                  <div className='text-4xl text-bamboo-100'>100</div>
                 </div>
-                
+
+                <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
+                  <div>Hòa</div>
+                  <div className='text-4xl text-bamboo-100'>0</div>
+                </div>
             </div>
+
 
             <div id="setting"
           className=" bg-primary rounded-md shadow-lg w-full float-left">
@@ -95,6 +97,9 @@ export default function UserInfo(){
                         <button><img src='/avatars/avatar5.png' className='h-20 rounded-full'></img></button>
                     </div>
                     <div className='table-cell'>
+                        <button><img src='/avatars/avatar6.png' className='h-20 rounded-full'></img></button>
+                    </div>
+                    <div className='table-cell'>
                         <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost rounded-btn bg-bamboo-100">
                             ...
@@ -117,31 +122,42 @@ export default function UserInfo(){
                 </div>
                 
             </div>
-            <button className='bg-bamboo-100 mb-5 w-1/5' style={{marginLeft:'30em'}}>Cập nhật</button>
+            <button className='bg-bamboo-100 mb-5 w-1/5 ml-[40em]'>Cập nhật</button>
         </div>
 
         </div>
 
 
         <div id="friend_list"
-          className=" bg-primary rounded-md shadow-lg w-1/2 h-full" style={{marginTop:'2%',marginLeft:'54%'}}>
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-full mt-[2%] ml-[54%]">
             <div className='text-bamboo-100 table'>
                 
                 <div className='table-row'>
-                <label className='text-2xl' style={{marginRight:'7em', marginLeft:'1em'}}>Bạn Bè</label>
+                <label className='text-2xl ml-[1em] mr-[40%]'>Bạn Bè</label>
                 <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost rounded-btn text-2xl">
-                        <img src='/icons/User_fill.svg' className='h-8'></img>
+                        <img src='/icons/primary/User_fill.svg' className='h-8'></img>
                         Thêm Bạn Bè
                         </label>
                         <ul
                             tabIndex={0}
-                            className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md w-52 mt-4"
+                            className="menu dropdown-content z-[1] p-2 shadow bg-primary text-primary-content rounded-md mt-4 bg w-[150%]"
                         >
                             <li>
                             <form>
-                                <input id="searchfriend"></input>
+                                <input id="searchfriend" className='w-[150%]'></input>
                             </form>
+                            <div className='inline-block float-left ml-3'>
+                                  <div>
+                                    <div className='inline-block float-left text-2xl'>
+                                    Owlvernyte99
+                                    <img src='/flags/vn.svg' className='float-right h-8 ml-3 mr-5'></img>
+                                    </div>
+                                  <button className='ml-2'><img src='/icons/primary/user_add_alt_fill.svg' className='float-right'></img>  </button>
+                                  
+                                </div>
+                                
+                            </div>
                             </li>
 
                         </ul>

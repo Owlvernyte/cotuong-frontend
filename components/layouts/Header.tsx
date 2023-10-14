@@ -24,7 +24,7 @@ function Header() {
                 </Link>
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost rounded-btn">
-                        <img src="/icons/Setting_fill.svg"></img>
+                        <img src="/icons/primary/Setting_fill.svg"></img>
                     </label>
                     <ul
                         tabIndex={0}
