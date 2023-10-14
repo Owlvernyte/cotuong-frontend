@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/layouts/Header'
 import OnCard from '@/components/tournament/active-tournament/OnCard'
 import OffCard from '@/components/tournament/pre-tournament/OffCard'
 import React from 'react'

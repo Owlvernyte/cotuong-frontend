@@ -1,9 +1,8 @@
-import Header from '@/components/layouts/Header'
 import React from 'react'
 import LeaderBoard from './LeaderBoard'
 import Banner from '../Banner'
 import SelfInfo from './SeftInfo'
-import Countdown from './CountdownS'
+import CountdownS from './CountdownS'
 import TournamentCard from '../TournamentCard'
 
 export default function OnCard() {
@@ -17,8 +16,8 @@ export default function OnCard() {
     return (
         <TournamentCard>
             <div className="flex flex-row justify-between text-bamboo-100 text-3xl">
-                <h3>Giai dau dang dien ra</h3>
-                <Countdown />
+                <h3>GIẢI ĐẤU ĐANG DIỄN RA</h3>
+                <CountdownS />
             </div>
             <div className="inline-grid grid-cols-9 gap-4">
                 <div className="col-span-2">
