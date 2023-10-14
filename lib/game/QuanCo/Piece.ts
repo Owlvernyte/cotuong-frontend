@@ -9,9 +9,13 @@ export interface IPiece {
 
 abstract class Piece implements IPiece {
     pieceType?: PieceType
-    coord?: CoordinationType
+    coord: CoordinationType = {
+        x: -1,
+        y: -1,
+    }
     isRed: boolean = true
     signature?: string = ''
+    _basePiecePath = '/game/pieces1'
 
     constructor(options?: Partial<IPiece>) {
         if (!options) {
@@ -24,7 +28,21 @@ abstract class Piece implements IPiece {
         this.signature = options.signature ?? this.signature
     }
 
-    setCoord(coord?: CoordinationType) {
+    get id() {
+        return `${this.pieceChars}_${this.coord.x}_${
+            this.coord.y
+        }`
+    }
+
+    get pieceChars() {
+        return `${this.isRed ? 'r' : 'b'}${this.signature}`
+    }
+
+    get imgSrc() {
+        return `${this._basePiecePath}/${this.pieceChars}.svg`
+    }
+
+    setCoord(coord: CoordinationType) {
         this.coord = coord
     }
 
