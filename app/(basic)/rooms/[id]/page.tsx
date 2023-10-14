@@ -222,7 +222,18 @@ function Game() {
 
               <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 
-              <div id="player1-captured-pieces"></div>
+              <div id="player1-captured-pieces" className="h-full"></div>
+
+              <div
+                id="countdown_steps_player1"
+                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
+              >
+                <div className="p-4">
+                  <p className="text-center text-xl text-bamboo-100">
+                    CÒN LẠI - 00:00
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
               <div id="player2" className="self-start pl-4 py-2">
@@ -241,7 +252,18 @@ function Game() {
 
               <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 
-              <div id="player2-captured-pieces"></div>
+              <div id="player2-captured-pieces" className="h-full"></div>
+
+              <div
+                id="countdown_steps_player2"
+                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
+              >
+                <div className="p-4">
+                  <p className="text-center text-xl text-bamboo-100">
+                    CÒN LẠI - 00:00
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
