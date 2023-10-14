@@ -1,3 +1,4 @@
+import ButtonsMenuList from "@/components/rooms/ButtonsMenuList"
 import RoomList from "@/components/rooms/RoomList"
 
 function Lobby() {
@@ -11,8 +12,15 @@ function Lobby() {
           <RoomList />
         </div>
       </div>
+
       <div className="card bg-bamboo-400 rounded-md w-full col-span-2 overflow-y-auto max-h-full">
-        <div className="card-body"></div>
+        <div className="card-body">
+            <ButtonsMenuList />
+
+            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
+
+            
+        </div>
       </div>
     </div>
   )
