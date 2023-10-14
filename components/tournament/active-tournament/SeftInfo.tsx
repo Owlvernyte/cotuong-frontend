@@ -1,6 +1,5 @@
 import React from "react"
 import Button from "@/components/ui/Button"
-import PlayerData from "./PlayerData"
 import PlayerInformation from "@/components/player/PlayerInformation"
 
 interface PlayerData {

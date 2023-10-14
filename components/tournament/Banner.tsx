@@ -10,7 +10,7 @@ interface Props {
 export default function Banner({ title, subtitle, imgSrc }: Props) {
   return (
     <div className="flex justify-center items-center w-full h-full">
-      <div className="flex flex-col items-center justify-center bg-dirt-300 rounded-md shadow h-full w-full ">
+      <div className="flex flex-col items-center justify-center bg-dirt-300 rounded-md shadow h-full w-full py-2">
         <h4 className="text-center text-bamboo-100 text-3xl font-bold mb-2">
           {title}
         </h4>
