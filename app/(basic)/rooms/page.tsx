@@ -1,4 +1,5 @@
 import ButtonsMenuList from "@/components/rooms/ButtonsMenuList"
+import PlayersStatus from "@/components/rooms/PlayersStatus"
 import RoomList from "@/components/rooms/RoomList"
 
 function Lobby() {
@@ -19,7 +20,7 @@ function Lobby() {
 
             <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 
-            
+            <PlayersStatus />
         </div>
       </div>
     </div>

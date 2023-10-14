@@ -15,6 +15,8 @@ interface PlayerInformationProps {
   flagHeight?: number
   hasScore?: boolean
   scoreValue?: number
+  hasStatus?: boolean
+  status?: "Rảnh tay" | "Ngoại tuyến" | "Đang chơi"
 }
 
 const PlayerInformation: React.FC<PlayerInformationProps> = ({
@@ -31,6 +33,8 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
   flagHeight = 40,
   hasScore = false,
   scoreValue = 0,
+  hasStatus = false,
+  status = "Rảnh tay",
 }) => {
   return (
     <div className="flex flex-col space-x-3 items-center md:flex-row">
@@ -61,6 +65,23 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
             </div>
           )}
         </div>
+
+        {hasStatus && (
+          <div className="flex items-center py-1">
+            <div
+              className={`btn btn-xs btn-circle ${
+                status === "Rảnh tay"
+                  ? "btn-success"
+                  : status === "Đang chơi"
+                  ? "btn-error"
+                  : "btn-disabled"
+              }`}
+            >
+              {" "}
+            </div>
+            <div className="text-lg text-bamboo-100 px-2">{status}</div>
+          </div>
+        )}
 
         {hasScore && (
           <div className="flex">
