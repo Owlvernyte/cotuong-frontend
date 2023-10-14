@@ -22,6 +22,7 @@ function Providers({ children }: PropsWithChildren) {
             }),
         })
     )
+    
     return (
         <QueryClientProvider client={client}>
             <SnackbarProvider>{children}</SnackbarProvider>
