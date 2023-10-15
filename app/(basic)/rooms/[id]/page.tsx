@@ -28,6 +28,7 @@ import {
 import LoadingBBQ from '@/components/ui/LoadingBBQ'
 import Disconnected from './Disconnected'
 import WaitingContainer from './WaitingContainer'
+import MenuBox from './LeftArea/MenuBox'
 
 function Game({ params }: { params: { id: string } }) {
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
@@ -42,7 +43,9 @@ function Game({ params }: { params: { id: string } }) {
     const [messages, setMessages] = useState<
         {
             content: string
-            create_at: Date
+            userName: string
+            userId: string
+            userEmail: string
         }[]
     >([])
 
@@ -82,6 +85,25 @@ function Game({ params }: { params: { id: string } }) {
                 turn: boolean
             ) => {
                 setBoard((b) => b.move(source, destination))
+            }
+        )
+
+        connection.on(
+            'Chatted',
+            (
+                message: string,
+                roomCode: string,
+                userDto: { id: string; userName: string; email: string }
+            ) => {
+                setMessages((a) => [
+                    ...a,
+                    {
+                        content: message,
+                        userName: userDto.userName,
+                        userId: userDto.id,
+                        userEmail: userDto.email,
+                    },
+                ])
             }
         )
     }, [])
@@ -199,191 +221,142 @@ function Game({ params }: { params: { id: string } }) {
     }
 
     return (
-        <DndContext
-            onDragStart={handleDragStart}
-            onDragCancel={handleDragCancel}
-            onDragEnd={handleDragEnd}
-        >
-            <div className="h-full space-y-2 flex flex-col">
-                <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
-                    <div
-                        id="left-area"
-                        className="flex flex-col space-y-2 col-span-2"
-                    >
+        <div className="h-full block">
+            <DndContext
+                onDragStart={handleDragStart}
+                onDragCancel={handleDragCancel}
+                onDragEnd={handleDragEnd}
+            >
+                <div className="h-full space-y-2 flex flex-col">
+                    <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                         <div
-                            id="menu"
-                            className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center"
+                            id="left-area"
+                            className="h-full space-y-2 col-span-2 pb-2"
                         >
-                            {/* Hard Code */}
-                            <div className="w-full flex flex-col xl:flex-row space-y-2 justify-between items-center px-6 py-2">
-                                <div>
-                                    <p className="text-2xl text-bamboo-100 ">
-                                        ID: {`${params.id}`}
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <button className="btn btn-primary bg-bamboo-300 btn-md text-bamboo-100 text-xl">
-                                        <Image
-                                            src="/icons/primary/Eye_fill.svg"
-                                            alt="Eye Icon"
-                                            width={30}
-                                            height={30}
-                                        />
-                                        3
-                                    </button>
-                                </div>
+                            <div className={'h-1/2'}>
+                                <MenuBox roomCode={params.id} />
                             </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div className="text-center text-md md:text-4xl text-bamboo-100 my-4">
-                                00:00:00 trôi qua
-                            </div>
-
-                            <div className="flex flex-col space-y-2 items-center xl:space-y-0 xl:flex-row xl:space-x-2 my-1">
-                                <button className="btn btn-secondary btn-md w-48 text-lg">
-                                    Tạm Dừng
-                                </button>
-                                <button className="btn btn-secondary btn-md w-48 text-lg">
-                                    Cầu Hoà
-                                </button>
-                            </div>
-
-                            <div className="flex flex-col space-y-2 items-center xl:space-y-0 xl:flex-row xl:space-x-2 my-1">
-                                <Link
-                                    href={'/rooms'}
-                                    className="btn btn-secondary btn-md w-48 text-lg"
-                                >
-                                    Rời Phòng
-                                </Link>
-                                <button
-                                    className="btn btn-secondary btn-md w-48 text-lg"
-                                    onClick={startBtnHandler}
-                                >
-                                    Bắt Đầu
-                                </button>
-                            </div>
-                            <div className="text-bamboo-100">
-                                {movingPiece && (
-                                    <p className="py-2">
-                                        Bạn đang chọn Quân:{' '}
-                                        {
-                                            PieceType[
-                                                movingPiece.piece.pieceType!
-                                            ]
-                                        }
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        <ChatBox messages={messages} />
-                    </div>
-                    <Board>
-                        {board.squares.map((row, i) =>
-                            row.map((cell, j) => {
-                                return (
-                                    <Cell
-                                        key={`cell_${i}_${j}`}
-                                        id={`${i}_${j}`}
-                                        x={i}
-                                        y={j}
-                                    >
-                                        {cell && (
-                                            <DraggablePiece
-                                                id={cell.id}
-                                                target={cell}
-                                                position={cell.coord}
-                                            />
-                                        )}
-                                    </Cell>
-                                )
-                            })
-                        )}
-                    </Board>
-                    <div
-                        id="right-area"
-                        className="flex flex-col space-y-2 col-span-2"
-                    >
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player1" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 1"
-                                    avatarSrc="/avatars/avatar1.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={1234}
+                            <div className={'h-1/2'}>
+                                <ChatBox
+                                    messages={messages}
+                                    handleSend={(message) => {
+                                        connection.send('Chat', message)
+                                    }}
                                 />
                             </div>
+                        </div>
+                        <Board>
+                            {board.squares.map((row, i) =>
+                                row.map((cell, j) => {
+                                    return (
+                                        <Cell
+                                            key={`cell_${i}_${j}`}
+                                            id={`${i}_${j}`}
+                                            x={i}
+                                            y={j}
+                                        >
+                                            {cell && (
+                                                <DraggablePiece
+                                                    id={cell.id}
+                                                    target={cell}
+                                                    position={cell.coord}
+                                                />
+                                            )}
+                                        </Cell>
+                                    )
+                                })
+                            )}
+                        </Board>
+                        <div
+                            id="right-area"
+                            className="flex flex-col space-y-2 col-span-2"
+                        >
+                            <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
+                                <div
+                                    id="player1"
+                                    className="self-start pl-4 py-2"
+                                >
+                                    <PlayerInformation
+                                        username="Player 1"
+                                        avatarSrc="/avatars/avatar1.png"
+                                        avatarSize={50}
+                                        imageWidth={70}
+                                        imageHeight={70}
+                                        hasFlag
+                                        flagSrc="/flags/VN.svg"
+                                        hasScore
+                                        scoreValue={1234}
+                                    />
+                                </div>
 
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
+                                <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 
-                            <div
-                                id="player1-captured-pieces"
-                                className="h-full"
-                            ></div>
+                                <div
+                                    id="player1-captured-pieces"
+                                    className="h-full"
+                                ></div>
 
-                            <div
-                                id="countdown_steps_player1"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
+                                <div
+                                    id="countdown_steps_player1"
+                                    className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
+                                >
+                                    <div className="p-4">
+                                        <p className="text-center text-xl text-bamboo-100">
+                                            CÒN LẠI - 00:00
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player2" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 2"
-                                    avatarSrc="/avatars/avatar2.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={3456}
-                                />
-                            </div>
+                            <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
+                                <div
+                                    id="player2"
+                                    className="self-start pl-4 py-2"
+                                >
+                                    <PlayerInformation
+                                        username="Player 2"
+                                        avatarSrc="/avatars/avatar2.png"
+                                        avatarSize={50}
+                                        imageWidth={70}
+                                        imageHeight={70}
+                                        hasFlag
+                                        flagSrc="/flags/VN.svg"
+                                        hasScore
+                                        scoreValue={3456}
+                                    />
+                                </div>
 
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
+                                <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 
-                            <div
-                                id="player2-captured-pieces"
-                                className="h-full"
-                            ></div>
+                                <div
+                                    id="player2-captured-pieces"
+                                    className="h-full"
+                                ></div>
 
-                            <div
-                                id="countdown_steps_player2"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
+                                <div
+                                    id="countdown_steps_player2"
+                                    className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
+                                >
+                                    <div className="p-4">
+                                        <p className="text-center text-xl text-bamboo-100">
+                                            CÒN LẠI - 00:00
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <DragOverlay dropAnimation={null}>
-                {movingPiece == null ? null : (
-                    <Piece
-                        target={movingPiece.piece}
-                        clone
-                        id={movingPiece.piece.id}
-                    />
-                )}
-            </DragOverlay>
-        </DndContext>
+                <DragOverlay dropAnimation={null}>
+                    {movingPiece == null ? null : (
+                        <Piece
+                            target={movingPiece.piece}
+                            clone
+                            id={movingPiece.piece.id}
+                        />
+                    )}
+                </DragOverlay>
+            </DndContext>
+        </div>
     )
 }
 
