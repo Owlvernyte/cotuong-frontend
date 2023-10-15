@@ -24,7 +24,7 @@ function Header() {
         </Link>
         <Link
           className="text-bamboo-100 hover:underline"
-          href={"/competitions"}
+          href={"/tournaments"}
         >
           {"Giải đấu"}
         </Link>
