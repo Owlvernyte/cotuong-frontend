@@ -38,9 +38,9 @@ function SignInForm() {
     React.useEffect(() => {
         if (response && response.token) {
             localStorageService.set(StoreKeys.ACCESS_TOKEN, response.token)
-            console.log(response.token)
+            // refetch()
+            location.reload()
         }
-        console.log(response)
     }, [response])
 
     return (

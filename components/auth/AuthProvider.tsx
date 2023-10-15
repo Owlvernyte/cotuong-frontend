@@ -2,8 +2,9 @@
 
 import useUser from '@/features/user/useUser'
 import { useStore } from '@/lib/zustand/store'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { PropsWithChildren } from 'react'
+import LoadingBBQ from '../ui/LoadingBBQ'
 
 const authPaths = ['/signin', '/signup']
 const publicPaths = ['/', '/contact']
@@ -34,7 +35,7 @@ function AuthProvider({ children }: PropsWithChildren) {
 
         if (authorized) {
             if (inAuthPath) {
-                router.push('/')
+                router.replace('/')
                 return
             }
             return
@@ -50,7 +51,7 @@ function AuthProvider({ children }: PropsWithChildren) {
         <>
             {isLoading ? (
                 <div className="flex h-full w-full justify-center items-center">
-                    <span className="loading loading-spinner"></span>
+                    <LoadingBBQ />
                 </div>
             ) : (
                 children
