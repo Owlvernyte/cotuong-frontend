@@ -1,120 +1,51 @@
-"use client"
+'use client'
 
-import React from "react"
-import RoomCard from "./RoomCard"
-
-// Note: Sử dụng data mẫu tạm thời
-interface Room {
-  idRoom: string
-  numberOfViewers: number
-  player1: string
-  player2: string
-  linkRoom: string
-}
-
-const rooms: Room[] = [
-  {
-    idRoom: "ABC123",
-    numberOfViewers: 5,
-    player1: "Username 1",
-    player2: "Username 2",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "DEF123",
-    numberOfViewers: 5,
-    player1: "Username 3",
-    player2: "Username 4",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "GHI123",
-    numberOfViewers: 3,
-    player1: "Username 5",
-    player2: "Username 6",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "JKL123",
-    numberOfViewers: 2,
-    player1: "Username 7",
-    player2: "Username 8",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "MNO123",
-    numberOfViewers: 4,
-    player1: "Username 9",
-    player2: "Username 10",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "PQR123",
-    numberOfViewers: 6,
-    player1: "Username 11",
-    player2: "Username 12",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "STU123",
-    numberOfViewers: 3,
-    player1: "Username 13",
-    player2: "Username 14",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "VWX123",
-    numberOfViewers: 7,
-    player1: "Username 15",
-    player2: "Username 16",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "ALO111",
-    numberOfViewers: 7,
-    player1: "Username 17",
-    player2: "Username 18",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "ALO222",
-    numberOfViewers: 7,
-    player1: "Username 19",
-    player2: "Username 20",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "ALO333",
-    numberOfViewers: 7,
-    player1: "Username 17",
-    player2: "Username 18",
-    linkRoom: "/rooms/vip",
-  },
-  {
-    idRoom: "ALO444",
-    numberOfViewers: 7,
-    player1: "Username 17",
-    player2: "Username 18",
-    linkRoom: "/rooms/vip",
-  },
-]
+import React from 'react'
+import RoomCard from './RoomCard'
+import useGetRooms from '@/features/room/useGetRooms'
+import LoadingBBQ from '../ui/LoadingBBQ'
 
 function RoomList() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:md:grid-cols-5  gap-2 grid-flow-row-dense">
-      {rooms.map((r) => (
-        <div key={r.idRoom} className="col-span-1">
-          <RoomCard
-            idRoom={r.idRoom}
-            numberOfViewers={r.numberOfViewers}
-            player1={r.player1}
-            player2={r.player2}
-            linkRoom={r.linkRoom}
-          />
+    const { data: rooms, isLoading, isError, refetch } = useGetRooms()
+
+    if (isLoading) {
+        return <LoadingBBQ />
+    }
+
+    if (!rooms || isError) {
+        return (
+            <div
+                onClick={() => refetch()}
+                className="hover:underline text-xl cursor-pointer"
+            >
+                {'Đã có lỗi xảy ra :( Click vào đây để thử lại.'}
+            </div>
+        )
+    }
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:md:grid-cols-5 gap-2 grid-flow-row-dense">
+            {rooms.map((r) => (
+                <div key={`room_${r.code}`} className="col-span-1">
+                    <RoomCard
+                        idRoom={r.code}
+                        numberOfViewers={
+                            r.countUser - 2 <= 0 ? 0 : r.countUser - 2
+                        }
+                        player1={
+                            r.hostUser?.fullName ?? r.hostUser?.userName ?? ''
+                        }
+                        player2={
+                            r.opponentUser?.fullName ??
+                            r.opponentUser?.userName ??
+                            ''
+                        }
+                        linkRoom={`/rooms/${r.code}`}
+                    />
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  )
+    )
 }
 
 export default RoomList

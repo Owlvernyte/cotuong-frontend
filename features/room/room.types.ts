@@ -14,3 +14,8 @@ export type RoomCreateRequest = {
     password?: string
     hostUserId: string
 }
+
+export type RoomJoinLeaveRequest = {
+    roomCode: string
+    userId: string
+}

@@ -20,7 +20,7 @@ function useSignalR(webSocketURI: string, options?: IHttpConnectionOptions) {
     )
 
     React.useEffect(() => {
-        connection.start()
+            connection.start()
 
         return () => {
             connection.stop()

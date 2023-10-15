@@ -6,6 +6,10 @@ const nextConfig = {
                 source: '/api/:slug*',
                 destination: 'https://cotuong.azurewebsites.net/api/:slug*',
             },
+            {
+                source: '/hubs/:slug*',
+                destination: 'https://cotuong.azurewebsites.net/hubs/:slug*',
+            },
         ]
     },
 }
