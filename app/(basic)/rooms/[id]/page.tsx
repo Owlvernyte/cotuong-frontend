@@ -26,6 +26,8 @@ import {
     HubConnectionState,
 } from '@microsoft/signalr'
 import LoadingBBQ from '@/components/ui/LoadingBBQ'
+import Disconnected from './Disconnected'
+import WaitingContainer from './WaitingContainer'
 
 function Game({ params }: { params: { id: string } }) {
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
@@ -33,6 +35,9 @@ function Game({ params }: { params: { id: string } }) {
         piece: GamePiece
         coord: CoordinationType
     } | null>(null)
+    const [status, setStatus] = useState<HubConnectionState>(
+        HubConnectionState.Disconnected
+    )
 
     const [messages, setMessages] = useState<
         {
@@ -47,26 +52,43 @@ function Game({ params }: { params: { id: string } }) {
             accessTokenFactory: () => {
                 return localStorageService.get(StoreKeys.ACCESS_TOKEN, '')
             },
-            headers: {
-                Authorization: `Bearer ${localStorageService.get(
-                    StoreKeys.ACCESS_TOKEN,
-                    ''
-                )}`,
-            },
             withCredentials: true,
-            httpClient: new CustomHttpClient(),
         }
     )
 
     useEffect(() => {
         connection.on('error', (e) => {
-            console.log(e)
+            console.log('ws error', e)
         })
 
-        connection.on('connect', (e) => {
-            console.log(e)
+        connection.on('connected', (e) => {
+            console.log('ws', e)
         })
-    }, [connection])
+
+        connection.on('Joined', () => {
+            if (status !== HubConnectionState.Connected)
+                setStatus(HubConnectionState.Connected)
+        })
+
+        connection.on('LoadBoard', (message: Matrix<GamePiece | null>) => {
+            setBoard((b) => b.setSquares(message))
+        })
+
+        connection.on(
+            'Moved',
+            (
+                source: CoordinationType,
+                destination: CoordinationType,
+                turn: boolean
+            ) => {
+                setBoard((b) => b.move(source, destination))
+            }
+        )
+    }, [])
+
+    useEffect(() => {
+        setStatus(connection.state)
+    }, [connection, connection.state])
 
     const handleDragCancel = useCallback(() => {
         setMovingPiece(null)
@@ -92,9 +114,14 @@ function Game({ params }: { params: { id: string } }) {
 
             setMovingPiece(null)
 
-            setBoard((b) =>
-                b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
-            )
+            connection.send('Move', {
+                source: movingPiece.coord,
+                destination: { x: cellX, y: cellY },
+            })
+
+            // setBoard((b) =>
+            //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
+            // )
         },
         [movingPiece]
     )
@@ -151,22 +178,24 @@ function Game({ params }: { params: { id: string } }) {
         }
     }
 
-    if (connection.state === HubConnectionState.Connecting) {
-        return <LoadingBBQ />
-    }
-
-    if (connection.state === HubConnectionState.Reconnecting) {
-        return <div>{`Đang kết nối lại...`}</div>
-    }
-
-    if (connection.state === HubConnectionState.Disconnecting) {
-        return <div>{`Đang ngắt kết nối...`}</div>
-    }
-
-    if (connection.state === HubConnectionState.Disconnected) {
+    if (status === HubConnectionState.Connecting) {
         return (
-            <Link href="/rooms">{`Mất kết nối do phòng không tồn tại hoặc có vấn đề gì đó...`}</Link>
+            <WaitingContainer>
+                <LoadingBBQ />
+            </WaitingContainer>
         )
+    }
+
+    if (status === HubConnectionState.Reconnecting) {
+        return <WaitingContainer>{`Đang kết nối lại...`}</WaitingContainer>
+    }
+
+    if (status === HubConnectionState.Disconnecting) {
+        return <WaitingContainer>{`Đang ngắt kết nối...`}</WaitingContainer>
+    }
+
+    if (status === HubConnectionState.Disconnected) {
+        return <Disconnected />
     }
 
     return (
@@ -359,14 +388,3 @@ function Game({ params }: { params: { id: string } }) {
 }
 
 export default Game
-
-class CustomHttpClient extends DefaultHttpClient {
-    constructor() {
-        super(console)
-    }
-
-    public send(request: HttpRequest): Promise<HttpResponse> {
-        request.headers = { ...request.headers, Authorization: 'Bearer ne' }
-        return super.send(request)
-    }
-}

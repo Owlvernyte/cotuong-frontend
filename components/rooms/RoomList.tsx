@@ -3,13 +3,17 @@
 import React from 'react'
 import RoomCard from './RoomCard'
 import useGetRooms from '@/features/room/useGetRooms'
-import LoadingBBQ from '../ui/LoadingBBQ'
+import SpinningBBQ from '../ui/SpinningBBQ'
 
 function RoomList() {
     const { data: rooms, isLoading, isError, refetch } = useGetRooms()
 
     if (isLoading) {
-        return <LoadingBBQ />
+        return (
+            <div className="flex justify-center items-center">
+                <SpinningBBQ />
+            </div>
+        )
     }
 
     if (!rooms || isError) {

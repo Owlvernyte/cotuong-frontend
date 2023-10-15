@@ -6,6 +6,7 @@ import {
 } from '@microsoft/signalr'
 
 function useSignalR(webSocketURI: string, options?: IHttpConnectionOptions) {
+    // Override default connection options if exist
     const connectionOptions: IHttpConnectionOptions = {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
@@ -20,8 +21,9 @@ function useSignalR(webSocketURI: string, options?: IHttpConnectionOptions) {
     )
 
     React.useEffect(() => {
-            connection.start()
+        connection.start()
 
+        // Stop connection on unmount
         return () => {
             connection.stop()
         }
