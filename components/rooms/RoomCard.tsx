@@ -20,7 +20,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
   linkRoom,
 }) => {
   return (
-    <div className="card bg-dirt-200 rounded-md">
+    <div className="card bg-dirt-200 rounded-md hover:bg-dirt-100">
       <div className="card-body p-4">
         <div className="w-full">
           <p className="text-md">ID: {idRoom || "..."}</p>
