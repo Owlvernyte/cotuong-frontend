@@ -1,16 +1,16 @@
 const axiosConfigs = {
     development: {
-        baseURL: 'http://localhost:3000/api/',
+        baseURL: '/api/',
         withCredentials: true,
         timeout: 10000,
     },
     production: {
-        baseURL: 'http://localhost:3000/api/',
+        baseURL: '/api/',
         withCredentials: true,
         timeout: 10000,
     },
     test: {
-        baseURL: 'http://localhost:3000/api/',
+        baseURL: '/api/',
         withCredentials: true,
         timeout: 10000,
     },
