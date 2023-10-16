@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 
 function WaitingContainer({ children }: PropsWithChildren) {
@@ -8,14 +9,10 @@ function WaitingContainer({ children }: PropsWithChildren) {
                 'h-full flex flex-col space-y-2 justify-center items-center'
             }
         >
-            <Image
-                src={'/thitnuong.svg'}
-                width={128}
-                height={128}
-                alt="Thit Nuong"
-                className='animate-spin'
-            />
             {children}
+            <Link className={'btn btn-primary'} href="/rooms">
+                {'Quay về'}
+            </Link>
         </div>
     )
 }

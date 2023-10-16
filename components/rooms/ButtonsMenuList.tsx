@@ -4,6 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import IconButton from '../ui/IconButton'
 import { useRouter } from 'next/navigation'
+import CreateRoomButton from './CreateRoomButton'
 
 function ButtonsMenuList() {
     const router = useRouter()
@@ -18,16 +19,7 @@ function ButtonsMenuList() {
 
     return (
         <div className="flex flex-col xl:flex-row justify-center w-full">
-            <button className="btn btn-secondary btn-md xl:btn-lg w-50 m-2">
-                <Image
-                    src={'/icons/secondary/Add_ring_fill.svg'}
-                    alt="Create Icon"
-                    width={35}
-                    height={35}
-                />
-                TẠO PHÒNG
-            </button>
-
+            <CreateRoomButton />
             <button
                 className="btn btn-secondary btn-md xl:btn-lg w-50 m-2"
                 onClick={() => (window as any).search_room.showModal()}

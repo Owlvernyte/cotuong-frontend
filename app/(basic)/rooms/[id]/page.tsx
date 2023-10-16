@@ -1,33 +1,33 @@
 'use client'
 
+import PlayerInformation from '@/components/player/PlayerInformation'
+import LoadingBBQ from '@/components/ui/LoadingBBQ'
+import useGetRoomById from '@/features/room/useGetRoomById'
+import StoreKeys from '@/lib/constants/storeKeys'
 import GameBoard from '@/lib/game/Board'
-import GamePiece, { PieceType } from '@/lib/game/QuanCo/Piece'
-import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import Board from './Board'
-import ChatBox from './LeftArea/ChatBox'
-import Cell from './Cell'
-import Piece, { DraggablePiece, PieceProps } from './Piece'
+import GamePiece from '@/lib/game/QuanCo/Piece'
+import useSignalR from '@/lib/hooks/useSignalR'
+import localStorageService from '@/lib/services/localStorage.service'
 import {
     DndContext,
     DragEndEvent,
     DragOverlay,
     DragStartEvent,
 } from '@dnd-kit/core'
-import Image from 'next/image'
-import PlayerInformation from '@/components/player/PlayerInformation'
-import useSignalR from '@/lib/hooks/useSignalR'
-import localStorageService from '@/lib/services/localStorage.service'
-import StoreKeys from '@/lib/constants/storeKeys'
-import {
-    DefaultHttpClient,
-    HttpRequest,
-    HttpResponse,
-    HubConnectionState,
-} from '@microsoft/signalr'
-import LoadingBBQ from '@/components/ui/LoadingBBQ'
-import Disconnected from './Disconnected'
+import { HubConnectionState } from '@microsoft/signalr'
+import { AxiosError } from 'axios'
+import { useCallback, useEffect, useState } from 'react'
+import Board from './Board'
+import Cell from './Cell'
+import ChatBox from './LeftArea/ChatBox'
+import MenuBox from './LeftArea/MenuBox'
+import Piece, { DraggablePiece } from './Piece'
 import WaitingContainer from './WaitingContainer'
+import { MessageProps } from './LeftArea/ChatBubble'
+import { useStore } from '@/lib/zustand/store'
+import PlayerArea from './RightArea/PlayerArea'
+
+type UserDto = { id: string; userName: string; email: string }
 
 function Game({ params }: { params: { id: string } }) {
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
@@ -38,13 +38,19 @@ function Game({ params }: { params: { id: string } }) {
     const [status, setStatus] = useState<HubConnectionState>(
         HubConnectionState.Disconnected
     )
+    const { user } = useStore()
+    const {
+        data: room,
+        isLoading,
+        isError,
+        error,
+        refetch,
+    } = useGetRoomById(params.id)
 
-    const [messages, setMessages] = useState<
-        {
-            content: string
-            create_at: Date
-        }[]
-    >([])
+    const [messages, setMessages] = useState<MessageProps[]>([])
+
+    const isPlayer =
+        user?.id === room?.hostUser?.id || user?.id === room?.opponentUser?.id
 
     const { connection } = useSignalR(
         `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
@@ -65,11 +71,6 @@ function Game({ params }: { params: { id: string } }) {
             console.log('ws', e)
         })
 
-        connection.on('Joined', () => {
-            if (status !== HubConnectionState.Connected)
-                setStatus(HubConnectionState.Connected)
-        })
-
         connection.on('LoadBoard', (message: Matrix<GamePiece | null>) => {
             setBoard((b) => b.setSquares(message))
         })
@@ -79,11 +80,55 @@ function Game({ params }: { params: { id: string } }) {
             (
                 source: CoordinationType,
                 destination: CoordinationType,
-                turn: boolean
+                isNotRed: boolean
             ) => {
                 setBoard((b) => b.move(source, destination))
             }
         )
+
+        connection.on(
+            'Chatted',
+            (messageContent: string, roomCode: string, userDto: UserDto) => {
+                setMessages((a) => [
+                    ...a,
+                    {
+                        content: messageContent,
+                        displayName: userDto.userName,
+                        me: user ? user.id === userDto.id : false,
+                        system: false,
+                    },
+                ])
+            }
+        )
+
+        connection.on('Joined', (userDto: UserDto) => {
+            if (status !== HubConnectionState.Connected)
+                setStatus(HubConnectionState.Connected)
+
+            refetch()
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} joined.`,
+                    displayName: 'Thịt nướng',
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
+
+        connection.on('Left', (userDto: UserDto) => {
+            refetch()
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} left.`,
+                    displayName: `Thịt nướng`,
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
     }, [])
 
     useEffect(() => {
@@ -178,24 +223,65 @@ function Game({ params }: { params: { id: string } }) {
         }
     }
 
+    if (!user) return null
+
+    if (isLoading) {
+        return (
+            <WaitingContainer>
+                <LoadingBBQ />
+                <span>{'Đang tải thông tin phòng...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (error && isError && !isLoading) {
+        return (
+            <WaitingContainer>
+                <span>{'Đã có lỗi xảy ra...'}</span>
+                <span>{(error as AxiosError).message}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (!room) {
+        return (
+            <WaitingContainer>
+                <span>{'Phòng không tồn tại...'}</span>
+            </WaitingContainer>
+        )
+    }
+
     if (status === HubConnectionState.Connecting) {
         return (
             <WaitingContainer>
                 <LoadingBBQ />
+                <span>{'Đang kết nối đến phòng...'}</span>
             </WaitingContainer>
         )
     }
 
     if (status === HubConnectionState.Reconnecting) {
-        return <WaitingContainer>{`Đang kết nối lại...`}</WaitingContainer>
+        return (
+            <WaitingContainer>
+                <span>{`Đang kết nối lại...`}</span>
+            </WaitingContainer>
+        )
     }
 
     if (status === HubConnectionState.Disconnecting) {
-        return <WaitingContainer>{`Đang ngắt kết nối...`}</WaitingContainer>
+        return (
+            <WaitingContainer>
+                <span>{`Đang ngắt kết nối...`}</span>
+            </WaitingContainer>
+        )
     }
 
     if (status === HubConnectionState.Disconnected) {
-        return <Disconnected />
+        return (
+            <WaitingContainer>
+                <span>{`Mất kết nối...`}</span>
+            </WaitingContainer>
+        )
     }
 
     return (
@@ -208,76 +294,26 @@ function Game({ params }: { params: { id: string } }) {
                 <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
                         id="left-area"
-                        className="flex flex-col space-y-2 col-span-2"
+                        className="h-full space-y-2 col-span-2 pb-2"
                     >
-                        <div
-                            id="menu"
-                            className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center"
-                        >
-                            {/* Hard Code */}
-                            <div className="w-full flex flex-col xl:flex-row space-y-2 justify-between items-center px-6 py-2">
-                                <div>
-                                    <p className="text-2xl text-bamboo-100 ">
-                                        ID: {`${params.id}`}
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <button className="btn btn-primary bg-bamboo-300 btn-md text-bamboo-100 text-xl">
-                                        <Image
-                                            src="/icons/primary/Eye_fill.svg"
-                                            alt="Eye Icon"
-                                            width={30}
-                                            height={30}
-                                        />
-                                        3
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div className="text-center text-md md:text-4xl text-bamboo-100 my-4">
-                                00:00:00 trôi qua
-                            </div>
-
-                            <div className="flex flex-col space-y-2 items-center xl:space-y-0 xl:flex-row xl:space-x-2 my-1">
-                                <button className="btn btn-secondary btn-md w-48 text-lg">
-                                    Tạm Dừng
-                                </button>
-                                <button className="btn btn-secondary btn-md w-48 text-lg">
-                                    Cầu Hoà
-                                </button>
-                            </div>
-
-                            <div className="flex flex-col space-y-2 items-center xl:space-y-0 xl:flex-row xl:space-x-2 my-1">
-                                <Link
-                                    href={'/rooms'}
-                                    className="btn btn-secondary btn-md w-48 text-lg"
-                                >
-                                    Rời Phòng
-                                </Link>
-                                <button
-                                    className="btn btn-secondary btn-md w-48 text-lg"
-                                    onClick={startBtnHandler}
-                                >
-                                    Bắt Đầu
-                                </button>
-                            </div>
-                            <div className="text-bamboo-100">
-                                {movingPiece && (
-                                    <p className="py-2">
-                                        Bạn đang chọn Quân:{' '}
-                                        {
-                                            PieceType[
-                                                movingPiece.piece.pieceType!
-                                            ]
-                                        }
-                                    </p>
-                                )}
-                            </div>
+                        <div className={'h-1/2'}>
+                            <MenuBox
+                                roomCode={params.id}
+                                viewCount={
+                                    room.countUser - 2 <= 0
+                                        ? 0
+                                        : room.countUser - 2
+                                }
+                            />
                         </div>
-                        <ChatBox messages={messages} />
+                        <div className={'h-1/2 max-h-[400px]'}>
+                            <ChatBox
+                                messages={messages}
+                                handleSend={(message) => {
+                                    connection.send('Chat', message)
+                                }}
+                            />
+                        </div>
                     </div>
                     <Board>
                         {board.squares.map((row, i) =>
@@ -305,72 +341,36 @@ function Game({ params }: { params: { id: string } }) {
                         id="right-area"
                         className="flex flex-col space-y-2 col-span-2"
                     >
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player1" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 1"
-                                    avatarSrc="/avatars/avatar1.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={1234}
+                        {isPlayer ? (
+                            <>
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={
+                                        room.hostUser?.userName ??
+                                        room.opponentUser?.userName
+                                    }
                                 />
-                            </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div
-                                id="player1-captured-pieces"
-                                className="h-full"
-                            ></div>
-
-                            <div
-                                id="countdown_steps_player1"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player2" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 2"
-                                    avatarSrc="/avatars/avatar2.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={3456}
+                                {user.id !== room.hostUser?.id ? (
+                                    <PlayerArea
+                                        playerIndex={2}
+                                        userName={user.userName}
+                                    />
+                                ) : (
+                                    <PlayerArea playerIndex={2} />
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={room.hostUser?.userName}
                                 />
-                            </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div
-                                id="player2-captured-pieces"
-                                className="h-full"
-                            ></div>
-
-                            <div
-                                id="countdown_steps_player2"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                                <PlayerArea
+                                    playerIndex={2}
+                                    userName={room.opponentUser?.userName}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

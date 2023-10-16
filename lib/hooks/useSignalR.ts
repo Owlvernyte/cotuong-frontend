@@ -3,6 +3,7 @@ import {
     HubConnectionBuilder,
     HttpTransportType,
     IHttpConnectionOptions,
+    HubConnectionState,
 } from '@microsoft/signalr'
 
 function useSignalR(webSocketURI: string, options?: IHttpConnectionOptions) {
@@ -21,13 +22,17 @@ function useSignalR(webSocketURI: string, options?: IHttpConnectionOptions) {
     )
 
     React.useEffect(() => {
-        connection.start()
+        if (connection.state === HubConnectionState.Disconnected) {
+            connection.start()
+        }
 
         // Stop connection on unmount
         return () => {
-            connection.stop()
+            if (connection.state !== HubConnectionState.Disconnected) {
+                connection.stop()
+            }
         }
-    }, [])
+    }, [connection])
 
     return { connection, setConnection }
 }

@@ -4,7 +4,7 @@ import { Room, RoomCreateRequest, RoomJoinLeaveRequest } from './room.types'
 
 class RoomApiService extends HttpService {
     createRoom(data: RoomCreateRequest) {
-        return this.post<Room>('/rooms')
+        return this.post<Room>('/rooms', data)
     }
 
     getRoomById(id: string) {
