@@ -346,18 +346,17 @@ function Game({ params }: { params: { id: string } }) {
                                 <PlayerArea
                                     playerIndex={1}
                                     userName={
-                                        room.hostUser?.userName ??
-                                        room.opponentUser?.userName
+                                        user.id === room.hostUser?.id ||
+                                        user.id === room.opponentUser?.id
+                                            ? undefined
+                                            : room.hostUser?.userName ??
+                                              room.opponentUser?.userName
                                     }
                                 />
-                                {user.id !== room.hostUser?.id ? (
-                                    <PlayerArea
-                                        playerIndex={2}
-                                        userName={user.userName}
-                                    />
-                                ) : (
-                                    <PlayerArea playerIndex={2} />
-                                )}
+                                <PlayerArea
+                                    playerIndex={2}
+                                    userName={user.userName}
+                                />
                             </>
                         ) : (
                             <>
