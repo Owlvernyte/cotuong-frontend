@@ -2,39 +2,45 @@
 
 import Image from 'next/image'
 import React from 'react'
+import ChatBubble, { MessageProps } from './ChatBubble'
 
 function ChatBox({
     messages,
     handleSend,
 }: {
-    messages: {
-        content: string
-        userName: string
-        userId: string
-        userEmail: string
-    }[]
+    messages: MessageProps[]
     handleSend: (message: string) => void
 }) {
+    const messagesEndRef = React.useRef<HTMLDivElement>(null)
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         handleSend(event.currentTarget['message-content'].value as string)
         event.currentTarget.reset()
     }
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+
+    React.useEffect(() => {
+        scrollToBottom()
+    }, [messages])
+
     return (
         <div
             id="chat-box"
             className="h-full bg-primary rounded-md shadow-lg flex flex-col p-2 space-y-2"
         >
-            <div className="flex-1 space-y-4 text-bamboo-100 overflow-auto break-all px-1 py-2">
+            <div className="flex-1 space-y-0 text-bamboo-100 overflow-auto break-all px-1 py-2">
                 {messages.map((message, i) => {
                     return (
-                        <div className='space-y-1' key={`m_${message.userId}_${i}`}>
-                            <span className={"bg-bamboo-100 text-dirt-300 h-fit px-2 py-1 rounded-md font-bold"}>{message.userName}</span>
-                            <p className={"font-light"}>{message.content}</p>
+                        <div key={`m_${message.displayName}_${i}`}>
+                            <ChatBubble {...message} />
                         </div>
                     )
                 })}
+                <div ref={messagesEndRef}></div>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="flex-none join w-full">

@@ -14,9 +14,7 @@ import {
     DragOverlay,
     DragStartEvent,
 } from '@dnd-kit/core'
-import {
-    HubConnectionState
-} from '@microsoft/signalr'
+import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import Board from './Board'
@@ -25,6 +23,11 @@ import ChatBox from './LeftArea/ChatBox'
 import MenuBox from './LeftArea/MenuBox'
 import Piece, { DraggablePiece } from './Piece'
 import WaitingContainer from './WaitingContainer'
+import { MessageProps } from './LeftArea/ChatBubble'
+import { useStore } from '@/lib/zustand/store'
+import PlayerArea from './RightArea/PlayerArea'
+
+type UserDto = { id: string; userName: string; email: string }
 
 function Game({ params }: { params: { id: string } }) {
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
@@ -35,17 +38,10 @@ function Game({ params }: { params: { id: string } }) {
     const [status, setStatus] = useState<HubConnectionState>(
         HubConnectionState.Disconnected
     )
-
+    const { user } = useStore()
     const { data: room, isLoading, isError, error } = useGetRoomById(params.id)
 
-    const [messages, setMessages] = useState<
-        {
-            content: string
-            userName: string
-            userId: string
-            userEmail: string
-        }[]
-    >([])
+    const [messages, setMessages] = useState<MessageProps[]>([])
 
     const { connection } = useSignalR(
         `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
@@ -88,22 +84,42 @@ function Game({ params }: { params: { id: string } }) {
 
         connection.on(
             'Chatted',
-            (
-                message: string,
-                roomCode: string,
-                userDto: { id: string; userName: string; email: string }
-            ) => {
+            (messageContent: string, roomCode: string, userDto: UserDto) => {
                 setMessages((a) => [
                     ...a,
                     {
-                        content: message,
-                        userName: userDto.userName,
-                        userId: userDto.id,
-                        userEmail: userDto.email,
+                        content: messageContent,
+                        displayName: userDto.userName,
+                        me: user ? user.id === userDto.id : false,
+                        system: false,
                     },
                 ])
             }
         )
+
+        connection.on('Joined', (userDto: UserDto) => {
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} joined.`,
+                    displayName: 'Thịt nướng',
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
+
+        connection.on('Left', (userDto: UserDto) => {
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} left.`,
+                    displayName: `Thịt nướng`,
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
     }, [])
 
     useEffect(() => {
@@ -198,7 +214,9 @@ function Game({ params }: { params: { id: string } }) {
         }
     }
 
-    if (status === HubConnectionState.Connecting || isLoading) {
+    if (status === HubConnectionState.Connecting
+        // || isLoading
+        ) {
         return (
             <WaitingContainer>
                 <LoadingBBQ />
@@ -230,22 +248,22 @@ function Game({ params }: { params: { id: string } }) {
         )
     }
 
-    if (error && isError && !isLoading) {
-        return (
-            <WaitingContainer>
-                <span>{'Đã có lỗi xảy ra...'}</span>
-                <span>{(error as AxiosError).message}</span>
-            </WaitingContainer>
-        )
-    }
+    // if (error && isError && !isLoading) {
+    //     return (
+    //         <WaitingContainer>
+    //             <span>{'Đã có lỗi xảy ra...'}</span>
+    //             <span>{(error as AxiosError).message}</span>
+    //         </WaitingContainer>
+    //     )
+    // }
 
-    if (!room) {
-        return (
-            <WaitingContainer>
-                <span>{'Phòng không tồn tại...'}</span>
-            </WaitingContainer>
-        )
-    }
+    // if (!room) {
+    //     return (
+    //         <WaitingContainer>
+    //             <span>{'Phòng không tồn tại...'}</span>
+    //         </WaitingContainer>
+    //     )
+    // }
 
     return (
         <DndContext
@@ -261,11 +279,12 @@ function Game({ params }: { params: { id: string } }) {
                     >
                         <div className={'h-1/2'}>
                             <MenuBox
-                                roomCode={room.code}
+                                roomCode={params.id}
                                 viewCount={
-                                    room.countUser - 2 <= 0
-                                        ? 0
-                                        : room.countUser - 2
+                                    // room.countUser - 2 <= 0
+                                    //     ? 0
+                                    //     : room.countUser - 2
+                                    3
                                 }
                             />
                         </div>
@@ -304,72 +323,8 @@ function Game({ params }: { params: { id: string } }) {
                         id="right-area"
                         className="flex flex-col space-y-2 col-span-2"
                     >
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player1" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 1"
-                                    avatarSrc="/avatars/avatar1.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={1234}
-                                />
-                            </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div
-                                id="player1-captured-pieces"
-                                className="h-full"
-                            ></div>
-
-                            <div
-                                id="countdown_steps_player1"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center">
-                            <div id="player2" className="self-start pl-4 py-2">
-                                <PlayerInformation
-                                    username="Player 2"
-                                    avatarSrc="/avatars/avatar2.png"
-                                    avatarSize={50}
-                                    imageWidth={70}
-                                    imageHeight={70}
-                                    hasFlag
-                                    flagSrc="/flags/VN.svg"
-                                    hasScore
-                                    scoreValue={3456}
-                                />
-                            </div>
-
-                            <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
-
-                            <div
-                                id="player2-captured-pieces"
-                                className="h-full"
-                            ></div>
-
-                            <div
-                                id="countdown_steps_player2"
-                                className="card rounded-md w-52 bg-bamboo-300 shadow-lg"
-                            >
-                                <div className="p-4">
-                                    <p className="text-center text-xl text-bamboo-100">
-                                        CÒN LẠI - 00:00
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <PlayerArea playerIndex={1} />
+                        <PlayerArea playerIndex={2} />
                     </div>
                 </div>
             </div>
