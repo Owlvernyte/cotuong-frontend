@@ -9,7 +9,7 @@ function MenuBox({ roomCode, viewCount }: MenuBoxProps) {
     return (
         <div
             id="menu"
-            className="h-full bg-primary w-full rounded-md shadow-lg p-2 flex flex-col items-center"
+            className="h-full bg-primary w-full rounded-md shadow-lg p-2 flex flex-col items-center overflow-y-auto"
         >
             {/* Hard Code */}
             <MenuBoxTitle roomCode={roomCode} viewCount={viewCount} />

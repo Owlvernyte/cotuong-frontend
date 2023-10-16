@@ -39,9 +39,18 @@ function Game({ params }: { params: { id: string } }) {
         HubConnectionState.Disconnected
     )
     const { user } = useStore()
-    const { data: room, isLoading, isError, error } = useGetRoomById(params.id)
+    const {
+        data: room,
+        isLoading,
+        isError,
+        error,
+        refetch,
+    } = useGetRoomById(params.id)
 
     const [messages, setMessages] = useState<MessageProps[]>([])
+
+    const isPlayer =
+        user?.id === room?.hostUser?.id || user?.id === room?.opponentUser?.id
 
     const { connection } = useSignalR(
         `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
@@ -60,11 +69,6 @@ function Game({ params }: { params: { id: string } }) {
 
         connection.on('connected', (e) => {
             console.log('ws', e)
-        })
-
-        connection.on('Joined', () => {
-            if (status !== HubConnectionState.Connected)
-                setStatus(HubConnectionState.Connected)
         })
 
         connection.on('LoadBoard', (message: Matrix<GamePiece | null>) => {
@@ -98,6 +102,10 @@ function Game({ params }: { params: { id: string } }) {
         )
 
         connection.on('Joined', (userDto: UserDto) => {
+            if (status !== HubConnectionState.Connected)
+                setStatus(HubConnectionState.Connected)
+
+            refetch()
             setMessages((a) => [
                 ...a,
                 {
@@ -110,6 +118,7 @@ function Game({ params }: { params: { id: string } }) {
         })
 
         connection.on('Left', (userDto: UserDto) => {
+            refetch()
             setMessages((a) => [
                 ...a,
                 {
@@ -214,12 +223,39 @@ function Game({ params }: { params: { id: string } }) {
         }
     }
 
-    if (status === HubConnectionState.Connecting
-        // || isLoading
-        ) {
+    if (!user) return null
+
+    if (isLoading) {
         return (
             <WaitingContainer>
                 <LoadingBBQ />
+                <span>{'Đang tải thông tin phòng...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (error && isError && !isLoading) {
+        return (
+            <WaitingContainer>
+                <span>{'Đã có lỗi xảy ra...'}</span>
+                <span>{(error as AxiosError).message}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (!room) {
+        return (
+            <WaitingContainer>
+                <span>{'Phòng không tồn tại...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (status === HubConnectionState.Connecting) {
+        return (
+            <WaitingContainer>
+                <LoadingBBQ />
+                <span>{'Đang kết nối đến phòng...'}</span>
             </WaitingContainer>
         )
     }
@@ -248,23 +284,6 @@ function Game({ params }: { params: { id: string } }) {
         )
     }
 
-    // if (error && isError && !isLoading) {
-    //     return (
-    //         <WaitingContainer>
-    //             <span>{'Đã có lỗi xảy ra...'}</span>
-    //             <span>{(error as AxiosError).message}</span>
-    //         </WaitingContainer>
-    //     )
-    // }
-
-    // if (!room) {
-    //     return (
-    //         <WaitingContainer>
-    //             <span>{'Phòng không tồn tại...'}</span>
-    //         </WaitingContainer>
-    //     )
-    // }
-
     return (
         <DndContext
             onDragStart={handleDragStart}
@@ -281,10 +300,9 @@ function Game({ params }: { params: { id: string } }) {
                             <MenuBox
                                 roomCode={params.id}
                                 viewCount={
-                                    // room.countUser - 2 <= 0
-                                    //     ? 0
-                                    //     : room.countUser - 2
-                                    3
+                                    room.countUser - 2 <= 0
+                                        ? 0
+                                        : room.countUser - 2
                                 }
                             />
                         </div>
@@ -323,8 +341,36 @@ function Game({ params }: { params: { id: string } }) {
                         id="right-area"
                         className="flex flex-col space-y-2 col-span-2"
                     >
-                        <PlayerArea playerIndex={1} />
-                        <PlayerArea playerIndex={2} />
+                        {isPlayer ? (
+                            <>
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={
+                                        room.hostUser?.userName ??
+                                        room.opponentUser?.userName
+                                    }
+                                />
+                                {user.id !== room.hostUser?.id ? (
+                                    <PlayerArea
+                                        playerIndex={2}
+                                        userName={user.userName}
+                                    />
+                                ) : (
+                                    <PlayerArea playerIndex={2} />
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={room.hostUser?.userName}
+                                />
+                                <PlayerArea
+                                    playerIndex={2}
+                                    userName={room.opponentUser?.userName}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

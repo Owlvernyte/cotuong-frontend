@@ -13,6 +13,7 @@ export type Room = {
 export type RoomCreateRequest = {
     password?: string
     hostUserId: string
+    opponentId?: string
 }
 
 export type RoomJoinLeaveRequest = {
