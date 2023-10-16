@@ -24,22 +24,20 @@ function ChatBox({
     return (
         <div
             id="chat-box"
-            className="h-full bg-primary rounded-md shadow-lg flex flex-col p-2 space-y-2 col-span-2"
+            className="h-full bg-primary rounded-md shadow-lg flex flex-col p-2 space-y-2"
         >
-            <div className="flex-1 space-y-2 text-bamboo-100 overflow-auto break-all">
+            <div className="flex-1 space-y-4 text-bamboo-100 overflow-auto break-all px-1 py-2">
                 {messages.map((message, i) => {
                     return (
-                        <div
-                            className={'flex break-all min-h-fit'}
-                            key={`m_${message.userId}_${i}`}
-                        >
-                            {message.userName}: {message.content}
+                        <div className='space-y-1' key={`m_${message.userId}_${i}`}>
+                            <span className={"bg-bamboo-100 text-dirt-300 h-fit px-2 py-1 rounded-md font-bold"}>{message.userName}</span>
+                            <p className={"font-light"}>{message.content}</p>
                         </div>
                     )
                 })}
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="join w-full">
+                <div className="flex-none join w-full">
                     <div className="w-full">
                         <div className="w-full">
                             <input

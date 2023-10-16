@@ -1,16 +1,18 @@
 import Image from 'next/image'
 import React from 'react'
-import MenuBoxTitle from './MenuBoxTitle'
+import MenuBoxTitle, { MenuBoxTitleProps } from './MenuBoxTitle'
 import Link from 'next/link'
 
-function MenuBox({ roomCode }: { roomCode: string }) {
+export type MenuBoxProps = {} & MenuBoxTitleProps
+
+function MenuBox({ roomCode, viewCount }: MenuBoxProps) {
     return (
         <div
             id="menu"
             className="h-full bg-primary w-full rounded-md shadow-lg p-2 flex flex-col items-center"
         >
             {/* Hard Code */}
-            <MenuBoxTitle roomCode={roomCode} viewCount={3} />
+            <MenuBoxTitle roomCode={roomCode} viewCount={viewCount} />
 
             <div className="w-full h-[1px] border-1 bg-bamboo-100 solid"></div>
 

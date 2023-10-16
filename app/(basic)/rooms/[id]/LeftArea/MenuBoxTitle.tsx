@@ -1,13 +1,12 @@
 import Image from 'next/image'
 import React from 'react'
 
-function MenuBoxTitle({
-    roomCode,
-    viewCount,
-}: {
+export type MenuBoxTitleProps = {
     roomCode: string
     viewCount: number
-}) {
+}
+
+function MenuBoxTitle({ roomCode, viewCount }: MenuBoxTitleProps) {
     return (
         <div className="w-full flex flex-col xl:flex-row space-y-2 justify-between items-center px-6 py-2">
             <p className="text-2xl text-bamboo-100 ">ID: {roomCode}</p>
