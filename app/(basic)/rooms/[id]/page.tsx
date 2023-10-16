@@ -62,7 +62,7 @@ function Game({ params }: { params: { id: string } }) {
             console.log('ws error', e)
         })
 
-        connection.on('connected', (e) => {z
+        connection.on('connected', (e) => {
             console.log('ws', e)
         })
 
