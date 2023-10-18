@@ -26,6 +26,7 @@ import WaitingContainer from './WaitingContainer'
 import { MessageProps } from './LeftArea/ChatBubble'
 import { useStore } from '@/lib/zustand/store'
 import PlayerArea from './RightArea/PlayerArea'
+import { enqueueSnackbar } from 'notistack'
 
 type UserDto = { id: string; userName: string; email: string }
 
@@ -159,15 +160,17 @@ function Game({ params }: { params: { id: string } }) {
 
             setMovingPiece(null)
             
-            if (movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board)) {
+            if (!movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board)) {
                 // setBoard((b) =>
                 //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
                 // )
-                connection.send('Move', {
-                    source: movingPiece.coord,
-                    destination: { x: cellX, y: cellY },
-                })
+                return enqueueSnackbar("Nước đi không hợp lệ!", {variant: "error"});
             }
+
+            connection.send('Move', {
+                source: movingPiece.coord,
+                destination: { x: cellX, y: cellY },
+            })
         },
         [movingPiece]
     )
