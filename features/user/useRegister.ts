@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import userApi from './user.service'
-import { RegisterRequest } from './user.types'
+import { AuthUserResponse, RegisterRequest } from './user.types'
 
 function useRegister() {
-    return useMutation({
+    return useMutation<AuthUserResponse, AppAxiosError, RegisterRequest>({
         mutationFn: (data: RegisterRequest) => userApi.register(data),
     })
 }
