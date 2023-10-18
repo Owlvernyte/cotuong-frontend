@@ -142,6 +142,24 @@ class Board implements IBoard {
         })
     }
 
+    isPieceBetweenGenerals(piece: Piece) {
+        let hasGeneralAbove = false
+        let hasGeneralBelow = false
+        for (let i = piece.coord.x - 1; i >= 0; i--) {
+            const oPiece = this.squares[i][piece.coord.y]
+            if (!oPiece) continue
+            if (oPiece.pieceType !== PieceType.General) return false
+            hasGeneralAbove = true
+        }
+        for (let i = piece.coord.x + 1; i < this.rows; i++) {
+            const oPiece = this.squares[i][piece.coord.y]
+            if (!oPiece) continue
+            if (oPiece.pieceType !== PieceType.General) return false
+            hasGeneralBelow = true
+        }
+        return hasGeneralAbove && hasGeneralBelow
+    }
+
     init() {
         this.squares = this.getInitSquares()
     }
