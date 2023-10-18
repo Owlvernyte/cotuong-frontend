@@ -10,7 +10,12 @@ export type Password = {
     confirmPassword: string
 }
 
-export type RegisterRequest = Omit<User, 'id'> & Password
+export type RegisterRequest = {
+    username: string
+    email: string
+    password: string
+    confirmPassword: string
+}
 
 export type LoginRequest = {
     userNameOrEmail: string
