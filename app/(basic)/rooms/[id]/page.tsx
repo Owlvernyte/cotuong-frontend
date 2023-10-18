@@ -159,12 +159,17 @@ function Game({ params }: { params: { id: string } }) {
             // const potentialExistingPiece = board.squares[cellY][cellX]
 
             setMovingPiece(null)
-            
-            if (!movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board)) {
+
+            if (
+                !movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board) ||
+                board.isPieceBetweenGenerals(movingPiece.piece)
+            ) {
                 // setBoard((b) =>
                 //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
                 // )
-                return enqueueSnackbar("Nước đi không hợp lệ!", {variant: "error"});
+                return enqueueSnackbar('Nước đi không hợp lệ!', {
+                    variant: 'error',
+                })
             }
 
             connection.send('Move', {
