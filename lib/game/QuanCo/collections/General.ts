@@ -1,3 +1,4 @@
+import Board from '../../Board'
 import Piece, { IPiece, PieceType } from '../Piece'
 
 class General extends Piece {
@@ -5,6 +6,13 @@ class General extends Piece {
         super(options)
         this.pieceType = PieceType.General
         this.signature = 'K'
+    }
+    override isValidMove(destination: ICoordination, board: Board): Boolean {
+        const isBaseValidMove = super.isValidMove(destination, board);
+        if (!isBaseValidMove) return false;
+
+        
+        return true;
     }
 }
 

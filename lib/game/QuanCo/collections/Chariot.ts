@@ -7,9 +7,9 @@ class Chariot extends Piece {
         this.pieceType = PieceType.Chariot
         this.signature = 'R'
     }
-    override isValidMove(destination: ICoordination, board: Board): Boolean {
-        return true
-    }
+    // override isValidMove(destination: ICoordination, board: Board): Boolean {
+    //     return true
+    // }
 }
 
 export default Chariot

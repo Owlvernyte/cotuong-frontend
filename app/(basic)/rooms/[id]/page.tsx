@@ -158,15 +158,16 @@ function Game({ params }: { params: { id: string } }) {
             // const potentialExistingPiece = board.squares[cellY][cellX]
 
             setMovingPiece(null)
-
-            connection.send('Move', {
-                source: movingPiece.coord,
-                destination: { x: cellX, y: cellY },
-            })
-
-            // setBoard((b) =>
-            //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
-            // )
+            
+            if (movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board)) {
+                // setBoard((b) =>
+                //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
+                // )
+                connection.send('Move', {
+                    source: movingPiece.coord,
+                    destination: { x: cellX, y: cellY },
+                })
+            }
         },
         [movingPiece]
     )
