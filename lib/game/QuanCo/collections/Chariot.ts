@@ -19,14 +19,12 @@ class Chariot extends Piece {
         // Khong cho phep di cheo
         if (moveX > 0 && moveY > 0) return false
 
-        const isOverPiece = board.squares[destination.x][destination.y] != null
-
         // Kiem tra cot
         if (moveY == 0) {
             const headIndex = directionX > 0 ? this.coord.x : destination.x
             const tailIndex = directionX < 0 ? this.coord.x : destination.x
             for (let i = headIndex + 1; i < tailIndex; i++) {
-                if (board.squares[i][this.coord.y] !== null) 
+                if (board.squares[i][this.coord.y] !== null)
                     return false;
             }
         }
@@ -36,7 +34,7 @@ class Chariot extends Piece {
             const headIndex = directionY > 0 ? this.coord.y : destination.y
             const tailIndex = directionY < 0 ? this.coord.y : destination.y
             for (let j = headIndex + 1; j < tailIndex; j++) {
-                if (board.squares[this.coord.x][j] !== null) 
+                if (board.squares[this.coord.x][j] !== null)
                     return false;
             }
         }
