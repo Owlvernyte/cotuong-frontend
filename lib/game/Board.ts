@@ -1,4 +1,4 @@
-import Piece from './QuanCo/Piece'
+import Piece, { PieceType } from './QuanCo/Piece'
 import Horse from './QuanCo/collections/Horse'
 import Cannon from './QuanCo/collections/Cannon'
 import Advisor from './QuanCo/collections/Advisor'
@@ -30,8 +30,51 @@ class Board implements IBoard {
         this.squares = options.squares ?? this.squares
     }
 
+    setSquares(matrix: Matrix<Piece | null>) {
+        return new Board({ ...this, squares: this._parseMatrix(matrix) })
+    }
+
+    _parseMatrix(matrix: Matrix<Piece | null>) {
+        return matrix.map((row) =>
+            row.map((cell) => {
+                if (!cell) return null
+                switch (cell.pieceType) {
+                    case PieceType.Advisor:
+                        return new Advisor({
+                            ...cell,
+                        })
+                    case PieceType.Cannon:
+                        return new Cannon({
+                            ...cell,
+                        })
+                    case PieceType.Chariot:
+                        return new Chariot({
+                            ...cell,
+                        })
+                    case PieceType.Elephant:
+                        return new Elephant({
+                            ...cell,
+                        })
+                    case PieceType.General:
+                        return new General({
+                            ...cell,
+                        })
+                    case PieceType.Horse:
+                        return new Horse({
+                            ...cell,
+                        })
+                    case PieceType.Soldier:
+                        return new Soldier({
+                            ...cell,
+                        })
+                    default:
+                        return null
+                }
+            })
+        )
+    }
+
     getInitBoard(): Board {
-        console.log({ ...this, squares: this.getInitSquares() })
         return new Board({ ...this, squares: this.getInitSquares() })
     }
 
@@ -42,16 +85,17 @@ class Board implements IBoard {
     movePiece(piece: Piece, destination: CoordinationType): Board {
         if (this.squares[piece.coord!.x][piece.coord!.y] != null) {
             this.squares[piece.coord!.x][piece.coord!.y] = null
-            // this.squares[piece.coord!.y][piece.coord!.x]!.setCoord(undefined)
-        }
-        const desCell = this.squares[destination.x][destination.y]
-        if (desCell !== null) {
-            desCell.setCoord(undefined)
         }
         this.squares[destination.x][destination.y] = piece
         piece.setCoord(destination)
 
         return new Board({ ...this })
+    }
+
+    move(source: CoordinationType, destination: CoordinationType) {
+        const piece = this.squares[source.x][source.y]
+        if (!piece) return this
+        return this.movePiece(piece, destination)
     }
 
     getInitSquares(): Matrix<Piece | null> {

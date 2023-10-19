@@ -9,7 +9,7 @@ import HttpService from '@/lib/services/http.service'
 
 class UserApiService extends HttpService {
     register(data: RegisterRequest) {
-        return this.post<AuthUserResponse>('/users', data)
+        return this.post<AuthUserResponse>('/users/register', data)
     }
 
     login(data: LoginRequest) {
@@ -22,6 +22,10 @@ class UserApiService extends HttpService {
 
     getUsers() {
         return this.get<User[]>(`/users`)
+    }
+
+    checkAuthorization() {
+        return this.get<User>(`/users/check-authorization`)
     }
 }
 

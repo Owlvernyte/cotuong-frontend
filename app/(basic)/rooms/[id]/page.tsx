@@ -1,57 +1,215 @@
 'use client'
 
-import Board from '@/lib/game/Board'
-import Piece, { PieceType } from '@/lib/game/QuanCo/Piece'
-import Link from 'next/link'
-import { useState } from 'react'
+import PlayerInformation from '@/components/player/PlayerInformation'
+import LoadingBBQ from '@/components/ui/LoadingBBQ'
+import useGetRoomById from '@/features/room/useGetRoomById'
+import StoreKeys from '@/lib/constants/storeKeys'
+import GameBoard from '@/lib/game/Board'
+import GamePiece from '@/lib/game/QuanCo/Piece'
+import useSignalR from '@/lib/hooks/useSignalR'
+import localStorageService from '@/lib/services/localStorage.service'
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+} from '@dnd-kit/core'
+import { HubConnectionState } from '@microsoft/signalr'
+import { AxiosError } from 'axios'
+import { useCallback, useEffect, useState } from 'react'
+import Board from './Board'
+import Cell from './Cell'
+import ChatBox from './LeftArea/ChatBox'
+import MenuBox from './LeftArea/MenuBox'
+import Piece, { DraggablePiece } from './Piece'
+import WaitingContainer from './WaitingContainer'
+import { MessageProps } from './LeftArea/ChatBubble'
+import { useStore } from '@/lib/zustand/store'
+import PlayerArea from './RightArea/PlayerArea'
 
-const basePiecePath = '/game/pieces1'
+type UserDto = { id: string; userName: string; email: string }
 
-function Game() {
-    const [board, setBoard] = useState<Board>(new Board())
-    const [selectedSquare, setSelectedSquare] = useState<{
-        piece: Piece
+function Game({ params }: { params: { id: string } }) {
+    const [board, setBoard] = useState<GameBoard>(new GameBoard())
+    const [movingPiece, setMovingPiece] = useState<{
+        piece: GamePiece
         coord: CoordinationType
     } | null>(null)
+    const [status, setStatus] = useState<HubConnectionState>(
+        HubConnectionState.Disconnected
+    )
+    const { user } = useStore()
+    const {
+        data: room,
+        isLoading,
+        isError,
+        error,
+        refetch,
+    } = useGetRoomById(params.id)
 
-    const [messages, setMessages] = useState<
+    const [messages, setMessages] = useState<MessageProps[]>([])
+
+    const isPlayer =
+        user?.id === room?.hostUser?.id || user?.id === room?.opponentUser?.id
+
+    const { connection } = useSignalR(
+        `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
         {
-            content: string
-            create_at: Date
-        }[]
-    >([])
+            accessTokenFactory: () => {
+                return localStorageService.get(StoreKeys.ACCESS_TOKEN, '')
+            },
+            withCredentials: true,
+        }
+    )
 
-    // useEffect(() => {
-    //      setBoard((b) => {
-    //         b.squares = b.getInitSquares()
-    //         return b
-    //     })
-    //     return () => {}
-    // }, [])
+    useEffect(() => {
+        connection.on('error', (e) => {
+            console.log('ws error', e)
+        })
+
+        connection.on('connected', (e) => {
+            console.log('ws', e)
+        })
+
+        connection.on('LoadBoard', (message: Matrix<GamePiece | null>) => {
+            setBoard((b) => b.setSquares(message))
+        })
+
+        connection.on(
+            'Moved',
+            (
+                source: CoordinationType,
+                destination: CoordinationType,
+                isNotRed: boolean
+            ) => {
+                setBoard((b) => b.move(source, destination))
+            }
+        )
+
+        connection.on(
+            'Chatted',
+            (messageContent: string, roomCode: string, userDto: UserDto) => {
+                setMessages((a) => [
+                    ...a,
+                    {
+                        content: messageContent,
+                        displayName: userDto.userName,
+                        me: user ? user.id === userDto.id : false,
+                        system: false,
+                    },
+                ])
+            }
+        )
+
+        connection.on('Joined', (userDto: UserDto) => {
+            if (status !== HubConnectionState.Connected)
+                setStatus(HubConnectionState.Connected)
+
+            refetch()
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} joined.`,
+                    displayName: 'Thịt nướng',
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
+
+        connection.on('Left', (userDto: UserDto) => {
+            refetch()
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${userDto.userName} left.`,
+                    displayName: `Thịt nướng`,
+                    system: true,
+                    badge: 'system',
+                },
+            ])
+        })
+    }, [])
+
+    useEffect(() => {
+        setStatus(connection.state)
+    }, [connection, connection.state])
+
+    const handleDragCancel = useCallback(() => {
+        setMovingPiece(null)
+    }, [])
 
     const startBtnHandler = () => {
         setBoard((b) => b.getInitBoard())
     }
 
+    const handleDragEnd = useCallback(
+        function handleDragEnd(event: DragEndEvent) {
+            if (!movingPiece?.coord || !movingPiece?.piece || !event.over?.id) {
+                return
+            }
+
+            const { x: movingPieceX, y: movingPieceY } = movingPiece.coord
+            const [cellX, cellY] = event.over.id
+                .toString()
+                .split('_')
+                .map(Number)
+
+            // const potentialExistingPiece = board.squares[cellY][cellX]
+
+            setMovingPiece(null)
+
+            connection.send('Move', {
+                source: movingPiece.coord,
+                destination: { x: cellX, y: cellY },
+            })
+
+            // setBoard((b) =>
+            //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
+            // )
+        },
+        [movingPiece]
+    )
+
+    const handleDragStart = useCallback(
+        function handleDragStart({ active }: DragStartEvent) {
+            const piece = board.squares.reduce<GamePiece | null>((acc, row) => {
+                return acc ?? row.find((cell) => cell?.id === active.id) ?? null
+            }, null)
+
+            if (piece) {
+                setMovingPiece({
+                    piece: piece,
+                    coord: piece.coord,
+                })
+            }
+        },
+        [board.squares]
+    )
+
     const movePiece = (destination: CoordinationType) => {
-        if (!selectedSquare?.piece) {
+        if (!movingPiece?.piece) {
             return
         }
         console.log(destination)
-        console.log(selectedSquare.piece.coord)
-        setBoard((b) => b.movePiece(selectedSquare?.piece, destination))
-        setSelectedSquare(null)
+        console.log(movingPiece.piece.coord)
+        setBoard((b) => b.movePiece(movingPiece?.piece, destination))
+        setMovingPiece(null)
     }
 
-    const selectSquareHandler = (cell: Piece | null, x: number, y: number) => {
+    const selectSquareHandler = (
+        cell: GamePiece | null,
+        x: number,
+        y: number
+    ) => {
         if (
             board.squares.every((rows) => rows.every((cell) => cell === null))
         ) {
             return
         }
 
-        if (!selectedSquare && cell) {
-            setSelectedSquare({
+        if (!movingPiece && cell) {
+            setMovingPiece({
                 piece: cell,
                 coord: {
                     x,
@@ -60,155 +218,171 @@ function Game() {
             })
             return
         }
-        if (selectedSquare?.piece) {
+        if (movingPiece?.piece) {
             movePiece({ x, y })
         }
     }
 
+    if (!user) return null
+
+    if (isLoading) {
+        return (
+            <WaitingContainer>
+                <LoadingBBQ />
+                <span>{'Đang tải thông tin phòng...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (error && isError && !isLoading) {
+        return (
+            <WaitingContainer>
+                <span>{'Đã có lỗi xảy ra...'}</span>
+                <span>{(error as AxiosError).message}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (!room) {
+        return (
+            <WaitingContainer>
+                <span>{'Phòng không tồn tại...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (status === HubConnectionState.Connecting) {
+        return (
+            <WaitingContainer>
+                <LoadingBBQ />
+                <span>{'Đang kết nối đến phòng...'}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (status === HubConnectionState.Reconnecting) {
+        return (
+            <WaitingContainer>
+                <span>{`Đang kết nối lại...`}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (status === HubConnectionState.Disconnecting) {
+        return (
+            <WaitingContainer>
+                <span>{`Đang ngắt kết nối...`}</span>
+            </WaitingContainer>
+        )
+    }
+
+    if (status === HubConnectionState.Disconnected) {
+        return (
+            <WaitingContainer>
+                <span>{`Mất kết nối...`}</span>
+            </WaitingContainer>
+        )
+    }
+
     return (
-        <div className="h-full space-y-2 flex flex-col">
-            <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
-                <div
-                    id="left-area"
-                    className="flex flex-col space-y-2 col-span-2"
-                >
+        <DndContext
+            onDragStart={handleDragStart}
+            onDragCancel={handleDragCancel}
+            onDragEnd={handleDragEnd}
+        >
+            <div className="h-full space-y-2 flex flex-col">
+                <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
-                        id="menu"
-                        className="bg-primary h-full rounded-md shadow-lg p-2"
+                        id="left-area"
+                        className="h-full space-y-2 col-span-2 pb-2"
                     >
-                        <div className="flex space-x-2">
-                            <Link href={'/room'} className="btn btn-secondary">
-                                Back to lobby
-                            </Link>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={startBtnHandler}
-                            >
-                                Start
-                            </button>
-                            <div>
-                                {selectedSquare &&
-                                    PieceType[selectedSquare.piece.pieceType!]}
-                            </div>
+                        <div className={'h-1/2'}>
+                            <MenuBox
+                                roomCode={params.id}
+                                viewCount={
+                                    room.countUser - 2 <= 0
+                                        ? 0
+                                        : room.countUser - 2
+                                }
+                            />
+                        </div>
+                        <div className={'h-1/2 max-h-[400px]'}>
+                            <ChatBox
+                                messages={messages}
+                                handleSend={(message) => {
+                                    connection.send('Chat', message)
+                                }}
+                            />
                         </div>
                     </div>
-                    <div
-                        id="chat-box"
-                        className="bg-primary h-full rounded-md shadow-lg flex flex-col p-2 space-y-2 col-span-2"
-                    >
-                        <div className="flex-1 flex flex-col space-y-2">
-                            {messages.map((message, i) => {
+                    <Board>
+                        {board.squares.map((row, i) =>
+                            row.map((cell, j) => {
                                 return (
-                                    <div key={`m_${i}`}>{message.content}</div>
+                                    <Cell
+                                        key={`cell_${i}_${j}`}
+                                        id={`${i}_${j}`}
+                                        x={i}
+                                        y={j}
+                                    >
+                                        {cell && (
+                                            <DraggablePiece
+                                                id={cell.id}
+                                                target={cell}
+                                                position={cell.coord}
+                                            />
+                                        )}
+                                    </Cell>
                                 )
-                            })}
-                        </div>
-                        <div className="join w-full">
-                            <div className="w-full">
-                                <div className="w-full">
-                                    <input
-                                        className="input input-bordered join-item w-full"
-                                        placeholder="Type something..."
-                                    />
-                                </div>
-                            </div>
-                            <button className="btn join-item">
-                                <img
-                                    src="/icons/Send_fill.svg"
-                                    alt="send_button"
-                                ></img>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    id="game-board"
-                    className="px-8 py-4 bg-dirt-300 rounded-md h-full flex items-center justify-center text-center col-span-4"
-                >
-                    <div className="bg-banco1 bg-center bg-contain bg-no-repeat p-2 grid grid-cols-9 gap-2 w-full max-w-2xl">
-                        {board.squares.map((row, i) => (
+                            })
+                        )}
+                    </Board>
+                    <div
+                        id="right-area"
+                        className="flex flex-col space-y-2 col-span-2"
+                    >
+                        {isPlayer ? (
                             <>
-                                {row.map((cell, j) => {
-                                    const isSelected =
-                                        selectedSquare &&
-                                        selectedSquare.coord.x == i &&
-                                        selectedSquare.coord.y == j
-
-                                    const selected = isSelected
-                                        ? 'ring-4 ring-black'
-                                        : ''
-
-                                    const baseClassName =
-                                        selected +
-                                        ' ' +
-                                        'flex aspect-square rounded-full justify-center cursor-pointer box-border'
-
-                                    const red =
-                                        baseClassName +
-                                        ' ' +
-                                        'hover:ring-red-500 hover:ring-4'
-
-                                    const blue =
-                                        baseClassName +
-                                        ' ' +
-                                        'hover:ring-blue-500 hover:ring-4'
-
-                                    const emptyCell = baseClassName
-
-                                    const className =
-                                        cell === null
-                                            ? emptyCell
-                                            : cell.isRed
-                                            ? red
-                                            : blue
-
-                                    const pieceChars = cell
-                                        ? `${cell.isRed ? 'r' : 'b'}${
-                                              cell.signature
-                                          }`
-                                        : undefined
-
-                                    const srcPath = !!pieceChars
-                                        ? basePiecePath +
-                                          '/' +
-                                          `${pieceChars}.svg`
-                                        : undefined
-
-                                    const alt = !!pieceChars
-                                        ? `${pieceChars}`
-                                        : undefined
-
-                                    return (
-                                        <div
-                                            key={`cell_${j}`}
-                                            className={className}
-                                            onClick={() =>
-                                                selectSquareHandler(cell, i, j)
-                                            }
-                                        >
-                                            {cell && (
-                                                <img
-                                                    className="box-content shadow-lg rounded-full"
-                                                    src={srcPath}
-                                                    alt={alt}
-                                                ></img>
-                                            )}
-                                        </div>
-                                    )
-                                })}
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={
+                                        user.id !== room.hostUser?.id
+                                            ? room.hostUser?.userName
+                                            : user.id !== room.opponentUser?.id
+                                            ? room.opponentUser?.userName
+                                            : undefined
+                                    }
+                                />
+                                <PlayerArea
+                                    playerIndex={2}
+                                    userName={user.userName}
+                                />
                             </>
-                        ))}
+                        ) : (
+                            <>
+                                <PlayerArea
+                                    playerIndex={1}
+                                    userName={room.hostUser?.userName}
+                                />
+                                <PlayerArea
+                                    playerIndex={2}
+                                    userName={room.opponentUser?.userName}
+                                />
+                            </>
+                        )}
                     </div>
-                </div>
-                <div
-                    id="right-area"
-                    className="flex flex-col space-y-2 col-span-2"
-                >
-                    <div className="bg-primary h-full rounded-md shadow-lg"></div>
-                    <div className="bg-primary h-full rounded-md shadow-lg"></div>
                 </div>
             </div>
-        </div>
+            <DragOverlay dropAnimation={null}>
+                {movingPiece == null ? null : (
+                    <Piece
+                        target={movingPiece.piece}
+                        clone
+                        id={movingPiece.piece.id}
+                    />
+                )}
+            </DragOverlay>
+        </DndContext>
     )
 }
 
