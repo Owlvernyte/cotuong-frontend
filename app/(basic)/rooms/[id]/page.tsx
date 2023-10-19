@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/core'
 import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Board from './Board'
 import Cell from './Cell'
 import ChatBox from './LeftArea/ChatBox'
@@ -47,12 +47,12 @@ function Game({ params }: { params: { id: string } }) {
         error,
         refetch,
     } = useGetRoomById(params.id)
+    const isHost = user?.id === room?.hostUser?.id
+    const isOpponent = user?.id === room?.opponentUser?.id
+    const isPlayer = isHost || isOpponent
 
+    const [isUserTurn, setIsUserTurn] = useState<boolean>(false)
     const [messages, setMessages] = useState<MessageProps[]>([])
-
-    const isPlayer =
-        user?.id === room?.hostUser?.id || user?.id === room?.opponentUser?.id
-
     const { connection } = useSignalR(
         `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
         {
@@ -72,19 +72,38 @@ function Game({ params }: { params: { id: string } }) {
             console.log('ws', e)
         })
 
-        connection.on('LoadBoard', (message: Matrix<GamePiece | null>) => {
-            setBoard((b) => b.setSquares(message))
-        })
+        connection.on(
+            'LoadBoard',
+            (
+                squares: Matrix<GamePiece | null>,
+                isHostRed: boolean,
+                isRedTurn: boolean
+            ) => {
+                console.log(isHostRed, isRedTurn)
+                setBoard(
+                    new GameBoard({
+                        squares,
+                        isHostRed,
+                        isRedTurn,
+                    })
+                )
+            }
+        )
 
         connection.on(
             'Moved',
             (
                 source: CoordinationType,
                 destination: CoordinationType,
-                isNotRed: boolean
+                isRedTurn: boolean
             ) => {
-                setBoard((b) => b.move(source, destination))
+                setBoard((b) => b.move(source, destination, isRedTurn))
             }
+        )
+
+        connection.on(
+            'MoveFailed',
+            (source: CoordinationType, destination: CoordinationType) => {}
         )
 
         connection.on(
@@ -133,16 +152,40 @@ function Game({ params }: { params: { id: string } }) {
     }, [])
 
     useEffect(() => {
+        const getIsUserTurn = () => {
+            // Neu luot cua mau do
+            if (board.isRedTurn) {
+                // Neu user la host do
+                if (
+                    (isHost && board.isHostRed) ||
+                    // Neu user la guest do
+                    (!isHost && !board.isHostRed)
+                )
+                    return true
+            }
+            // Neu luot cua xanh/den
+            else {
+                // Neu user la host xanh
+                if (
+                    (isHost && !board.isHostRed) ||
+                    // Neu user la guest xanh
+                    (!isHost && board.isHostRed)
+                )
+                    return true
+            }
+            return false
+        }
+
+        if (isPlayer) setIsUserTurn(() => getIsUserTurn())
+    }, [board.isHostRed, board.isRedTurn, isHost, isPlayer])
+
+    useEffect(() => {
         setStatus(connection.state)
     }, [connection, connection.state])
 
     const handleDragCancel = useCallback(() => {
         setMovingPiece(null)
     }, [])
-
-    const startBtnHandler = () => {
-        setBoard((b) => b.getInitBoard())
-    }
 
     const handleDragEnd = useCallback(
         function handleDragEnd(event: DragEndEvent) {
@@ -197,41 +240,16 @@ function Game({ params }: { params: { id: string } }) {
         [board.squares]
     )
 
-    const movePiece = (destination: CoordinationType) => {
-        if (!movingPiece?.piece) {
-            return
-        }
-        console.log(destination)
-        console.log(movingPiece.piece.coord)
-        setBoard((b) => b.movePiece(movingPiece?.piece, destination))
-        setMovingPiece(null)
-    }
+    const handleStartPressed = useCallback(() => {
+        connection.send('NewGame')
+    }, [connection])
 
-    const selectSquareHandler = (
-        cell: GamePiece | null,
-        x: number,
-        y: number
-    ) => {
-        if (
-            board.squares.every((rows) => rows.every((cell) => cell === null))
-        ) {
-            return
-        }
-
-        if (!movingPiece && cell) {
-            setMovingPiece({
-                piece: cell,
-                coord: {
-                    x,
-                    y,
-                },
-            })
-            return
-        }
-        if (movingPiece?.piece) {
-            movePiece({ x, y })
-        }
-    }
+    console.log(
+        `isUserTurn ${isUserTurn}`,
+        `isHost ${isHost}`,
+        `isRedTurn ${board.isRedTurn}`,
+        `isHostRed ${board.isHostRed}`
+    )
 
     if (!user) return null
 
@@ -308,6 +326,7 @@ function Game({ params }: { params: { id: string } }) {
                     >
                         <div className={'h-1/2'}>
                             <MenuBox
+                                handleStartPressed={handleStartPressed}
                                 roomCode={params.id}
                                 viewCount={
                                     room.countUser - 2 <= 0
@@ -328,6 +347,55 @@ function Game({ params }: { params: { id: string } }) {
                     <Board>
                         {board.squares.map((row, i) =>
                             row.map((cell, j) => {
+                                if (!cell) {
+                                    return (
+                                        <Cell
+                                            key={`cell_${i}_${j}`}
+                                            id={`${i}_${j}`}
+                                            x={i}
+                                            y={j}
+                                        ></Cell>
+                                    )
+                                }
+
+                                if (!isUserTurn) {
+                                    return (
+                                        <Cell
+                                            key={`cell_${i}_${j}`}
+                                            id={`${i}_${j}`}
+                                            x={i}
+                                            y={j}
+                                        >
+                                            <Piece
+                                                id={cell.id}
+                                                target={cell}
+                                                position={cell.coord}
+                                                title={'Cant move'}
+                                                disabled
+                                                draggable={false}
+                                            />
+                                        </Cell>
+                                    )
+                                }
+
+                                if (board.isRedTurn === cell.isRed) {
+                                    return (
+                                        <Cell
+                                            key={`cell_${i}_${j}`}
+                                            id={`${i}_${j}`}
+                                            x={i}
+                                            y={j}
+                                        >
+                                            <DraggablePiece
+                                                id={cell.id}
+                                                target={cell}
+                                                position={cell.coord}
+                                                title={'Movable'}
+                                            />
+                                        </Cell>
+                                    )
+                                }
+
                                 return (
                                     <Cell
                                         key={`cell_${i}_${j}`}
@@ -335,13 +403,14 @@ function Game({ params }: { params: { id: string } }) {
                                         x={i}
                                         y={j}
                                     >
-                                        {cell && (
-                                            <DraggablePiece
-                                                id={cell.id}
-                                                target={cell}
-                                                position={cell.coord}
-                                            />
-                                        )}
+                                        <Piece
+                                            id={cell.id}
+                                            target={cell}
+                                            position={cell.coord}
+                                            title={'Cant move'}
+                                            disabled
+                                            draggable={false}
+                                        />
                                     </Cell>
                                 )
                             })
