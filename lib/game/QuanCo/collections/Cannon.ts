@@ -7,91 +7,44 @@ class Cannon extends Piece {
         this.pieceType = PieceType.Cannon
         this.signature = 'C'
     }
-    CheckRow(destinationCoordinate: ICoordination, board: Board): boolean {
-        if (this.coord.x < destinationCoordinate.x) {
-            for (let i = this.coord.x + 1; i < destinationCoordinate.x; i++) {
-                if (board.squares[i][destinationCoordinate.y] !== null)
-                    return false;
-            }
-            return true;
-        }
-        for (let i = this.coord.x - 1; i >= destinationCoordinate.x; i--) {
-            if (board.squares[i][destinationCoordinate.y] !== null)
-                return false;
-        }
-        return true;
-    }
 
-    CheckColumns(destinationCoordinate: ICoordination, board: Board): boolean {
-        if (this.coord.y < destinationCoordinate.y) {
-            for (let i = this.coord.y + 1; i <= destinationCoordinate.y; i++) {
-                if (board.squares[destinationCoordinate.x][i] !== null)
-                    return false;
-            }
-            return true;
-        }
-        for (let i = this.coord.y - 1; i >= destinationCoordinate.y; i--) {
-            if (board.squares[destinationCoordinate.x][i] !==null)
-                return false;
-        }
-        return true;
-    }
-    CheckRemoveDesRow(destinationCoordinate: ICoordination, board: Board): boolean {
-        let count = 0;
-        if (this.coord!.x < destinationCoordinate.x) {
-            for (let i = this.coord!.x + 1; i < destinationCoordinate.x; i++) {
-                if (board.squares[i][destinationCoordinate.y] !== null)
-                    count++;
-            }
-        }
-        else {
-            for (let i = this.coord!.x - 1; i > destinationCoordinate.x; i--) {
-                if (board.squares[i][destinationCoordinate.y] !== null)
-                    count++;
-            }
-        }
-        if(count == 1)
-            return true;
-        return false;
-    }
-
-    CheckRemoveDesColumns(destinationCoordinate: ICoordination, board: Board): boolean {
-        let count = 0;
-        if (this.coord!.y < destinationCoordinate.y) {
-            for (let i = this.coord!.y + 1; i < destinationCoordinate.y; i++) {
-                if (board.squares[this.coord!.x][i] !== null)
-                    count++;
-            }
-        }
-        else {
-            for (let i = this.coord!.y - 1; i > destinationCoordinate.y; i--) {
-                if (board.squares[destinationCoordinate.x][i] !== null)
-                    count++;
-            }
-        }
-        if(count == 1)
-            return true;
-        return false;
-    }
     override isValidMove(destination: ICoordination, board: Board): Boolean {
-        const isBaseValidMove = super.isValidMove(destination, board);
-        if (!isBaseValidMove)
-            return false;
-        if(destination.x != this.coord.x && destination.y != this.coord.y)
-            return false;
-        if (!board.squares[destination.x][destination.y]) {
-            if (destination.x != this.coord.x)
-                return this.CheckRow(destination, board);
-            if (destination.y != this.coord!.y)
-                return this.CheckColumns(destination, board);
+        const isBaseValidMove = super.isValidMove(destination, board)
+        if (!isBaseValidMove) return false
+
+        const directionX = destination.x - this.coord.x
+        const directionY = destination.y - this.coord.y
+        const moveX = Math.abs(directionX)
+        const moveY = Math.abs(directionY)
+
+        // Khong cho phep di cheo
+        if (moveX > 0 && moveY > 0) return false
+
+        const isOverPiece = board.squares[destination.x][destination.y] != null
+        let count = 0
+
+        // Kiem tra cot
+        if (moveY == 0) {
+            const headIndex = directionX > 0 ? this.coord.x : destination.x
+            const tailIndex = directionX < 0 ? this.coord.x : destination.x
+            for (let i = headIndex + 1; i < tailIndex; i++) {
+                if (board.squares[i][this.coord.y] !== null) count++
+            }
         }
-           else {
-            if (destination.x !== this.coord!.x)
-                return this.CheckRemoveDesRow(destination, board);
-            if (destination.y !== this.coord!.y)
-                return this.CheckRemoveDesColumns(destination, board);
+
+        // Kiem tra dong
+        if (moveX == 0) {
+            const headIndex = directionY > 0 ? this.coord.y : destination.y
+            const tailIndex = directionY < 0 ? this.coord.y : destination.y
+            for (let j = headIndex + 1; j < tailIndex; j++) {
+                if (board.squares[this.coord.x][j] !== null) count++
+            }
         }
-        return false;
+
+        if (count > 0 && !isOverPiece) return false
+
+        // TODO: Sẽ cập nhật lại khi có Xoay Bàn Cờ!
+        return true
     }
 }
 
