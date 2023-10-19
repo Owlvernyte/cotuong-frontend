@@ -259,13 +259,6 @@ function Game({ params }: { params: { id: string } }) {
         connection.send('NewGame')
     }, [connection])
 
-    console.log(
-        `isUserTurn ${isUserTurn}`,
-        `isHost ${isHost}`,
-        `isRedTurn ${board.isRedTurn}`,
-        `isHostRed ${board.isHostRed}`
-    )
-
     if (!user) return null
 
     if (isLoading) {
