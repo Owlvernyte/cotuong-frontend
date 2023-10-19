@@ -41,7 +41,8 @@ class Cannon extends Piece {
             }
         }
 
-        if (count > 0 && !isOverPiece) return false
+        if ((!isOverPiece && count != 0) || (isOverPiece && count != 1))
+            return false
 
         // TODO: Sẽ cập nhật lại khi có Xoay Bàn Cờ!
         return true
