@@ -29,9 +29,7 @@ abstract class Piece implements IPiece {
     }
 
     get id() {
-        return `${this.pieceChars}_${this.coord.x}_${
-            this.coord.y
-        }`
+        return `${this.pieceChars}_${this.coord.x}_${this.coord.y}`
     }
 
     get pieceChars() {
@@ -50,16 +48,22 @@ abstract class Piece implements IPiece {
         return []
     }
     isValidMove(destination: CoordinationType, board: Board): Boolean {
-        if (destination.x < 0 || destination.y < 0 || destination.x >= board.rows || destination.y >= board.columns) {
-            return false;
+        if (
+            destination.x < 0 ||
+            destination.y < 0 ||
+            destination.x >= board.rows ||
+            destination.y >= board.columns ||
+            (this.coord.x == destination.x && this.coord.y == destination.y)
+        ) {
+            return false
         }
 
-        const destinationPiece = board.squares[destination.x][destination.y];
+        const destinationPiece = board.squares[destination.x][destination.y]
 
         if (destinationPiece && destinationPiece.isRed == this.isRed) {
-            return false;
+            return false
         }
-        
+
         return true
     }
 }
