@@ -145,11 +145,14 @@ function Game({ params }: { params: { id: string } }) {
             setMessages((a) => [
                 ...a,
                 {
-                    content: `${winUser.userName} WON!`,
+                    content: `${winUser.userName} thắng!`,
                     ...systemMsgProps,
                 },
             ])
             audioWonRef.current?.play()
+            enqueueSnackbar(`${winUser.userName} thắng!`, {
+                variant: 'warning',
+            })
         })
 
         connection.on(
