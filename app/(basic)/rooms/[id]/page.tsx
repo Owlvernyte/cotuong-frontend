@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/core'
 import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Board from './Board'
 import Cell from './Cell'
 import ChatBox from './LeftArea/ChatBox'
@@ -29,8 +29,16 @@ import PlayerArea from './RightArea/PlayerArea'
 import { enqueueSnackbar } from 'notistack'
 
 type UserDto = { id: string; userName: string; email: string }
+const systemDisplayName = 'Thịt nướng'
+const systemMsgProps = {
+    displayName: systemDisplayName,
+    system: true,
+    badge: 'system',
+}
 
 function Game({ params }: { params: { id: string } }) {
+    const audioMsgRef = useRef<HTMLAudioElement>(null)
+    const audioWonRef = useRef<HTMLAudioElement>(null)
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
     const [movingPiece, setMovingPiece] = useState<{
         piece: GamePiece
@@ -50,8 +58,6 @@ function Game({ params }: { params: { id: string } }) {
     const isHost = user?.id === room?.hostUser?.id
     const isOpponent = user?.id === room?.opponentUser?.id
     const isPlayer = isHost || isOpponent
-
-    const [isUserTurn, setIsUserTurn] = useState<boolean>(false)
     const [messages, setMessages] = useState<MessageProps[]>([])
     const { connection } = useSignalR(
         `https://cotuong.azurewebsites.net/hubs/game?roomCode=${params.id}`,
@@ -62,6 +68,32 @@ function Game({ params }: { params: { id: string } }) {
             withCredentials: true,
         }
     )
+
+    const isUserTurn =
+        isPlayer &&
+        (() => {
+            // Neu luot cua mau do
+            if (board.isRedTurn) {
+                // Neu user la host do
+                if (
+                    (isHost && board.isHostRed) ||
+                    // Neu user la guest do
+                    (!isHost && !board.isHostRed)
+                )
+                    return true
+            }
+            // Neu luot cua xanh/den
+            else {
+                // Neu user la host xanh
+                if (
+                    (isHost && !board.isHostRed) ||
+                    // Neu user la guest xanh
+                    (!isHost && board.isHostRed)
+                )
+                    return true
+            }
+            return false
+        })()
 
     useEffect(() => {
         connection.on('error', (e) => {
@@ -79,7 +111,6 @@ function Game({ params }: { params: { id: string } }) {
                 isHostRed: boolean,
                 isRedTurn: boolean
             ) => {
-                console.log(isHostRed, isRedTurn)
                 setBoard(
                     new GameBoard({
                         squares,
@@ -103,8 +134,23 @@ function Game({ params }: { params: { id: string } }) {
 
         connection.on(
             'MoveFailed',
-            (source: CoordinationType, destination: CoordinationType) => {}
+            (source: CoordinationType, destination: CoordinationType) => {
+                enqueueSnackbar('Di chuyển thất bại', {
+                    variant: 'error',
+                })
+            }
         )
+
+        connection.on('Ended', (isRed: boolean, winUser: UserDto) => {
+            setMessages((a) => [
+                ...a,
+                {
+                    content: `${winUser.userName} WON!`,
+                    ...systemMsgProps,
+                },
+            ])
+            audioWonRef.current?.play()
+        })
 
         connection.on(
             'Chatted',
@@ -118,6 +164,7 @@ function Game({ params }: { params: { id: string } }) {
                         system: false,
                     },
                 ])
+                if (userDto.id !== user?.id) audioMsgRef.current?.play()
             }
         )
 
@@ -130,9 +177,7 @@ function Game({ params }: { params: { id: string } }) {
                 ...a,
                 {
                     content: `${userDto.userName} joined.`,
-                    displayName: 'Thịt nướng',
-                    system: true,
-                    badge: 'system',
+                    ...systemMsgProps,
                 },
             ])
         })
@@ -143,41 +188,11 @@ function Game({ params }: { params: { id: string } }) {
                 ...a,
                 {
                     content: `${userDto.userName} left.`,
-                    displayName: `Thịt nướng`,
-                    system: true,
-                    badge: 'system',
+                    ...systemMsgProps,
                 },
             ])
         })
     }, [])
-
-    useEffect(() => {
-        const getIsUserTurn = () => {
-            // Neu luot cua mau do
-            if (board.isRedTurn) {
-                // Neu user la host do
-                if (
-                    (isHost && board.isHostRed) ||
-                    // Neu user la guest do
-                    (!isHost && !board.isHostRed)
-                )
-                    return true
-            }
-            // Neu luot cua xanh/den
-            else {
-                // Neu user la host xanh
-                if (
-                    (isHost && !board.isHostRed) ||
-                    // Neu user la guest xanh
-                    (!isHost && board.isHostRed)
-                )
-                    return true
-            }
-            return false
-        }
-
-        if (isPlayer) setIsUserTurn(() => getIsUserTurn())
-    }, [board.isHostRed, board.isRedTurn, isHost, isPlayer])
 
     useEffect(() => {
         setStatus(connection.state)
@@ -318,6 +333,8 @@ function Game({ params }: { params: { id: string } }) {
             onDragCancel={handleDragCancel}
             onDragEnd={handleDragEnd}
         >
+            <audio ref={audioMsgRef} src="/sfx/msg.mp3"></audio>
+            <audio ref={audioWonRef} src="/sfx/won.mp3"></audio>
             <div className="h-full space-y-2 flex flex-col">
                 <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
@@ -425,16 +442,26 @@ function Game({ params }: { params: { id: string } }) {
                                 <PlayerArea
                                     playerIndex={1}
                                     userName={
-                                        user.id !== room.hostUser?.id
+                                        !isHost
                                             ? room.hostUser?.userName
-                                            : user.id !== room.opponentUser?.id
+                                            : !isOpponent
                                             ? room.opponentUser?.userName
+                                            : undefined
+                                    }
+                                    label={
+                                        isUserTurn
+                                            ? 'ĐANG CHỜ TỚI LƯỢT'
                                             : undefined
                                     }
                                 />
                                 <PlayerArea
                                     playerIndex={2}
                                     userName={user.userName}
+                                    label={
+                                        !isUserTurn
+                                            ? 'ĐANG CHỜ TỚI LƯỢT'
+                                            : undefined
+                                    }
                                 />
                             </>
                         ) : (
