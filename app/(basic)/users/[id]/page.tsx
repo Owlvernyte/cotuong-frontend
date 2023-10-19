@@ -1,5 +1,4 @@
 'use client'
-'use client'
 import React from 'react'
 import { useStore } from '@/lib/zustand/store'
 import Image from 'next/image'
