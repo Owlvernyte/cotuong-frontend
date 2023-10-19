@@ -64,6 +64,12 @@ abstract class Piece implements IPiece {
             return false
         }
 
+        if (
+            this.pieceType != PieceType.General &&
+            board.isPieceBetweenGenerals(this, destination)
+        )
+            return false
+
         return true
     }
 }

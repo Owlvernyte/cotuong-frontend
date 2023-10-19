@@ -164,13 +164,7 @@ function Game({ params }: { params: { id: string } }) {
 
             setMovingPiece(null)
 
-            if (
-                !movingPiece.piece.isValidMove(destinationCoord, board) ||
-                board.isPieceBetweenGenerals(
-                    movingPiece.piece,
-                    destinationCoord
-                )
-            ) {
+            if (!movingPiece.piece.isValidMove(destinationCoord, board)) {
                 // setBoard((b) =>
                 //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
                 // )
