@@ -19,8 +19,6 @@ class Chariot extends Piece {
         // Khong cho phep di cheo
         if (moveX > 0 && moveY > 0) return false
 
-        const isOverPiece = board.squares[destination.x][destination.y] != null
-
         // Kiem tra cot
         if (moveY == 0) {
             const headIndex = directionX > 0 ? this.coord.x : destination.x
