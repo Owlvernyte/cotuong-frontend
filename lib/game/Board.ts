@@ -142,21 +142,32 @@ class Board implements IBoard {
         })
     }
 
-    isPieceBetweenGenerals(piece: Piece) {
+    isPieceBetweenGenerals(piece: Piece, destination: CoordinationType) {
         let hasGeneralAbove = false
         let hasGeneralBelow = false
         for (let i = piece.coord.x - 1; i >= 0; i--) {
             const oPiece = this.squares[i][piece.coord.y]
             if (!oPiece) continue
-            if (oPiece.pieceType !== PieceType.General) return false
-            hasGeneralAbove = true
+            if (oPiece.pieceType === PieceType.General) {
+                hasGeneralAbove = true
+                break
+            } else break
         }
+        if (!hasGeneralAbove) return false
         for (let i = piece.coord.x + 1; i < this.rows; i++) {
             const oPiece = this.squares[i][piece.coord.y]
             if (!oPiece) continue
-            if (oPiece.pieceType !== PieceType.General) return false
-            hasGeneralBelow = true
+            if (oPiece.pieceType === PieceType.General) {
+                hasGeneralBelow = true
+                break
+            } else break
         }
+        if (!hasGeneralBelow) return false
+
+        const moveX = Math.abs(piece.coord.x - destination.x)
+        const moveY = Math.abs(piece.coord.y - destination.y)
+        if (moveY === 0 && moveX > 0) return false
+
         return hasGeneralAbove && hasGeneralBelow
     }
 

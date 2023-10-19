@@ -150,19 +150,26 @@ function Game({ params }: { params: { id: string } }) {
                 return
             }
 
-            const { x: movingPieceX, y: movingPieceY } = movingPiece.coord
+            const sourceCoord = movingPiece.coord
             const [cellX, cellY] = event.over.id
                 .toString()
                 .split('_')
                 .map(Number)
+            const destinationCoord = {
+                x: cellX,
+                y: cellY,
+            }
 
             // const potentialExistingPiece = board.squares[cellY][cellX]
 
             setMovingPiece(null)
 
             if (
-                !movingPiece.piece.isValidMove({ x: cellX, y: cellY }, board) ||
-                board.isPieceBetweenGenerals(movingPiece.piece)
+                !movingPiece.piece.isValidMove(destinationCoord, board) ||
+                board.isPieceBetweenGenerals(
+                    movingPiece.piece,
+                    destinationCoord
+                )
             ) {
                 // setBoard((b) =>
                 //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
@@ -173,11 +180,11 @@ function Game({ params }: { params: { id: string } }) {
             }
 
             connection.send('Move', {
-                source: movingPiece.coord,
-                destination: { x: cellX, y: cellY },
+                source: sourceCoord,
+                destination: destinationCoord,
             })
         },
-        [movingPiece]
+        [board, connection, movingPiece]
     )
 
     const handleDragStart = useCallback(
