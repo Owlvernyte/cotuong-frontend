@@ -1,3 +1,4 @@
+import Board from '../../Board';
 import Piece, { IPiece, PieceType } from '../Piece'
 
 class Advisor extends Piece {
