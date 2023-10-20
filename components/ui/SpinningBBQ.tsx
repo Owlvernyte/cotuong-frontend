@@ -4,7 +4,7 @@ import React from 'react'
 function SpinningBBQ({ size = 32 }: { size?: number }) {
     return (
         <Image
-            src={'/thitnuong.svg'}
+            src={'/assets/thitnuong.svg'}
             width={size}
             height={size}
             alt="Thit Nuong"

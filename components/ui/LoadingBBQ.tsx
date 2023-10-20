@@ -5,7 +5,7 @@ function LoadingBBQ() {
     return (
         <div className="flex space-x-2 justify-center items-center">
              <Image
-                src={'/thitnuong.svg'}
+                src={'/assets/thitnuong.svg'}
                 width={32}
                 height={32}
                 alt="Thit Nuong"

@@ -3,17 +3,16 @@
 import Image from 'next/image'
 import React from 'react'
 import IconButton from '../ui/IconButton'
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import CreateRoomButton from './CreateRoomButton'
 
 function ButtonsMenuList() {
-    const router = useRouter()
     const handleSubmit = React.useCallback(function handleSubmit(
         e: React.FormEvent<HTMLFormElement>
     ) {
         e.preventDefault()
         const roomCode = e.currentTarget['roomCode'].value as string
-        router.push(`/rooms/${roomCode}`)
+        redirect(`/rooms/${roomCode}`)
     },
     [])
 
@@ -25,7 +24,7 @@ function ButtonsMenuList() {
                 onClick={() => (window as any).search_room.showModal()}
             >
                 <Image
-                    src={'/icons/secondary/Search_alt_fill.svg'}
+                    src={'/assets/icons/secondary/Search_alt_fill.svg'}
                     alt="Create Icon"
                     width={35}
                     height={35}
@@ -36,7 +35,7 @@ function ButtonsMenuList() {
                 <div className="modal-box w-full bg-bamboo-400">
                     <form onSubmit={handleSubmit} method="dialog">
                         <IconButton
-                            iconSrc="/icons/primary/Dell_fill.svg"
+                            iconSrc="/assets/icons/primary/Dell_fill.svg"
                             iconAlt="Icon Close"
                             buttonVariants="btn-primary"
                             buttonStyle="btn-circle"

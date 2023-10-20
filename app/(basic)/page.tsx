@@ -12,7 +12,7 @@ export default function Home() {
                 <div className="h-screen flex flex-col space-y-4 justify-center items-center pb-52">
                     <div className="flex flex-row justify-center items-center p-2 text-center space-x-2">
                         <Image
-                            src="/h1_quanco.svg"
+                            src="/assets/h1_quanco.svg"
                             alt="icon_quan_co"
                             width={120}
                             height={120}

@@ -27,7 +27,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
 
           <div className="flex flex-row pb-2 items-center justify-center">
             <Image
-              src="/icons/secondary/Eye_fill.svg"
+              src="/assets/icons/secondary/Eye_fill.svg"
               alt="Eye Icon"
               width={25}
               height={25}
@@ -49,7 +49,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
             <div id="board-room" className="py-2 hover:blur-sm relative">
               <Link href={linkRoom}>
                 <Image
-                  src="/game/board/banco1.svg"
+                  src="/assets/game/board/banco1.svg"
                   alt="Board Image"
                   width={150}
                   height={150}

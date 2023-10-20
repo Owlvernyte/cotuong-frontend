@@ -17,7 +17,7 @@ const sampleData: PlayerData[] = [
   {
     username: "User1",
     avatarSrc: "/avatars/avatar1.png",
-    flagSrc: "/flags/VN.svg",
+    flagSrc: "/assets/flags/VN.svg",
     win: 120,
     loss: 42,
     draw: 2,
@@ -26,7 +26,7 @@ const sampleData: PlayerData[] = [
   {
     username: "User2",
     avatarSrc: "/avatars/avatar2.png",
-    flagSrc: "/flags/US.svg",
+    flagSrc: "/assets/flags/US.svg",
     win: 365,
     loss: 45,
     draw: 6,
@@ -35,7 +35,7 @@ const sampleData: PlayerData[] = [
   {
     username: "User3",
     avatarSrc: "/avatars/avatar3.png",
-    flagSrc: "/flags/CA.svg",
+    flagSrc: "/assets/flags/CA.svg",
     win: 664,
     loss: 432,
     draw: 26,
@@ -58,7 +58,7 @@ const LeaderBoardTable: React.FC = () => {
             <th>
               <div className="w-12">
                 <Image
-                  src="/diemthitnuong.svg"
+                  src="/assets/diemthitnuong.svg"
                   alt="Score"
                   width={120}
                   height={120}

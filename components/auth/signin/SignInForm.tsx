@@ -1,8 +1,6 @@
 'use client'
 
 import useLogin from '@/features/user/useLogin'
-import StoreKeys from '@/lib/constants/storeKeys'
-import localStorageService from '@/lib/services/localStorage.service'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -36,8 +34,7 @@ function SignInForm() {
     )
 
     React.useEffect(() => {
-        if (response && response.token) {
-            localStorageService.set(StoreKeys.ACCESS_TOKEN, response.token)
+        if (response) {
             // refetch()
             location.reload()
         }
@@ -47,7 +44,7 @@ function SignInForm() {
         <form onSubmit={handleSubmit}>
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/User_fill.svg"
+                    src="/assets/icons/secondary/User_fill.svg"
                     alt="User Logo"
                     width={80}
                     height={80}
@@ -63,7 +60,7 @@ function SignInForm() {
 
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/Unlock_fill.svg"
+                    src="/assets/icons/secondary/Unlock_fill.svg"
                     alt="Password Logo"
                     width={80}
                     height={80}

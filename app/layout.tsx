@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'Cờ tướng Thịt nướng',
     description: 'Play Vietnamese Chess while BBQing!',
     viewport: 'user-scalable=no, initial-scale=1.0',
-    icons: ['/thitnuong.svg'],
+    icons: ['/assets/thitnuong.svg'],
 }
 
 export default function RootLayout({

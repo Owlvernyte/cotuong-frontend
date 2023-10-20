@@ -12,7 +12,7 @@ function MenuBoxTitle({ roomCode, viewCount }: MenuBoxTitleProps) {
             <p className="text-2xl text-bamboo-100 ">ID: {roomCode}</p>
             <div className="flex items-center text-bamboo-100 text-xl space-x-2">
                 <Image
-                    src="/icons/primary/Eye_fill.svg"
+                    src="/assets/icons/primary/Eye_fill.svg"
                     alt="Eye Icon"
                     width={30}
                     height={30}

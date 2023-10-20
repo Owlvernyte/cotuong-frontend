@@ -26,35 +26,35 @@ const users: User[] = [
   {
     id: 1,
     name: "John Doe",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     email: "john.doe@example.com",
     win: 5,
   },
   {
     id: 2,
     name: "Jane Doe",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     email: "jane.doe@example.com",
     win: 6,
   },
   {
     id: 3,
     name: "Bob Smith",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     email: "bob.smith@example.com",
     win: 6,
   },
   {
     id: 4,
     name: "Bob Smith",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     email: "bob.smith@example.com",
     win: 5,
   },
   {
     id: 5,
     name: "Bob Smith",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     email: "bob.smith@example.com",
     win: 4,
   },
@@ -64,13 +64,13 @@ const tournaments: Tournament[] = [
   {
     id: 1,
     name: "Tournament 1",
-    bannerSrc: "/icons/Cup.svg",
+    bannerSrc: "/assets/icons/Cup.svg",
     users: users.slice(0, 3),
   },
   {
     id: 2,
     name: "Tournament 2",
-    bannerSrc: "/icons/Cup.svg",
+    bannerSrc: "/assets/icons/Cup.svg",
     users: users.slice(2, 5),
   },
 ]
@@ -117,7 +117,7 @@ const OffCard = () => {
             <div className="card rounded-md w-full h-48 justify-center items-center bg-bamboo-200">
               <div className="card-body h-full flex flex-row justify-center items-center">
                 <Image
-                  src="/medals/top1.svg"
+                  src="/assets/medals/top1.svg"
                   alt="top1"
                   width={100}
                   height={100}
@@ -130,9 +130,9 @@ const OffCard = () => {
               <div className="card-body">
                 <PlayerInformation
                   username="Player 1"
-                  avatarSrc="/avatars/avatar1.png"
+                  avatarSrc="/assets/avatars/avatar1.png"
                   hasFlag
-                  flagSrc="/flags/VN.svg"
+                  flagSrc="/assets/flags/VN.svg"
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ const OffCard = () => {
             <div className="card rounded-md w-full h-48 justify-center items-center bg-bamboo-200">
               <div className="card-body h-full flex flex-row justify-center items-center">
                 <Image
-                  src="/medals/top2.svg"
+                  src="/assets/medals/top2.svg"
                   alt="top2"
                   width={100}
                   height={100}
@@ -157,9 +157,9 @@ const OffCard = () => {
               <div className="card-body">
                 <PlayerInformation
                   username="Player 2"
-                  avatarSrc="/avatars/avatar6.png"
+                  avatarSrc="/assets/avatars/avatar6.png"
                   hasFlag
-                  flagSrc="/flags/VN.svg"
+                  flagSrc="/assets/flags/VN.svg"
                 />
               </div>
             </div>
@@ -171,7 +171,7 @@ const OffCard = () => {
             <div className="card rounded-md w-full h-48 justify-center items-center bg-bamboo-200">
               <div className="card-body h-full flex flex-row justify-center items-center">
                 <Image
-                  src="/medals/top3.svg"
+                  src="/assets/medals/top3.svg"
                   alt="top3"
                   width={100}
                   height={100}
@@ -184,9 +184,9 @@ const OffCard = () => {
               <div className="card-body">
                 <PlayerInformation
                   username="Player 3"
-                  avatarSrc="/avatars/avatar2.png"
+                  avatarSrc="/assets/avatars/avatar2.png"
                   hasFlag
-                  flagSrc="/flags/VN.svg"
+                  flagSrc="/assets/flags/VN.svg"
                 />
               </div>
             </div>
