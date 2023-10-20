@@ -1,4 +1,5 @@
 import ContactForm from "@/components/contact/ContactForm"
+import HelpList from "@/components/contact/HelpList"
 import Title from "@/components/ui/Title"
 import Image from "next/image"
 import Link from "next/link"
@@ -73,10 +74,13 @@ function Contact() {
         className="card bg-bamboo-400 rounded-md w-full col-span-4 overflow-y-auto max-h-full"
       >
         <div className="card-body">
-          <p className="text-bamboo-100 text-center text-2xl md:text-4xl pb-2">
-            CÂU HỎI THƯỜNG GẶP
-          </p>
-          {/* List */}
+          <div>
+            <p className="text-bamboo-100 text-center text-2xl md:text-4xl pb-2">
+              CÂU HỎI THƯỜNG GẶP
+            </p>
+          </div>
+
+          <HelpList />
         </div>
       </div>
     </div>

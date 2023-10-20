@@ -18,7 +18,7 @@ function ContactForm() {
       <div>
         <p className="text-bamboo-100 text-2xl pb-4">Email</p>
         <input
-          type="text"
+          type="email"
           name="email"
           placeholder="Nhập email của bạn tại đây"
           className="input input-bordered input-lg w-full bg-bamboo-100 placeholder-dirt-400 placeholder-opacity-50 text-lg mb-5"
