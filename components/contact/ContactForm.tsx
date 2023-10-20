@@ -34,7 +34,7 @@ function ContactForm() {
         />
       </div>
 
-      <button type="submit" className="btn btn-secondary btn-lg w-full">
+      <button type="submit" className="btn btn-secondary btn-md w-full">
         GỬI LỜI NHẮN
       </button>
     </form>
