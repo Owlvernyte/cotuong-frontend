@@ -19,12 +19,12 @@ function PlayerArea({
             <div id={`player${playerIndex}`} className="self-start pl-4 py-2">
                 <PlayerInformation
                     username={userName ?? `Waiting for player`}
-                    avatarSrc={avatarSrc ?? '/avatars/avatar1.png'}
+                    avatarSrc={avatarSrc ?? '/assets/avatars/avatar1.png'}
                     avatarSize={50}
                     imageWidth={70}
                     imageHeight={70}
                     hasFlag
-                    flagSrc={flagSrc ?? '/flags/VN.svg'}
+                    flagSrc={flagSrc ?? '/assets/flags/VN.svg'}
                     hasScore
                     scoreValue={0}
                 />

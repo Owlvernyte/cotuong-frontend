@@ -9,7 +9,7 @@ const ExtraInformation: React.FC = () => {
       <Button
         text="CHIA SẺ THÀNH TÍCH"
         startIcon
-        startIconSrc="/icons/primary/Share_fill.svg"
+        startIconSrc="/assets/icons/primary/Share_fill.svg"
         startIconAlt="Share Icon"
       />
     </div>

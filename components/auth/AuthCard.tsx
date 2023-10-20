@@ -25,7 +25,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
     <div className="card lg:card-side bg-bamboo-200 rounded-md shadow-xl">
       <div className="card-body w-full lg:border-r-bamboo-400 lg:border-r-2">
         <div className="card-title">
-          <Image src="/nyte2.svg" alt="Nyte Logo" width={50} height={50} />
+          <Image src="/assets/nyte2.svg" alt="Nyte Logo" width={50} height={50} />
         </div>
 
         <div className="w-full py-40 h-full flex flex-col justify-center items-center">
@@ -75,7 +75,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
           <div className="flex flex-row">
             <button className="w-80 mx-2 btn btn-lg btn-accent">
               <Image
-                src="/google.svg"
+                src="/assets/google.svg"
                 alt="Google Logo"
                 width={40}
                 height={40}
@@ -85,7 +85,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
 
             <button className="w-80 mx-2 btn btn-lg btn-accent">
               <Image
-                src="/discord.svg"
+                src="/assets/discord.svg"
                 alt="Discord Logo"
                 width={40}
                 height={40}

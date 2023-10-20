@@ -12,8 +12,8 @@ interface PlayerData {
 // Note: Sử dụng data mẫu tạm thời
 const sampleData: PlayerData = {
   username: "User1",
-  avatarSrc: "/avatars/avatar1.png",
-  flagSrc: "/flags/VN.svg",
+  avatarSrc: "/assets/avatars/avatar1.png",
+  flagSrc: "/assets/flags/VN.svg",
 }
 
 const CardTitle: React.FC = () => {
@@ -36,7 +36,7 @@ const CardTitle: React.FC = () => {
           cotuong.nyte.tk
         </Link>
         <Image
-          src="/thitnuong.svg"
+          src="/assets/thitnuong.svg"
           alt="Logo"
           width={50}
           height={50}

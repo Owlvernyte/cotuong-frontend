@@ -86,7 +86,7 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
         {hasScore && (
           <div className="flex">
             <Image
-              src="/diemthitnuong.svg"
+              src="/assets/diemthitnuong.svg"
               alt="Score"
               width={30}
               height={30}

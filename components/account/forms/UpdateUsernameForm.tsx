@@ -24,7 +24,7 @@ const UpdateUsernameForm: React.FC = () => {
           {sampleData.username}
         </div>
         <IconButton
-          iconSrc="/icons/secondary/Edit.svg"
+          iconSrc="/assets/icons/secondary/Edit.svg"
           iconAlt="Icon Edit"
           onClick={() => (window as any).modal_update_username.showModal()}
           buttonVariants="btn-neutral"
@@ -34,7 +34,7 @@ const UpdateUsernameForm: React.FC = () => {
           <div className="modal-box w-full bg-bamboo-400">
             <form method="dialog">
               <IconButton
-                iconSrc="/icons/primary/Dell_fill.svg"
+                iconSrc="/assets/icons/primary/Dell_fill.svg"
                 iconAlt="Icon Close"
                 buttonVariants="btn-primary"
                 buttonStyle="btn-circle"

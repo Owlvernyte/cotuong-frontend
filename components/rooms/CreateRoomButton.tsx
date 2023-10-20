@@ -41,7 +41,7 @@ function CreateRoomButton() {
                 <span className="loading loading-spinner"></span>
             ) : (
                 <Image
-                    src={'/icons/secondary/Add_ring_fill.svg'}
+                    src={'/assets/icons/secondary/Add_ring_fill.svg'}
                     alt="Create Icon"
                     width={35}
                     height={35}

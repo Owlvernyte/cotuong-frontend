@@ -1,23 +1,23 @@
-'use client'
-
-import StoreKeys from '@/lib/constants/storeKeys'
-import localStorageService from '@/lib/services/localStorage.service'
-import { useStore } from '@/lib/zustand/store'
+import { User } from '@/features/user/user.types'
+import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import SignoutBtn from './SignoutBtn'
 
 function AuthHeaderArea() {
-    const { authorized, user } = useStore()
+    const cookieStore = cookies()
+    const userCookie = cookieStore.get('user')
+    const user = userCookie && (JSON.parse(userCookie.value) as User)
+
     return (
         <>
-            {authorized && user ? (
+            {user ? (
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="">
                         <div className="flex space-x-2 text-secondary items-center justify-between hover:underline cursor-pointer">
                             <span>{`Xin chào, ${user.userName}!`}</span>
                             <Image
-                                src="/icons/primary/User_circle_duotone.svg"
+                                src="/assets/icons/primary/User_circle_duotone.svg"
                                 alt="Icon People"
                                 width={32}
                                 height={32}
@@ -34,7 +34,7 @@ function AuthHeaderArea() {
                                 href={`/users/${user.id}`}
                             >
                                 <Image
-                                    src="/icons/primary/User_fill.svg"
+                                    src="/assets/icons/primary/User_fill.svg"
                                     alt="Profile Icon"
                                     width={25}
                                     height={25}
@@ -48,7 +48,7 @@ function AuthHeaderArea() {
                                 href={`/settings/account`}
                             >
                                 <Image
-                                    src="/icons/primary/Key_alt_fill.svg"
+                                    src="/assets/icons/primary/Key_alt_fill.svg"
                                     alt="Account Icon"
                                     width={25}
                                     height={25}
@@ -57,23 +57,7 @@ function AuthHeaderArea() {
                             </Link>
                         </li>
                         <li>
-                            <a
-                                className="hover:bg-bamboo-300 hover:text-bamboo-100"
-                                onClick={() => {
-                                    localStorageService.remove(
-                                        StoreKeys.ACCESS_TOKEN
-                                    )
-                                    location.reload()
-                                }}
-                            >
-                                <Image
-                                    src="/icons/primary/Unlock_fill.svg"
-                                    alt="Singout Icon"
-                                    width={25}
-                                    height={25}
-                                />
-                                {'Đăng xuất'}
-                            </a>
+                            <SignoutBtn />
                         </li>
                     </ul>
                 </div>
