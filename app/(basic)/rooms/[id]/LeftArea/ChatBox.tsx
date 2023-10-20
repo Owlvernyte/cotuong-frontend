@@ -61,7 +61,7 @@ function ChatBox({
                         title="send"
                     >
                         <Image
-                            src="/icons/secondary/Send_fill.svg"
+                            src="/assets/icons/secondary/Send_fill.svg"
                             alt="send_button"
                             width={25}
                             height={25}

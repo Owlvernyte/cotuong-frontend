@@ -15,8 +15,8 @@ interface PlayerData {
 // Note: Sử dụng data mẫu tạm thời
 const sampleData: PlayerData = {
   username: "User1",
-  avatarSrc: "/avatars/avatar1.png",
-  flagSrc: "/flags/VN.svg",
+  avatarSrc: "/assets/avatars/avatar1.png",
+  flagSrc: "/assets/flags/VN.svg",
   rank: 1,
   win: 120,
   loss: 42,
@@ -36,9 +36,9 @@ const SelfInfo: React.FC = () => {
         <div>
           <PlayerInformation
             username="Username 1"
-            avatarSrc="/avatars/avatar1.png"
+            avatarSrc="/assets/avatars/avatar1.png"
             hasFlag
-            flagSrc="/flags/VN.svg"
+            flagSrc="/assets/flags/VN.svg"
           />
 
           <div className="flex flex-row justify-around w-full">

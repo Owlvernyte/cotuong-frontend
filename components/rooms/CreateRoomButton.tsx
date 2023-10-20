@@ -1,13 +1,12 @@
 'use client'
 
 import useCreateRoom from '@/features/room/useCreateRoom'
-import { useStore } from '@/lib/zustand/store'
+import { User } from '@/features/user/user.types'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-function CreateRoomButton() {
-    const { user } = useStore()
+function CreateRoomButton({ user }: { user: User }) {
     const {
         mutate: createRoom,
         data,
@@ -41,7 +40,7 @@ function CreateRoomButton() {
                 <span className="loading loading-spinner"></span>
             ) : (
                 <Image
-                    src={'/icons/secondary/Add_ring_fill.svg'}
+                    src={'/assets/icons/secondary/Add_ring_fill.svg'}
                     alt="Create Icon"
                     width={35}
                     height={35}

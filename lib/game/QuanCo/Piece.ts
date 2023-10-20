@@ -15,7 +15,7 @@ abstract class Piece implements IPiece {
     }
     isRed: boolean = true
     signature?: string = ''
-    _basePiecePath = '/game/pieces1'
+    _basePiecePath = '/assets/game/pieces1'
 
     constructor(options?: Partial<IPiece>) {
         if (!options) {

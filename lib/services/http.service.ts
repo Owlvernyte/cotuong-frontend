@@ -23,25 +23,14 @@ export default class HttpService {
         this.instance = instance
     }
 
-    private async onRefreshToken() {
-        const { refresh_token }: IAuthToken = localStorageService.get(
-            StoreKeys.ACCESS_TOKEN,
-            ''
-        )
-        if (refresh_token) {
-            // TODO: handle refresh token
-            return ''
-        }
-    }
-
     private onRequest = async (config: AxiosRequestConfig) => {
-        const token = localStorageService.get(StoreKeys.ACCESS_TOKEN, '')
-        if (token) {
-            config.headers = {
-                ...config.headers,
-                Authorization: `Bearer ${token}`,
-            }
-        }
+        // const token = localStorageService.get(StoreKeys.ACCESS_TOKEN, '')
+        // if (token) {
+        //     config.headers = {
+        //         ...config.headers,
+        //         Authorization: `Bearer ${token}`,
+        //     }
+        // }
         return config
     }
 
@@ -55,17 +44,17 @@ export default class HttpService {
     }
 
     private onResponseError = (error: AxiosError): Promise<AxiosError> => {
-        const statusCode = error?.response?.status
-        switch (statusCode) {
-            case HttpStatusCode.UNAUTHORIZED: {
-                if (
-                    typeof window !== 'undefined' &&
-                    !window.location.pathname.startsWith('/sign') // /^\/(sign)(in|up)$/
-                )
-                    window.location.replace('/signin')
-                break
-            }
-        }
+        // const statusCode = error?.response?.status
+        // switch (statusCode) {
+        //     case HttpStatusCode.UNAUTHORIZED: {
+        //         if (
+        //             typeof window !== 'undefined' &&
+        //             !window.location.pathname.startsWith('/sign') // /^\/(sign)(in|up)$/
+        //         )
+        //             window.location.replace('/signin')
+        //         break
+        //     }
+        // }
         return Promise.reject(error)
     }
 
