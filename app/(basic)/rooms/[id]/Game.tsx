@@ -1,3 +1,5 @@
+'use client'
+
 import StoreKeys from '@/lib/constants/storeKeys'
 import GameBoard from '@/lib/game/Board'
 import GamePiece from '@/lib/game/QuanCo/Piece'
