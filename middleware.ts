@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
                 new URL(authPaths.shift() ?? '/', request.url)
             )
             nextRes.cookies.delete(StoreKeys.ACCESS_TOKEN)
-            nextRes.cookies.delete('user')
+            nextRes.cookies.delete(StoreKeys.USER)
             return nextRes
         }
 
@@ -59,7 +59,7 @@ export async function middleware(request: NextRequest) {
             const nextRes = inAuthPath
                 ? NextResponse.redirect(new URL('/', request.url))
                 : NextResponse.next()
-            nextRes.cookies.set('user', JSON.stringify(data))
+            nextRes.cookies.set(StoreKeys.USER, JSON.stringify(data))
             return nextRes
         } catch (error) {
             console.error(error)

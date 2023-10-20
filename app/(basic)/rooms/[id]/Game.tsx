@@ -2,10 +2,10 @@
 
 import LoadingBBQ from '@/components/ui/LoadingBBQ'
 import useGetRoomById from '@/features/room/useGetRoomById'
+import { User } from '@/features/user/user.types'
 import GameBoard from '@/lib/game/Board'
 import GamePiece from '@/lib/game/QuanCo/Piece'
 import useSignalR from '@/lib/hooks/useSignalR'
-import { useStore } from '@/lib/zustand/store'
 import {
     DndContext,
     DragEndEvent,
@@ -23,7 +23,6 @@ import MenuBox from './LeftArea/MenuBox'
 import Piece, { DraggablePiece } from './Piece'
 import PlayerArea from './RightArea/PlayerArea'
 import WaitingContainer from './WaitingContainer'
-import { User } from '@/features/user/user.types'
 
 type GameProps = {
     roomCode: string
