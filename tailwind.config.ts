@@ -14,8 +14,8 @@ const config: Config = {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
                 'gradient-conic':
                     'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-                banco1: "url('/game/board/banco1.svg')",
-                banco2: "url('/game/board/banco2.svg')",
+                banco1: "url('/assets/game/board/banco1.svg')",
+                banco2: "url('/assets/game/board/banco2.svg')",
             },
             fontFamily: {
                 paytone: ['var(--font-paytone)'],

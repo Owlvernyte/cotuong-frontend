@@ -51,13 +51,13 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    @apply bg-transparent rounded-l-full;
+    @apply bg-transparent rounded-md m-1;
     background-color: #c8ae7d;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    @apply rounded-l-full;
+    @apply rounded-md;
     background-color: #765827;
 }
 

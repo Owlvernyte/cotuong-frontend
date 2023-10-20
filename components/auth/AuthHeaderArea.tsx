@@ -3,10 +3,11 @@ import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
 import SignoutBtn from './SignoutBtn'
+import StoreKeys from '@/lib/constants/storeKeys'
 
 function AuthHeaderArea() {
     const cookieStore = cookies()
-    const userCookie = cookieStore.get('user')
+    const userCookie = cookieStore.get(StoreKeys.USER)
     const user = userCookie && (JSON.parse(userCookie.value) as User)
 
     return (
