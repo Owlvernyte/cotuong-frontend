@@ -1,3 +1,4 @@
+import ContactForm from "@/components/contact/ContactForm"
 import Title from "@/components/ui/Title"
 import React from "react"
 
@@ -12,12 +13,13 @@ function Contact() {
         className="card bg-bamboo-400 rounded-md w-full col-span-4 overflow-y-auto max-h-full"
       >
         <div className="card-body">
-          <Title text="LIÊN HỆ & GÓP Ý" textColor="text-bamboo-100" />
-          <p className="text-bamboo-100 text-center text-2xl text-opacity-50 py-2">
-            Để lại lời nhắn trực tiếp cho chúng tôi tại trang web
-          </p>
-
-          {/* Form */}
+          <div className="mb-2">
+            <Title text="LIÊN HỆ & GÓP Ý" textColor="text-bamboo-100" />
+            <p className="text-bamboo-100 text-center text-2xl text-opacity-50 py-4">
+              Để lại lời nhắn trực tiếp cho chúng tôi tại trang web
+            </p>
+          </div>
+          <ContactForm />
           {/* Hoặc */}
         </div>
       </div>
