@@ -6,6 +6,7 @@ export type PlayerAreaProps = {
     userName?: string
     avatarSrc?: string
     flagSrc?: string
+    label?: string
 }
 
 function PlayerArea({
@@ -13,6 +14,7 @@ function PlayerArea({
     userName,
     avatarSrc,
     flagSrc,
+    label,
 }: PlayerAreaProps) {
     return (
         <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center overflow-y-auto">
@@ -43,7 +45,7 @@ function PlayerArea({
             >
                 <div className="p-4">
                     <p className="text-center text-xl text-bamboo-100">
-                        CÒN LẠI - 00:00
+                        {label ?? 'CÒN LẠI - 00:00'}
                     </p>
                 </div>
             </div>
