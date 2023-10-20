@@ -51,7 +51,7 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    @apply bg-transparent rounded-md;
+    @apply bg-transparent rounded-md m-1;
     background-color: #c8ae7d;
 }
 
