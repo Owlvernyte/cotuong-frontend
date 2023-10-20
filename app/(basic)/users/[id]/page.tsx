@@ -9,7 +9,7 @@ export default function UserInfo(){
     return(
     <div className='h-full'>
         <div id="user_info"
-          className=" bg-primary rounded-md shadow-lg w-1/2 h-[40%] float-left ml-[2%]">
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-[45%] float-left ml-[2%]">
             <div className='text-bamboo-100 flex items-center table-auto'>
                 <div>
                     <div className='table-cell'><img src='/avatars/avatar1.png'className='h-20 rounded-full' ></img></div>
@@ -31,36 +31,36 @@ export default function UserInfo(){
                 </div>
             </div>
 
-            <div className='h-[50%] w-[90%] mb-[20%] ml-[5%] mt-[5%] flex bg-bamboo-300 text-bamboo-200'>
+            <div className='h-[50%] w-[90%] ml-[5%] mt-[5%] flex bg-bamboo-300 text-bamboo-200'>
                 
                 <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
                   <div>Thắng</div>
-                  <div className='text-4xl text-bamboo-100'>100</div>
+                  <div className='text-[200%] text-bamboo-100'>100</div>
                 </div>
                 
                 <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
                   <div>Thua</div>
-                  <div className='text-4xl text-bamboo-100'>100</div>
+                  <div className='text-[200%] text-bamboo-100'>100</div>
                 </div>
 
                 <div className='table-cell ml-[20%] mt-[5%] justify-center text-center'>
                   <div>Hòa</div>
-                  <div className='text-4xl text-bamboo-100'>0</div>
+                  <div className='text-[200%] text-bamboo-100'>0</div>
                 </div>
             </div>
 
 
             <div id="setting"
-          className=" bg-primary rounded-md shadow-lg w-full float-left">
+          className=" bg-primary rounded-md shadow-lg w-full mt-[15%] float-left">
                 <div className='text-bamboo-100 flex items-center table'>
                     
                     <div className='table-row '>
                     <label className='mr-8 text-2xl'>Chọn quốc gia: </label> 
-                    <div className="dropdown dropdown-end bg-bamboo-100 mt-2 w-60">
+                    <div className="dropdown dropdown-end bg-bamboo-100 mt-2 w-[33%] inline-block">
                         <label tabIndex={0} className="btn btn-ghost rounded-btn text-dirt-200">
                         <img src='/flags/vn.svg' className='h-8'></img>
                         Việt Nam
-                        <img src='/icons/dropdown.svg' className='float-right inline-block h-8 ml-10'></img>
+                        <img src='/icons/dropdown.svg' className='float-right h-6'></img>
                         </label>
                         <ul
                             tabIndex={0}
@@ -122,14 +122,14 @@ export default function UserInfo(){
                 </div>
                 
             </div>
-            <button className='bg-bamboo-100 mb-5 w-1/5 ml-[40em]'>Cập nhật</button>
+            <button className='bg-bamboo-100 mb-5 w-1/5 ml-[75%]'>Cập nhật</button>
         </div>
 
         </div>
 
 
         <div id="friend_list"
-          className=" bg-primary rounded-md shadow-lg w-1/2 h-full mt-[2%] ml-[54%]">
+          className=" bg-primary rounded-md shadow-lg w-1/2 h-[200%] mt-[2%] ml-[54%]">
             <div className='text-bamboo-100 table'>
                 
                 <div className='table-row'>
