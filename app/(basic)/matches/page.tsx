@@ -1,5 +1,6 @@
 import React from "react"
 import MatchesTable from "@/components/matches/MatchesTable"
+
 function Matches() {
   return (
     <div className="flex justify-center">
