@@ -4,11 +4,11 @@ import { Match } from './match.types'
 
 class MatchApiService extends HttpService {
     getMatchById(id: string) {
-        return this.get<Match>(`/rooms/${id}`)
+        return this.get<Match>(`/matches/${id}`)
     }
 
     getMatches() {
-        return this.get<Match[]>(`/rooms`)
+        return this.get<Match[]>(`/matches`)
     }
 }
 
