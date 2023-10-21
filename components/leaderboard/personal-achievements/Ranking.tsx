@@ -7,13 +7,13 @@ interface RankingProps {
 }
 
 const medalImages = [
-  "/medals/top1.svg",
-  "/medals/top2.svg",
-  "/medals/top3.svg",
+  "/assets/medals/top1.svg",
+  "/assets/medals/top2.svg",
+  "/assets/medals/top3.svg",
 ];
 
 const Ranking: React.FC<RankingProps> = ({
-  medalSrc: customMedalSrc = "/medals/normal_top.svg",
+  medalSrc: customMedalSrc = "/assets/medals/normal_top.svg",
   top,
 }) => {
   const medalSrc = top <= 3 ? medalImages[top - 1] : customMedalSrc;
