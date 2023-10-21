@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import PlayerInformation from "@/components/player/PlayerInformation";
@@ -55,14 +56,12 @@ const sampleData: PlayerData[] = [
   },
 ];
 
-sampleData.sort((a, b) => b.score - a.score);
-
 const LeaderBoardTable: React.FC = () => {
   return (
     <div className="overflow-x-auto w-full flex-1">
-      <table className="table bg-bamboo-300 text-bamboo-100 text-lg rounded-md">
-        <thead className="text-bamboo-100 text-lg">
-          <tr>
+      <div className="table text-bamboo-100 text-lg">
+        <thead>
+          <tr className="text-bamboo-100 text-lg bg-bamboo-300 rounded-md">
             <th>SST</th>
             <th>Bạn đấu với</th>
             <th>Quốc gia</th>
@@ -76,7 +75,7 @@ const LeaderBoardTable: React.FC = () => {
             <LeaderBoardRow key={index} data={data} rank={index + 1} />
           ))}
         </tbody>
-      </table>
+      </div>
     </div>
   );
 };
@@ -107,7 +106,18 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
           />
         </div>
       </td>
-      <td>{data.result}</td>
+      <td>
+        {data.result}
+        <button className="btn bg-bamboo-400 border-transparent ">
+          <Image
+            src="/assets/icons/primary/Result.svg"
+            alt="Result"
+            width={15}
+            height={15}
+            style={{ width: "auto", height: "auto" }}
+          />
+        </button>
+      </td>
       <td>{data.playTime}</td>
       <td>{data.score}</td>
     </tr>
