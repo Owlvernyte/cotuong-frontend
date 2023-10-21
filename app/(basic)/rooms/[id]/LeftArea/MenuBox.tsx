@@ -3,9 +3,11 @@ import React from 'react'
 import MenuBoxTitle, { MenuBoxTitleProps } from './MenuBoxTitle'
 import Link from 'next/link'
 
-export type MenuBoxProps = {} & MenuBoxTitleProps
+export type MenuBoxProps = {
+    handleStartPressed: () => void
+} & MenuBoxTitleProps
 
-function MenuBox({ roomCode, viewCount }: MenuBoxProps) {
+function MenuBox({ roomCode, viewCount, handleStartPressed }: MenuBoxProps) {
     return (
         <div
             id="menu"
@@ -38,7 +40,7 @@ function MenuBox({ roomCode, viewCount }: MenuBoxProps) {
                 </Link>
                 <button
                     className="btn btn-secondary btn-md w-48 text-lg"
-                    // onClick={startBtnHandler}
+                    onClick={handleStartPressed}
                 >
                     Bắt Đầu
                 </button>

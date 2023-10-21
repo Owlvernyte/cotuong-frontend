@@ -1,4 +1,5 @@
 'use client'
+import { AxiosRequestConfig } from 'axios'
 import {
     RegisterRequest,
     AuthUserResponse,
@@ -24,8 +25,8 @@ class UserApiService extends HttpService {
         return this.get<User[]>(`/users`)
     }
 
-    checkAuthorization() {
-        return this.get<User>(`/users/check-authorization`)
+    checkAuthorization(config?: AxiosRequestConfig<any> | undefined) {
+        return this.get<User>(`/users/check-authorization`, config)
     }
 }
 

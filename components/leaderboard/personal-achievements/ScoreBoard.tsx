@@ -21,7 +21,7 @@ const ScoreBoard: React.FC = () => {
       <div className="flex flex-row md:flex-col items-center">
         <div className="w-14 md:w-auto">
           <Image
-            src="/diemthitnuong.svg"
+            src="/assets/diemthitnuong.svg"
             alt="Score"
             width={120}
             height={120}

@@ -11,13 +11,20 @@ export interface PieceProps extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 const Piece = forwardRef<HTMLButtonElement, PieceProps>(function Piece(
-    { disabled, target, id, position, clone, ...props },
+    { disabled, target, id, position, clone, draggable, ...props },
     ref
 ) {
-    let baseCn = "bg-inherit border-none cursor-pointer appearance-none flex-1 rounded-full hover:ring-4 w-full"
+    let baseCn =
+        'bg-inherit border-none cursor-pointer appearance-none flex-1 rounded-full w-full'
 
     if (clone) {
         baseCn += ` cursor-grabbing shadow-2xl`
+    }
+
+    if (disabled) {
+        baseCn += ` cursor-not-allowed`
+    } else {
+        baseCn += ` hover:ring-4`
     }
 
     return (
@@ -25,12 +32,15 @@ const Piece = forwardRef<HTMLButtonElement, PieceProps>(function Piece(
             ref={ref}
             className={baseCn}
             data-position={JSON.stringify(position)}
+            disabled={disabled}
+            draggable={draggable}
             {...props}
         >
             <img
                 className="box-content shadow-lg rounded-full"
                 src={target?.imgSrc}
                 alt={id}
+                draggable={draggable}
             ></img>
         </button>
     )

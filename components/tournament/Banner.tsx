@@ -15,7 +15,7 @@ export default function Banner({ title, subtitle, imgSrc }: Props) {
           {title}
         </h4>
         <Image
-          src={imgSrc ?? "/icons/Cup.svg"}
+          src={imgSrc ?? "/assets/icons/Cup.svg"}
           alt="Banner"
           width={150}
           height={150}

@@ -11,6 +11,8 @@ export interface IBoard {
     columns: number
     rows: number
     squares: Matrix<Piece | null>
+    isHostRed: boolean
+    isRedTurn: boolean
 }
 
 class Board implements IBoard {
@@ -19,6 +21,8 @@ class Board implements IBoard {
     squares: Matrix<Piece | null> = new Array(this.rows).fill(
         new Array<Piece | null>(this.columns).fill(null)
     )
+    isHostRed: boolean = true
+    isRedTurn: boolean = true
 
     constructor(options?: Partial<IBoard>) {
         if (!options) {
@@ -27,7 +31,9 @@ class Board implements IBoard {
 
         this.columns = options.columns ?? this.columns
         this.rows = options.rows ?? this.rows
-        this.squares = options.squares ?? this.squares
+        this.squares = this._parseMatrix(options.squares ?? this.squares)
+        this.isHostRed = options.isHostRed ?? this.isHostRed
+        this.isRedTurn = options.isRedTurn ?? this.isRedTurn
     }
 
     setSquares(matrix: Matrix<Piece | null>) {
@@ -82,20 +88,28 @@ class Board implements IBoard {
         return new Board({ ...this })
     }
 
-    movePiece(piece: Piece, destination: CoordinationType): Board {
+    movePiece(
+        piece: Piece,
+        destination: CoordinationType,
+        isRedTurn: boolean
+    ): Board {
         if (this.squares[piece.coord!.x][piece.coord!.y] != null) {
             this.squares[piece.coord!.x][piece.coord!.y] = null
         }
         this.squares[destination.x][destination.y] = piece
         piece.setCoord(destination)
 
-        return new Board({ ...this })
+        return new Board({ ...this, isRedTurn })
     }
 
-    move(source: CoordinationType, destination: CoordinationType) {
+    move(
+        source: CoordinationType,
+        destination: CoordinationType,
+        isRedTurn: boolean
+    ) {
         const piece = this.squares[source.x][source.y]
         if (!piece) return this
-        return this.movePiece(piece, destination)
+        return this.movePiece(piece, destination, isRedTurn)
     }
 
     getInitSquares(): Matrix<Piece | null> {
@@ -140,6 +154,35 @@ class Board implements IBoard {
                 }
             })
         })
+    }
+
+    isPieceBetweenGenerals(piece: Piece, destination: CoordinationType) {
+        let hasGeneralAbove = false
+        let hasGeneralBelow = false
+        for (let i = piece.coord.x - 1; i >= 0; i--) {
+            const oPiece = this.squares[i][piece.coord.y]
+            if (!oPiece) continue
+            if (oPiece.pieceType === PieceType.General) {
+                hasGeneralAbove = true
+                break
+            } else break
+        }
+        if (!hasGeneralAbove) return false
+        for (let i = piece.coord.x + 1; i < this.rows; i++) {
+            const oPiece = this.squares[i][piece.coord.y]
+            if (!oPiece) continue
+            if (oPiece.pieceType === PieceType.General) {
+                hasGeneralBelow = true
+                break
+            } else break
+        }
+        if (!hasGeneralBelow) return false
+
+        const moveX = Math.abs(piece.coord.x - destination.x)
+        const moveY = Math.abs(piece.coord.y - destination.y)
+        if (moveY === 0 && moveX > 0) return false
+
+        return hasGeneralAbove && hasGeneralBelow
     }
 
     init() {

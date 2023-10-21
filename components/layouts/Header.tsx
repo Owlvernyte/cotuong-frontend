@@ -9,7 +9,7 @@ function Header() {
       <div className="flex-1 px-2 inline-flex items-center space-x-6">
         <Link href="/">
           <Image
-            src="/thitnuong.svg"
+            src="/assets/thitnuong.svg"
             alt="Logo Thit Nuong"
             width={40}
             height={40}
@@ -34,7 +34,7 @@ function Header() {
             className="btn btn-circle btn-ghost hover:bg-bamboo-300"
           >
             <Image
-              src="/icons/primary/Setting_fill.svg"
+              src="/assets/icons/primary/Setting_fill.svg"
               alt="Icon Settings"
               width={25}
               height={25}
@@ -50,7 +50,7 @@ function Header() {
                 href={"/"}
               >
                 <Image
-                  src="/icons/primary/sound_max_fill.svg"
+                  src="/assets/icons/primary/sound_max_fill.svg"
                   alt="Sound Icon"
                   width={25}
                   height={25}
@@ -64,7 +64,7 @@ function Header() {
                 href={"/contact"}
               >
                 <Image
-                  src="/icons/primary/Question_fill.svg"
+                  src="/assets/icons/primary/Question_fill.svg"
                   alt="Sound Icon"
                   width={25}
                   height={25}

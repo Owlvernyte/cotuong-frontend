@@ -1,8 +1,6 @@
 'use client'
 
 import useRegister from '@/features/user/useRegister'
-import StoreKeys from '@/lib/constants/storeKeys'
-import localStorageService from '@/lib/services/localStorage.service'
 import Image from 'next/image'
 import React from 'react'
 
@@ -33,8 +31,7 @@ function SignUpForm() {
     )
 
     React.useEffect(() => {
-        if (response && response.token) {
-            localStorageService.set(StoreKeys.ACCESS_TOKEN, response.token)
+        if (response) {
             // refetch()
             location.reload()
         }
@@ -44,7 +41,7 @@ function SignUpForm() {
         <form onSubmit={handleSubmit}>
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/User_fill.svg"
+                    src="/assets/icons/secondary/User_fill.svg"
                     alt="User Logo"
                     width={80}
                     height={80}
@@ -60,7 +57,7 @@ function SignUpForm() {
 
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/Message_alt_fill.svg"
+                    src="/assets/icons/secondary/Message_alt_fill.svg"
                     alt="Mail Logo"
                     width={80}
                     height={80}
@@ -76,7 +73,7 @@ function SignUpForm() {
 
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/Unlock_fill.svg"
+                    src="/assets/icons/secondary/Unlock_fill.svg"
                     alt="Password Logo"
                     width={80}
                     height={80}
@@ -92,7 +89,7 @@ function SignUpForm() {
 
             <div className="flex flex-row justify-start w-full ">
                 <Image
-                    src="/icons/secondary/Unlock_fill.svg"
+                    src="/assets/icons/secondary/Unlock_fill.svg"
                     alt="Password Logo"
                     width={80}
                     height={80}
