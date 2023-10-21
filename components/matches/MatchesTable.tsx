@@ -59,7 +59,7 @@ const sampleData: PlayerData[] = [
 const LeaderBoardTable: React.FC = () => {
   return (
     <div className="overflow-x-auto w-full flex-1">
-      <div className="table text-bamboo-100 text-lg">
+      <table className="table text-bamboo-100 text-lg">
         <thead>
           <tr className="text-bamboo-100 text-lg bg-bamboo-300 rounded-md">
             <th>SST</th>
@@ -75,7 +75,7 @@ const LeaderBoardTable: React.FC = () => {
             <LeaderBoardRow key={index} data={data} rank={index + 1} />
           ))}
         </tbody>
-      </div>
+      </table>
     </div>
   );
 };
@@ -96,7 +96,7 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
         />
       </td>
       <td>
-        <div className="w-12">
+        <div className="w-12 flex items-center space-x-1">
           <Image
             src={data.flagSrc}
             alt="Flag"
@@ -104,9 +104,18 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
             height={40}
             style={{ width: "auto", height: "auto" }}
           />
+          <button className="btn bg-bamboo-400 border-transparent ">
+            <Image
+              src="/assets/icons/primary/Add_Friend.svg"
+              alt="Add"
+              width={40}
+              height={40}
+              style={{ width: "auto", height: "auto" }}
+            />
+          </button>
         </div>
       </td>
-      <td>
+      <td className="flex items-center">
         {data.result}
         <button className="btn bg-bamboo-400 border-transparent ">
           <Image
