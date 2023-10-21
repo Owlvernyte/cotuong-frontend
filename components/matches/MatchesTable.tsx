@@ -1,15 +1,15 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import PlayerInformation from "@/components/player/PlayerInformation";
+"use client"
+import React from "react"
+import Image from "next/image"
+import PlayerInformation from "@/components/player/PlayerInformation"
 
 interface PlayerData {
-  username: string;
-  avatarSrc: string;
-  flagSrc: string;
-  result: string;
-  playTime: string;
-  score: number;
+  username: string
+  avatarSrc: string
+  flagSrc: string
+  result: string
+  playTime: string
+  score: number
 }
 
 // Note: Sử dụng data mẫu tạm thời
@@ -54,35 +54,37 @@ const sampleData: PlayerData[] = [
     playTime: "40 phút",
     score: 22,
   },
-];
+]
 
 const LeaderBoardTable: React.FC = () => {
   return (
-    <div className="overflow-x-auto w-full flex-1">
-      <table className="table text-bamboo-100 text-lg">
-        <thead>
-          <tr className="text-bamboo-100 text-lg bg-bamboo-300 rounded-md">
-            <th>SST</th>
-            <th>Bạn đấu với</th>
-            <th>Quốc gia</th>
-            <th>Kết quả</th>
-            <th>Tổng thời gian</th>
-            <th>Điểm</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sampleData.map((data, index) => (
-            <LeaderBoardRow key={index} data={data} rank={index + 1} />
-          ))}
-        </tbody>
-      </table>
+    <div className="w-full h-full rounded-xl bg-bamboo-400 p-8">
+      <div className="overflow-x-auto w-full flex-1">
+        <table className="table text-bamboo-100 text-lg">
+          <thead>
+            <tr className="text-bamboo-100 text-lg bg-bamboo-300 rounded-md">
+              <th>SST</th>
+              <th>Bạn đấu với</th>
+              <th>Quốc gia</th>
+              <th>Kết quả</th>
+              <th>Tổng thời gian</th>
+              <th>Điểm</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sampleData.map((data, index) => (
+              <LeaderBoardRow key={index} data={data} rank={index + 1} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
-};
+  )
+}
 
 interface LeaderBoardRowProps {
-  data: PlayerData;
-  rank: number;
+  data: PlayerData
+  rank: number
 }
 
 const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
@@ -130,7 +132,7 @@ const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
       <td>{data.playTime}</td>
       <td>{data.score}</td>
     </tr>
-  );
-};
+  )
+}
 
-export default LeaderBoardTable;
+export default LeaderBoardTable

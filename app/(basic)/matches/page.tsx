@@ -1,14 +1,16 @@
-import React from "react";
-import MatchesTable from "@/components/matches/MatchesTable";
+import React from "react"
+import MatchesTable from "@/components/matches/MatchesTable"
 function Matches() {
   return (
-    <div className="flex flex-col h-full justify-center items-center w-full py-4">
-      <h1 className="text-5xl py-8">Lịch Sử Đấu</h1>
-      <div className="w-full h-full rounded-xl bg-bamboo-400 p-8">
-        <MatchesTable />
+    <div className="flex justify-center">
+      <div className="container max-w-screen-2xl px-10 py-4">
+        <div id="matches">
+          <h1 className="text-6xl text-center py-8">LỊCH SỬ ĐẤU</h1>
+          <MatchesTable />
+        </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Matches;
+export default Matches
