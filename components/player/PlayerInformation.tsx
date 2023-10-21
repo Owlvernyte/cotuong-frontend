@@ -17,6 +17,8 @@ interface PlayerInformationProps {
   scoreValue?: number
   hasStatus?: boolean
   status?: "Rảnh tay" | "Ngoại tuyến" | "Đang chơi"
+  hasTimeSpent?: boolean
+  timeSpentValue?: number
 }
 
 const PlayerInformation: React.FC<PlayerInformationProps> = ({
@@ -35,6 +37,8 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
   scoreValue = 0,
   hasStatus = false,
   status = "Rảnh tay",
+  hasTimeSpent = false,
+  timeSpentValue = 0,
 }) => {
   return (
     <div className="flex flex-col space-x-3 items-center md:flex-row">
@@ -94,8 +98,19 @@ const PlayerInformation: React.FC<PlayerInformationProps> = ({
             <div className="text-lg text-bamboo-100 px-2">{scoreValue}</div>
           </div>
         )}
+
+        {hasTimeSpent && (
+          <div className="flex">
+            <Image
+              src="/assets/icons/primary/Hhourglass_move_light.svg"
+              alt="Time Spent"
+              width={20}
+              height={20}
+            />
+            <div className="text-lg text-bamboo-100 px-2 py-2">{timeSpentValue} giờ</div>
+          </div>
+        )}
       </div>
-      {/* Dự kiến: Thêm trạng thái hoạt động */}
     </div>
   )
 }
