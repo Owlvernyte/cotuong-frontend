@@ -2,6 +2,7 @@
 import React from "react"
 import Image from "next/image"
 import PlayerInformation from "@/components/player/PlayerInformation"
+import IconButton from "../ui/IconButton"
 
 interface PlayerData {
   username: string
@@ -18,62 +19,61 @@ const sampleData: PlayerData[] = [
     username: "User1",
     avatarSrc: "/assets/avatars/avatar1.png",
     flagSrc: "/assets/flags/VN.svg",
-    result: "win",
+    result: "Thắng",
     playTime: "40 phút",
-    score: 9999,
+    score: -10,
   },
   {
     username: "User2",
     avatarSrc: "/assets/avatars/avatar2.png",
     flagSrc: "/assets/flags/US.svg",
-    result: "win",
-    playTime: "40 phút",
-    score: 3333,
+    result: "Thắng",
+    playTime: "12 phút",
+    score: 20,
   },
   {
     username: "User3",
     avatarSrc: "/assets/avatars/avatar3.png",
     flagSrc: "/assets/flags/CA.svg",
-    result: "win",
-    playTime: "40 phút",
-    score: 22,
+    result: "Thắng",
+    playTime: "3 phút",
+    score: 10,
   },
   {
     username: "User4",
     avatarSrc: "/assets/avatars/avatar3.png",
     flagSrc: "/assets/flags/CA.svg",
-    result: "win",
-    playTime: "40 phút",
-    score: 22,
+    result: "Thua",
+    playTime: "24 phút",
+    score: -5,
   },
   {
     username: "User5",
     avatarSrc: "/assets/avatars/avatar3.png",
     flagSrc: "/assets/flags/CA.svg",
-    result: "win",
-    playTime: "40 phút",
-    score: 22,
+    result: "Hoà",
+    playTime: "12 phút",
+    score: -10,
   },
 ]
 
-const LeaderBoardTable: React.FC = () => {
+const MatchesTable: React.FC = () => {
   return (
     <div className="w-full h-full rounded-xl bg-bamboo-400 p-8">
       <div className="overflow-x-auto w-full flex-1">
         <table className="table text-bamboo-100 text-lg">
           <thead>
-            <tr className="text-bamboo-100 text-lg bg-bamboo-300 rounded-md">
-              <th>SST</th>
+            <tr className="text-dirt-400 text-lg bg-bamboo-200 border-none">
+              <th className="rounded-l-md text-center">SST</th>
               <th>Bạn đấu với</th>
-              <th>Quốc gia</th>
               <th>Kết quả</th>
-              <th>Tổng thời gian</th>
-              <th>Điểm</th>
+              <th className="text-center">Tổng thời gian</th>
+              <th className="rounded-r-md text-center">Điểm</th>
             </tr>
           </thead>
           <tbody>
             {sampleData.map((data, index) => (
-              <LeaderBoardRow key={index} data={data} rank={index + 1} />
+              <MatchesRow key={index} data={data} index={index + 1} />
             ))}
           </tbody>
         </table>
@@ -82,57 +82,46 @@ const LeaderBoardTable: React.FC = () => {
   )
 }
 
-interface LeaderBoardRowProps {
+interface MatchesRowProps {
   data: PlayerData
-  rank: number
+  index: number
 }
 
-const LeaderBoardRow: React.FC<LeaderBoardRowProps> = ({ data, rank }) => {
+const MatchesRow: React.FC<MatchesRowProps> = ({ data, index }) => {
   return (
-    <tr>
-      <th>{rank}</th>
+    <tr className="border-none">
+      <th className="text-center">{index}</th>
       <td>
-        <PlayerInformation
-          username={data.username}
-          avatarSrc={data.avatarSrc}
-        />
-      </td>
-      <td>
-        <div className="w-12 flex items-center space-x-1">
-          <Image
-            src={data.flagSrc}
-            alt="Flag"
-            width={40}
-            height={40}
-            style={{ width: "auto", height: "auto" }}
+        <div className="group flex space-x-2">
+          <PlayerInformation
+            username={data.username}
+            avatarSrc={data.avatarSrc}
+            hasFlag
+            flagSrc={data.flagSrc}
           />
-          <button className="btn bg-bamboo-400 border-transparent ">
-            <Image
-              src="/assets/icons/primary/Add_Friend.svg"
-              alt="Add"
-              width={40}
-              height={40}
-              style={{ width: "auto", height: "auto" }}
-            />
-          </button>
+          <IconButton
+            iconSrc="/assets/icons/primary/Add_Friend.svg"
+            iconAlt="add friend"
+            className="btn-neutral bg-bamboo-300 border-transparent invisible group-hover:visible"
+          />
         </div>
       </td>
-      <td className="flex items-center">
-        {data.result}
-        <button className="btn bg-bamboo-400 border-transparent ">
-          <Image
-            src="/assets/icons/primary/Result.svg"
-            alt="Result"
-            width={15}
-            height={15}
-            style={{ width: "auto", height: "auto" }}
+      <td>
+        <div className="flex space-x-2 group items-center">
+          <p className="text-xl">{data.result}</p>
+          <IconButton
+            iconSrc="/assets/icons/primary/Result.svg"
+            iconAlt="result"
+            className="btn-neutral bg-bamboo-300 border-transparent invisible group-hover:visible"
           />
-        </button>
+        </div>
       </td>
-      <td>{data.playTime}</td>
-      <td>{data.score}</td>
+      <td className="text-center">{data.playTime}</td>
+      <td className="text-center">
+        {data.score > 0 ? <p>+{data.score}</p> : <p>{data.score}</p>}
+      </td>
     </tr>
   )
 }
 
-export default LeaderBoardTable
+export default MatchesTable
