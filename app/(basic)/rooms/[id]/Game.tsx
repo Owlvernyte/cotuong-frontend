@@ -328,6 +328,77 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
     }
 
+    const squares = board.squares.map((row, i) =>
+        row.map((cell, j) => {
+            if (!cell) {
+                return (
+                    <Cell
+                        key={`cell_${i}_${j}`}
+                        id={`${i}_${j}`}
+                        x={i}
+                        y={j}
+                    ></Cell>
+                )
+            }
+
+            if (!isUserTurn) {
+                return (
+                    <Cell
+                        key={`cell_${i}_${j}`}
+                        id={`${i}_${j}`}
+                        x={i}
+                        y={j}
+                    >
+                        <Piece
+                            id={cell.id}
+                            target={cell}
+                            position={cell.coord}
+                            title={'Cant move'}
+                            disabled
+                            draggable={false}
+                        />
+                    </Cell>
+                )
+            }
+
+            if (board.isRedTurn === cell.isRed) {
+                return (
+                    <Cell
+                        key={`cell_${i}_${j}`}
+                        id={`${i}_${j}`}
+                        x={i}
+                        y={j}
+                    >
+                        <DraggablePiece
+                            id={cell.id}
+                            target={cell}
+                            position={cell.coord}
+                            title={'Movable'}
+                        />
+                    </Cell>
+                )
+            }
+
+            return (
+                <Cell
+                    key={`cell_${i}_${j}`}
+                    id={`${i}_${j}`}
+                    x={i}
+                    y={j}
+                >
+                    <Piece
+                        id={cell.id}
+                        target={cell}
+                        position={cell.coord}
+                        title={'Cant move'}
+                        disabled
+                        draggable={false}
+                    />
+                </Cell>
+            )
+        })
+    );
+
     return (
         <DndContext
             onDragStart={handleDragStart}
@@ -363,76 +434,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                         </div>
                     </div>
                     <Board>
-                        {board.squares.map((row, i) =>
-                            row.map((cell, j) => {
-                                if (!cell) {
-                                    return (
-                                        <Cell
-                                            key={`cell_${i}_${j}`}
-                                            id={`${i}_${j}`}
-                                            x={i}
-                                            y={j}
-                                        ></Cell>
-                                    )
-                                }
-
-                                if (!isUserTurn) {
-                                    return (
-                                        <Cell
-                                            key={`cell_${i}_${j}`}
-                                            id={`${i}_${j}`}
-                                            x={i}
-                                            y={j}
-                                        >
-                                            <Piece
-                                                id={cell.id}
-                                                target={cell}
-                                                position={cell.coord}
-                                                title={'Cant move'}
-                                                disabled
-                                                draggable={false}
-                                            />
-                                        </Cell>
-                                    )
-                                }
-
-                                if (board.isRedTurn === cell.isRed) {
-                                    return (
-                                        <Cell
-                                            key={`cell_${i}_${j}`}
-                                            id={`${i}_${j}`}
-                                            x={i}
-                                            y={j}
-                                        >
-                                            <DraggablePiece
-                                                id={cell.id}
-                                                target={cell}
-                                                position={cell.coord}
-                                                title={'Movable'}
-                                            />
-                                        </Cell>
-                                    )
-                                }
-
-                                return (
-                                    <Cell
-                                        key={`cell_${i}_${j}`}
-                                        id={`${i}_${j}`}
-                                        x={i}
-                                        y={j}
-                                    >
-                                        <Piece
-                                            id={cell.id}
-                                            target={cell}
-                                            position={cell.coord}
-                                            title={'Cant move'}
-                                            disabled
-                                            draggable={false}
-                                        />
-                                    </Cell>
-                                )
-                            })
-                        )}
+                        {(board.isHostRed && isHost) || (!board.isHostRed && !isHost) ? squares : squares.reverse()}
                     </Board>
                     <div
                         id="right-area"
