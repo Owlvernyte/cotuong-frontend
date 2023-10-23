@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/core'
 import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Board from './Board'
@@ -41,6 +41,7 @@ const systemMsgProps = {
 }
 
 function Game({ roomCode, accessToken, user }: GameProps) {
+    const router = useRouter()
     const audioMsgRef = useRef<HTMLAudioElement>(null)
     const audioMoveRef = useRef<HTMLAudioElement>(null)
     const audioWonRef = useRef<HTMLAudioElement>(null)
@@ -221,7 +222,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             enqueueSnackbar(`Đã xóa phòng!`, {
                 variant: 'warning',
             })
-            redirect('/rooms')
+            router.push('/rooms')
         })
     }, [])
 
