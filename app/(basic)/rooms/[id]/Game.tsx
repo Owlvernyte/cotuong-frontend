@@ -24,6 +24,7 @@ import MenuBox from './LeftArea/MenuBox'
 import Piece, { DraggablePiece } from './Piece'
 import PlayerArea from './RightArea/PlayerArea'
 import WaitingContainer from './WaitingContainer'
+import { redirect } from 'next/navigation'
 
 type GameProps = {
     roomCode: string
@@ -103,16 +104,16 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         : (board.isHostRed && isHost) || (!board.isHostRed && !isHost))
 
     useEffect(() => {
-        connection.on('error', (e) => {
+        connection.on(SignalREvent.Error, (e) => {
             console.log('ws error', e)
         })
 
-        connection.on('connected', (e) => {
+        connection.on(SignalREvent.Connected, (e) => {
             console.log('ws', e)
         })
 
         connection.on(
-            'LoadBoard',
+            SignalREvent.LoadBoard,
             (
                 squares: Matrix<GamePiece | null>,
                 isHostRed: boolean,
@@ -129,7 +130,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
 
         connection.on(
-            'Moved',
+            SignalREvent.Moved,
             (
                 source: CoordinationType,
                 destination: CoordinationType,
@@ -141,7 +142,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
 
         connection.on(
-            'MoveFailed',
+            SignalREvent.MoveFailed,
             (source: CoordinationType, destination: CoordinationType) => {
                 enqueueSnackbar('Di chuyển thất bại', {
                     variant: 'error',
@@ -149,22 +150,25 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             }
         )
 
-        connection.on('Ended', (isRed: boolean, winUser: UserDto) => {
-            setMessages((a) => [
-                ...a,
-                {
-                    content: `${winUser.userName} thắng!`,
-                    ...systemMsgProps,
-                },
-            ])
-            audioWonRef.current?.play()
-            enqueueSnackbar(`${winUser.userName} thắng!`, {
-                variant: 'warning',
-            })
-        })
+        connection.on(
+            SignalREvent.Ended,
+            (isRed: boolean, winUser: UserDto) => {
+                setMessages((a) => [
+                    ...a,
+                    {
+                        content: `${winUser.userName} thắng!`,
+                        ...systemMsgProps,
+                    },
+                ])
+                audioWonRef.current?.play()
+                enqueueSnackbar(`${winUser.userName} thắng!`, {
+                    variant: 'warning',
+                })
+            }
+        )
 
         connection.on(
-            'Chatted',
+            SignalREvent.Chatted,
             (messageContent: string, roomCode: string, userDto: UserDto) => {
                 setMessages((a) => [
                     ...a,
@@ -179,7 +183,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             }
         )
 
-        connection.on('Joined', (userDto: UserDto) => {
+        connection.on(SignalREvent.Joined, (userDto: UserDto) => {
             if (status !== HubConnectionState.Connected)
                 setStatus(HubConnectionState.Connected)
 
@@ -193,7 +197,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             ])
         })
 
-        connection.on('Left', (userDto: UserDto) => {
+        connection.on(SignalREvent.Left, (userDto: UserDto) => {
             refetch()
             setMessages((a) => [
                 ...a,
@@ -204,13 +208,20 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             ])
         })
 
-        connection.on('HostLeft', (seconds: number) => {
+        connection.on(SignalREvent.HostLeft, (seconds: number) => {
             enqueueSnackbar(
                 `Phòng sẽ bị xóa sau ${seconds} giây nếu chủ phòng không vào lại`,
                 {
                     variant: 'warning',
                 }
             )
+        })
+
+        connection.on(SignalREvent.RoomDeleted, () => {
+            enqueueSnackbar(`Đã xóa phòng!`, {
+                variant: 'warning',
+            })
+            redirect('/rooms')
         })
     }, [])
 
