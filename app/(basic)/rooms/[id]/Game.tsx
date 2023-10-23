@@ -41,6 +41,7 @@ const systemMsgProps = {
 
 function Game({ roomCode, accessToken, user }: GameProps) {
     const audioMsgRef = useRef<HTMLAudioElement>(null)
+    const audioMoveRef = useRef<HTMLAudioElement>(null)
     const audioWonRef = useRef<HTMLAudioElement>(null)
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
     const [movingPiece, setMovingPiece] = useState<{
@@ -134,6 +135,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                 destination: CoordinationType,
                 isRedTurn: boolean
             ) => {
+                audioMoveRef.current?.play()
                 setBoard((b) => b.move(source, destination, isRedTurn))
             }
         )
@@ -200,6 +202,15 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                     ...systemMsgProps,
                 },
             ])
+        })
+
+        connection.on('HostLeft', (seconds: number) => {
+            enqueueSnackbar(
+                `Phòng sẽ bị xóa sau ${seconds} giây nếu chủ phòng không vào lại`,
+                {
+                    variant: 'warning',
+                }
+            )
         })
     }, [])
 
@@ -411,6 +422,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         >
             <audio ref={audioMsgRef} src="/sfx/msg.mp3"></audio>
             <audio ref={audioWonRef} src="/sfx/won.mp3"></audio>
+            <audio ref={audioMoveRef} src="/sfx/piece-move.mp3"></audio>
             <div className="h-full space-y-2 flex flex-col">
                 <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
