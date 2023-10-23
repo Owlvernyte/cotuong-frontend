@@ -50,7 +50,7 @@ function ChatBox({
                                 required
                                 name="message-content"
                                 className="input input-bordered input-primary bg-bamboo-100 join-item w-full placeholder-dirt-300 placeholder-opacity-50"
-                                placeholder="Type something..."
+                                placeholder="Nhập vào gì đó..."
                             />
                         </div>
                     </div>
