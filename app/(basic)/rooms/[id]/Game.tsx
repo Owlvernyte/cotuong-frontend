@@ -5,7 +5,7 @@ import useGetRoomById from '@/features/room/useGetRoomById'
 import { User } from '@/features/user/user.types'
 import GameBoard from '@/lib/game/Board'
 import GamePiece from '@/lib/game/QuanCo/Piece'
-import useSignalR from '@/lib/hooks/useSignalR'
+import useSignalR, { SignalREventName } from '@/lib/hooks/useSignalR'
 import {
     DndContext,
     DragEndEvent,
@@ -14,6 +14,7 @@ import {
 } from '@dnd-kit/core'
 import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Board from './Board'
@@ -40,6 +41,7 @@ const systemMsgProps = {
 }
 
 function Game({ roomCode, accessToken, user }: GameProps) {
+    const router = useRouter()
     const audioMsgRef = useRef<HTMLAudioElement>(null)
     const audioMoveRef = useRef<HTMLAudioElement>(null)
     const audioWonRef = useRef<HTMLAudioElement>(null)
@@ -103,16 +105,16 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         : (board.isHostRed && isHost) || (!board.isHostRed && !isHost))
 
     useEffect(() => {
-        connection.on('error', (e) => {
+        connection.on(SignalREventName.Error, (e) => {
             console.log('ws error', e)
         })
 
-        connection.on('connected', (e) => {
+        connection.on(SignalREventName.Connected, (e) => {
             console.log('ws', e)
         })
 
         connection.on(
-            'LoadBoard',
+            SignalREventName.LoadBoard,
             (
                 squares: Matrix<GamePiece | null>,
                 isHostRed: boolean,
@@ -129,7 +131,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
 
         connection.on(
-            'Moved',
+            SignalREventName.Moved,
             (
                 source: CoordinationType,
                 destination: CoordinationType,
@@ -141,7 +143,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
 
         connection.on(
-            'MoveFailed',
+            SignalREventName.MoveFailed,
             (source: CoordinationType, destination: CoordinationType) => {
                 enqueueSnackbar('Di chuyển thất bại', {
                     variant: 'error',
@@ -149,22 +151,25 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             }
         )
 
-        connection.on('Ended', (isRed: boolean, winUser: UserDto) => {
-            setMessages((a) => [
-                ...a,
-                {
-                    content: `${winUser.userName} thắng!`,
-                    ...systemMsgProps,
-                },
-            ])
-            audioWonRef.current?.play()
-            enqueueSnackbar(`${winUser.userName} thắng!`, {
-                variant: 'warning',
-            })
-        })
+        connection.on(
+            SignalREventName.Ended,
+            (isRed: boolean, winUser: UserDto) => {
+                setMessages((a) => [
+                    ...a,
+                    {
+                        content: `${winUser.userName} thắng!`,
+                        ...systemMsgProps,
+                    },
+                ])
+                audioWonRef.current?.play()
+                enqueueSnackbar(`${winUser.userName} thắng!`, {
+                    variant: 'warning',
+                })
+            }
+        )
 
         connection.on(
-            'Chatted',
+            SignalREventName.Chatted,
             (messageContent: string, roomCode: string, userDto: UserDto) => {
                 setMessages((a) => [
                     ...a,
@@ -179,7 +184,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             }
         )
 
-        connection.on('Joined', (userDto: UserDto) => {
+        connection.on(SignalREventName.Joined, (userDto: UserDto) => {
             if (status !== HubConnectionState.Connected)
                 setStatus(HubConnectionState.Connected)
 
@@ -193,7 +198,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             ])
         })
 
-        connection.on('Left', (userDto: UserDto) => {
+        connection.on(SignalREventName.Left, (userDto: UserDto) => {
             refetch()
             setMessages((a) => [
                 ...a,
@@ -204,13 +209,20 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             ])
         })
 
-        connection.on('HostLeft', (seconds: number) => {
+        connection.on(SignalREventName.HostLeft, (seconds: number) => {
             enqueueSnackbar(
                 `Phòng sẽ bị xóa sau ${seconds} giây nếu chủ phòng không vào lại`,
                 {
                     variant: 'warning',
                 }
             )
+        })
+
+        connection.on(SignalREventName.RoomDeleted, () => {
+            enqueueSnackbar(`Đã xóa phòng!`, {
+                variant: 'warning',
+            })
+            router.push('/rooms')
         })
     }, [])
 

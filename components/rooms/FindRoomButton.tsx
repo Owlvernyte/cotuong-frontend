@@ -1,19 +1,21 @@
 'use client'
 
 import Image from 'next/image'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import IconButton from '../ui/IconButton'
 
 function FindRoomButton() {
+    const router = useRouter()
     const handleSubmit = React.useCallback(function handleSubmit(
         e: React.FormEvent<HTMLFormElement>
     ) {
         e.preventDefault()
         const roomCode = e.currentTarget['roomCode'].value as string
-        redirect(`/rooms/${roomCode}`)
+        router.push(`/rooms/${roomCode}`)
     },
     [])
+    
     return (
         <>
             <button
