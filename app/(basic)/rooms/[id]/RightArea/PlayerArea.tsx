@@ -20,7 +20,7 @@ function PlayerArea({
         <div className="bg-primary w-full h-full rounded-md shadow-lg p-2 flex flex-col items-center overflow-y-auto">
             <div id={`player${playerIndex}`} className="self-start pl-4 py-2">
                 <PlayerInformation
-                    username={userName ?? `Waiting for player`}
+                    username={userName ?? `Trống`}
                     avatarSrc={avatarSrc ?? '/assets/avatars/avatar1.png'}
                     avatarSize={50}
                     imageWidth={70}

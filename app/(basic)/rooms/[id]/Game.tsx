@@ -192,7 +192,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             setMessages((a) => [
                 ...a,
                 {
-                    content: `${userDto.userName} joined.`,
+                    content: `${userDto.userName} vừa tham gia phòng`,
                     ...systemMsgProps,
                 },
             ])
@@ -203,7 +203,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             setMessages((a) => [
                 ...a,
                 {
-                    content: `${userDto.userName} left.`,
+                    content: `${userDto.userName} đã rời phòng`,
                     ...systemMsgProps,
                 },
             ])
@@ -380,7 +380,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                                 id={cell.id}
                                 target={cell}
                                 position={cell.coord}
-                                title={'Cant move'}
+                                title={'Không thể di chuyển'}
                                 disabled
                                 draggable={false}
                             />
@@ -400,7 +400,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                                 id={cell.id}
                                 target={cell}
                                 position={cell.coord}
-                                title={'Movable'}
+                                title={'Có thể di chuyển'}
                             />
                         </Cell>
                     )
@@ -412,7 +412,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                             id={cell.id}
                             target={cell}
                             position={cell.coord}
-                            title={'Cant move'}
+                            title={'Không thể di chuyển'}
                             disabled
                             draggable={false}
                         />
