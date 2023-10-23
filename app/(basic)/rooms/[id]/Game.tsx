@@ -1,10 +1,11 @@
 'use client'
 
-import StoreKeys from '@/lib/constants/storeKeys'
+import LoadingBBQ from '@/components/ui/LoadingBBQ'
+import useGetRoomById from '@/features/room/useGetRoomById'
+import { User } from '@/features/user/user.types'
 import GameBoard from '@/lib/game/Board'
 import GamePiece from '@/lib/game/QuanCo/Piece'
 import useSignalR from '@/lib/hooks/useSignalR'
-import localStorageService from '@/lib/services/localStorage.service'
 import {
     DndContext,
     DragEndEvent,
@@ -13,20 +14,16 @@ import {
 } from '@dnd-kit/core'
 import { HubConnectionState } from '@microsoft/signalr'
 import { AxiosError } from 'axios'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { enqueueSnackbar } from 'notistack'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Board from './Board'
 import Cell from './Cell'
 import ChatBox from './LeftArea/ChatBox'
+import { MessageProps } from './LeftArea/ChatBubble'
 import MenuBox from './LeftArea/MenuBox'
 import Piece, { DraggablePiece } from './Piece'
-import WaitingContainer from './WaitingContainer'
-import { MessageProps } from './LeftArea/ChatBubble'
-import { useStore } from '@/lib/zustand/store'
 import PlayerArea from './RightArea/PlayerArea'
-import { enqueueSnackbar } from 'notistack'
-import { User } from '@/features/user/user.types'
-import useGetRoomById from '@/features/room/useGetRoomById'
-import LoadingBBQ from '@/components/ui/LoadingBBQ'
+import WaitingContainer from './WaitingContainer'
 
 type GameProps = {
     roomCode: string
@@ -44,6 +41,7 @@ const systemMsgProps = {
 
 function Game({ roomCode, accessToken, user }: GameProps) {
     const audioMsgRef = useRef<HTMLAudioElement>(null)
+    const audioMoveRef = useRef<HTMLAudioElement>(null)
     const audioWonRef = useRef<HTMLAudioElement>(null)
     const [board, setBoard] = useState<GameBoard>(new GameBoard())
     const [movingPiece, setMovingPiece] = useState<{
@@ -137,6 +135,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                 destination: CoordinationType,
                 isRedTurn: boolean
             ) => {
+                audioMoveRef.current?.play()
                 setBoard((b) => b.move(source, destination, isRedTurn))
             }
         )
@@ -204,6 +203,15 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                 },
             ])
         })
+
+        connection.on('HostLeft', (seconds: number) => {
+            enqueueSnackbar(
+                `Phòng sẽ bị xóa sau ${seconds} giây nếu chủ phòng không vào lại`,
+                {
+                    variant: 'warning',
+                }
+            )
+        })
     }, [])
 
     useEffect(() => {
@@ -230,14 +238,16 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                 y: cellY,
             }
 
-            // const potentialExistingPiece = board.squares[cellY][cellX]
-
             setMovingPiece(null)
 
+            if (
+                sourceCoord.x === destinationCoord.x &&
+                sourceCoord.y === destinationCoord.y
+            ) {
+                return
+            }
+
             if (!movingPiece.piece.isValidMove(destinationCoord, board)) {
-                // setBoard((b) =>
-                //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
-                // )
                 return enqueueSnackbar('Nước đi không hợp lệ!', {
                     variant: 'error',
                 })
@@ -412,6 +422,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         >
             <audio ref={audioMsgRef} src="/sfx/msg.mp3"></audio>
             <audio ref={audioWonRef} src="/sfx/won.mp3"></audio>
+            <audio ref={audioMoveRef} src="/sfx/piece-move.mp3"></audio>
             <div className="h-full space-y-2 flex flex-col">
                 <div className="grid grid-cols-8 gap-2 grid-flow-row-dense flex-1">
                     <div
