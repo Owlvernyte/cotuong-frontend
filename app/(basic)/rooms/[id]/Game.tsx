@@ -100,6 +100,10 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             return false
         })()
 
+    const isBoardReversed: boolean = !(!isPlayer
+        ? !board.isHostRed
+        : (board.isHostRed && isHost) || (!board.isHostRed && !isHost))
+
     useEffect(() => {
         connection.on('error', (e) => {
             console.log('ws error', e)
@@ -328,27 +332,60 @@ function Game({ roomCode, accessToken, user }: GameProps) {
         )
     }
 
-    const squares = board.squares.map((row, i) =>
-        row.map((cell, j) => {
-            if (!cell) {
-                return (
-                    <Cell
-                        key={`cell_${i}_${j}`}
-                        id={`${i}_${j}`}
-                        x={i}
-                        y={j}
-                    ></Cell>
-                )
-            }
+    const RenderedSquares = () => {
+        const squares = board.squares.map((row, i) =>
+            row.map((cell, j) => {
+                if (!cell) {
+                    return (
+                        <Cell
+                            key={`cell_${i}_${j}`}
+                            id={`${i}_${j}`}
+                            x={i}
+                            y={j}
+                        ></Cell>
+                    )
+                }
 
-            if (!isUserTurn) {
+                if (!isUserTurn) {
+                    return (
+                        <Cell
+                            key={`cell_${i}_${j}`}
+                            id={`${i}_${j}`}
+                            x={i}
+                            y={j}
+                        >
+                            <Piece
+                                id={cell.id}
+                                target={cell}
+                                position={cell.coord}
+                                title={'Cant move'}
+                                disabled
+                                draggable={false}
+                            />
+                        </Cell>
+                    )
+                }
+
+                if (board.isRedTurn === cell.isRed) {
+                    return (
+                        <Cell
+                            key={`cell_${i}_${j}`}
+                            id={`${i}_${j}`}
+                            x={i}
+                            y={j}
+                        >
+                            <DraggablePiece
+                                id={cell.id}
+                                target={cell}
+                                position={cell.coord}
+                                title={'Movable'}
+                            />
+                        </Cell>
+                    )
+                }
+
                 return (
-                    <Cell
-                        key={`cell_${i}_${j}`}
-                        id={`${i}_${j}`}
-                        x={i}
-                        y={j}
-                    >
+                    <Cell key={`cell_${i}_${j}`} id={`${i}_${j}`} x={i} y={j}>
                         <Piece
                             id={cell.id}
                             target={cell}
@@ -359,45 +396,13 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                         />
                     </Cell>
                 )
-            }
+            })
+        )
 
-            if (board.isRedTurn === cell.isRed) {
-                return (
-                    <Cell
-                        key={`cell_${i}_${j}`}
-                        id={`${i}_${j}`}
-                        x={i}
-                        y={j}
-                    >
-                        <DraggablePiece
-                            id={cell.id}
-                            target={cell}
-                            position={cell.coord}
-                            title={'Movable'}
-                        />
-                    </Cell>
-                )
-            }
-
-            return (
-                <Cell
-                    key={`cell_${i}_${j}`}
-                    id={`${i}_${j}`}
-                    x={i}
-                    y={j}
-                >
-                    <Piece
-                        id={cell.id}
-                        target={cell}
-                        position={cell.coord}
-                        title={'Cant move'}
-                        disabled
-                        draggable={false}
-                    />
-                </Cell>
-            )
-        })
-    );
+        return isBoardReversed
+            ? squares.map((row) => row.reverse()).reverse()
+            : squares
+    }
 
     return (
         <DndContext
@@ -434,7 +439,7 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                         </div>
                     </div>
                     <Board>
-                        {(board.isHostRed && isHost) || (!board.isHostRed && !isHost) ? squares : squares.reverse()}
+                        <RenderedSquares />
                     </Board>
                     <div
                         id="right-area"
@@ -472,10 +477,23 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                                 <PlayerArea
                                     playerIndex={1}
                                     userName={room.hostUser?.userName}
+                                    label={
+                                        board.isRedTurn && board.isHostRed
+                                            ? undefined
+                                            : !board.isRedTurn &&
+                                              !board.isHostRed
+                                            ? undefined
+                                            : 'ĐANG CHỜ TỚI LƯỢT'
+                                    }
                                 />
                                 <PlayerArea
                                     playerIndex={2}
                                     userName={room.opponentUser?.userName}
+                                    label={
+                                        board.isRedTurn && !board.isHostRed
+                                            ? undefined
+                                            : 'ĐANG CHỜ TỚI LƯỢT'
+                                    }
                                 />
                             </>
                         )}
