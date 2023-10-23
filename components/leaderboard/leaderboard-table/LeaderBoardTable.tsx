@@ -16,7 +16,7 @@ interface PlayerData {
 const sampleData: PlayerData[] = [
   {
     username: "User1",
-    avatarSrc: "/avatars/avatar1.png",
+    avatarSrc: "/assets/avatars/avatar1.png",
     flagSrc: "/assets/flags/VN.svg",
     win: 120,
     loss: 42,
@@ -25,7 +25,7 @@ const sampleData: PlayerData[] = [
   },
   {
     username: "User2",
-    avatarSrc: "/avatars/avatar2.png",
+    avatarSrc: "/assets/avatars/avatar2.png",
     flagSrc: "/assets/flags/US.svg",
     win: 365,
     loss: 45,
@@ -34,7 +34,7 @@ const sampleData: PlayerData[] = [
   },
   {
     username: "User3",
-    avatarSrc: "/avatars/avatar3.png",
+    avatarSrc: "/assets/avatars/avatar3.png",
     flagSrc: "/assets/flags/CA.svg",
     win: 664,
     loss: 432,
