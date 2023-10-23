@@ -227,8 +227,6 @@ function Game({ roomCode, accessToken, user }: GameProps) {
                 y: cellY,
             }
 
-            // const potentialExistingPiece = board.squares[cellY][cellX]
-
             setMovingPiece(null)
 
             if (
@@ -239,9 +237,6 @@ function Game({ roomCode, accessToken, user }: GameProps) {
             }
 
             if (!movingPiece.piece.isValidMove(destinationCoord, board)) {
-                // setBoard((b) =>
-                //     b.movePiece(movingPiece.piece, { x: cellX, y: cellY })
-                // )
                 return enqueueSnackbar('Nước đi không hợp lệ!', {
                     variant: 'error',
                 })
