@@ -14,8 +14,17 @@ function Footer() {
                         height={35}
                     ></Image>
                 </aside>
+
                 <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end text-bamboo-100 opacity-50">
-                    Phiên bản {packageJson['version']}
+                    <a
+                        className="items-center grid-flow-col hover:underline"
+                        href="https://github.com/Owlvernyte/cotuong-frontend"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        GitHub
+                    </a>
+                    <span>Phiên bản {packageJson['version']}</span>
                 </nav>
             </footer>
         </div>
