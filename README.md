@@ -169,9 +169,9 @@ We are students at HUTECH university:
 <table>
 	<tr>
     <td align="center" valign="top">
-				<img loading="lazy" width="150" height="150" src="https://github.com/fiezt1492.png?s=150">
+				<img loading="lazy" width="150" height="150" src="https://github.com/fieztazica.png?s=150">
         <br>
-        <a href="https://github.com/fiezt1492">Hoang Tien Dat</a>
+        <a href="https://github.com/fieztazica">Hoang Tien Dat</a>
 		</td>
 		<td align="center" valign="top">
 				<img loading="lazy" width="150" height="150" src="https://github.com/Slimaeus.png?s=150">
@@ -202,11 +202,6 @@ We are students at HUTECH university:
 				<img loading="lazy" width="150" height="150" src="https://github.com/Meelow8112.png?s=150">
         <br>
         <a href="https://github.com/Meelow8112">Nguyen Quoc Kha</a>
-		</td>
-    <td align="center" valign="top">
-				<img loading="lazy" width="150" height="150" src="https://github.com/BuiDatShiro.png?s=150">
-        <br>
-        <a href="https://github.com/BuiDatShiro">Bui Thanh Dat</a>
 		</td>
     <td align="center" valign="top">
 				<img loading="lazy" width="150" height="150" src="https://github.com/vduong2k2.png?s=150">
